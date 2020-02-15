@@ -7,7 +7,7 @@ public:
 	Bullet(sf::Vector2f pos, sf::Vector2f dir, float radius, float speed, float maxDistance, sf::Color color);
 	void Update(float dt);
 	void Draw(sf::RenderTarget& rt);
-	bool GetState() { return pop; }
+	bool OverMaxDist() { return pop; }
 	sf::CircleShape GetCircle() { return cc; }
 private:
 	sf::Vector2f pos;

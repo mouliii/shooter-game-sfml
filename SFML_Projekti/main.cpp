@@ -16,7 +16,7 @@ sf::Clock _clock;
 float curTime = float(_clock.getElapsedTime().asMilliseconds());
 
 BulletManager bm;
-Player p(sf::Vector2f(100, 100));
+Player p(sf::Vector2f(100, 100),&bm);
 std::vector<Enemy> enemyArr;
 
 
@@ -57,22 +57,14 @@ int main()
 
         // UPDATE
         p.Update(sf::Vector2f(mPos),dt);
-
+        for (size_t i = 0; i < bm.GetBullets().size(); i++)
+        {
+            bm.GetBullets()[i].Update(dt);
+        }
+        bm.Update(dt);
         for (int i = 0; i < enemyArr.size(); i++)
         {
             enemyArr[i].Update(dt);
-            for (int j = 0; j < p.GetBullets().size(); j++)
-            {
-                if (CircleRectCollision(p.GetBullets()[j].GetCircle(), enemyArr[i].GetRect()))
-                {
-                    p.PopBullet(j);
-                    enemyArr[i].OffsetHp(-1);
-                    if (enemyArr[i].GetHp() <= 0)
-                    {
-                        enemyArr.erase(enemyArr.begin() + i);
-                    }
-                }
-            }
         }
         
 
@@ -80,9 +72,13 @@ int main()
         // DRAW
         window.clear();
         p.Draw(window); 
-        for (int i = 0; i < enemyArr.size(); i++)
+        for (auto d : enemyArr)
         {
-            enemyArr[i].Draw(window);
+            d.Draw(window);
+        }
+        for (auto b : bm.GetBullets())
+        {
+            b.Draw(window);
         }
         window.display();
     }

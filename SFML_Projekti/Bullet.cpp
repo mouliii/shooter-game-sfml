@@ -1,6 +1,5 @@
 #include "Bullet.h"
 #include <math.h>
-#include <iostream>
 
 
 Bullet::Bullet(sf::Vector2f pos, sf::Vector2f dir, float radius, float speed, float maxDistance, sf::Color color)
@@ -35,7 +34,7 @@ void Bullet::Update(float dt)
 	// delete???
 	const sf::Vector2f tempPos = pos - originalPos;
 	const float dP = std::sqrt((tempPos.x * tempPos.x) + (tempPos.y * tempPos.y));
-	//std::cout << originalLenght << "-" << tempL << std::endl;
+	//std::cout << maxDistance << std::endl;
 	if (dP > maxDistance)
 	{
 		pop = true;

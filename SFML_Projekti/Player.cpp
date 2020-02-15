@@ -1,9 +1,10 @@
 #include "Player.h"
 #include <iostream>
 
-Player::Player(sf::Vector2f pos)
+Player::Player(sf::Vector2f pos, BulletManager* bm)
 	:
-	pos(pos)
+	pos(pos),
+	bm(bm)
 {
 	rect.setSize(sf::Vector2f(50, 50));
 	rect.setOutlineColor(sf::Color::Red);
@@ -49,15 +50,13 @@ void Player::Update(sf::Vector2f mousepos,float dt)
 	pos.y += dir.y * spd;
 
 	rect.setPosition( pos );
-
 	// update ampuminen
 	if (canShoot)
 	{
+		canShoot = false;
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 		{
-			canShoot = false;
-			Bullet b = Bullet(rect.getPosition(), mousepos, 10.f, 600.f, 400.f, sf::Color::Magenta);
-			bulletArr.push_back(b);
+			bm->AddBullet(rect.getPosition(), mousepos, 10.f, 450.f, 400.f, sf::Color::Green);
 		}
 	}
 	else
@@ -69,25 +68,11 @@ void Player::Update(sf::Vector2f mousepos,float dt)
 			shootTimer = shootCooldown;
 		}
 	}
-	
-	// update bullets
-	for (int i = 0; i < bulletArr.size(); i++)
-	{
-		bulletArr[i].Update(dt);
-		if (bulletArr[i].GetState())
-		{
-			bulletArr.erase(bulletArr.begin() + i);
-		}
-	}
 }
 
 void Player::Draw(sf::RenderTarget& target)
 {
 	target.draw(rect);
-	for (int i = 0; i < bulletArr.size(); i++)
-	{
-		bulletArr[i].Draw(target);
-	}
 }
 
 sf::RectangleShape Player::GetRect()
