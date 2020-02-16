@@ -1,16 +1,17 @@
 #include "Enemy.h"
 
-Enemy::Enemy(sf::Vector2f pos)
+Enemy::Enemy(sf::Vector2f pos, BulletManager* bm)
 	:
-	pos(pos)
+	Entity(pos,bm)
 {
 	rect.setSize(sf::Vector2f(50, 50));
-	rect.setFillColor(sf::Color::Red);
+	rect.setFillColor(sf::Color::Yellow);
 	rect.setPosition(pos);
 }
 
-void Enemy::Update(float dt)
+void Enemy::Update(sf::Vector2f mpos, float dt)
 {
+	
 	if (hp <= 0)
 	{
 		dead = true;
@@ -31,16 +32,7 @@ void Enemy::Update(float dt)
 	pos.y += dir.y * spd;
 
 	rect.setPosition(pos);
-}
-
-void Enemy::Draw(sf::RenderTarget& target)
-{
-	target.draw(rect);
-}
-
-sf::RectangleShape Enemy::GetRect()
-{
-	return rect;
+	
 }
 
 void Enemy::OffsetHp(int offset)

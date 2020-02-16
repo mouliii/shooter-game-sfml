@@ -1,10 +1,8 @@
 #include "Player.h"
-#include <iostream>
 
 Player::Player(sf::Vector2f pos, BulletManager* bm)
 	:
-	pos(pos),
-	bm(bm)
+	Entity(pos,bm)
 {
 	rect.setSize(sf::Vector2f(50, 50));
 	rect.setOutlineColor(sf::Color::Red);
@@ -53,9 +51,9 @@ void Player::Update(sf::Vector2f mousepos,float dt)
 	// update ampuminen
 	if (canShoot)
 	{
-		canShoot = false;
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 		{
+			canShoot = false;
 			bm->AddBullet(rect.getPosition(), mousepos, 10.f, 450.f, 400.f, sf::Color::Green);
 		}
 	}
@@ -68,14 +66,4 @@ void Player::Update(sf::Vector2f mousepos,float dt)
 			shootTimer = shootCooldown;
 		}
 	}
-}
-
-void Player::Draw(sf::RenderTarget& target)
-{
-	target.draw(rect);
-}
-
-sf::RectangleShape Player::GetRect()
-{
-	return rect;
 }
