@@ -12,7 +12,10 @@ Enemy::Enemy(sf::Vector2f pos, BulletManager* bm)
 
 void Enemy::Update(sf::Vector2f mpos, float dt)
 {
-	// ehkä laittaa liikkuminen omaan funktioon ja sit se tähä
+	if (hp <= 0)
+	{
+		isDead = true;
+	}
 	sf::Vector2f dir(0.f, 0.f);
 	bool diagonalCheck[2] = { 0,0 };
 	float spd = 0.0f;

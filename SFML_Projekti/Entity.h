@@ -10,7 +10,7 @@ public:
 	virtual void Update(sf::Vector2f mousepos, float dt);
 	void Draw(sf::RenderTarget& target);
 	sf::RectangleShape GetRect();
-	void GetDmg(int n) { hp -= n; }
+	virtual void GetDmg(int n) { hp -= n; }
 	bool IsDead() { return isDead; }
 	virtual void Print() { std::cout << "entity debug print" << std::endl; }
 protected:

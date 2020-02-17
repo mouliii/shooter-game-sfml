@@ -1,5 +1,4 @@
 #include "Entity.h"
-#include <iostream>
 
 Entity::Entity(sf::Vector2f pos, BulletManager* bm)
 	:

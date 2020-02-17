@@ -1,6 +1,7 @@
 #include "BulletManager.h"
 #include "EntityManager.h"
 #include "RectCircleCollision.h"
+#include <iostream>
 
 void BulletManager::AddBullet(sf::Vector2f pos, sf::Vector2f dir, float radius, float speed, float maxDistance, sf::Color color, std::string owner)
 {
@@ -8,8 +9,9 @@ void BulletManager::AddBullet(sf::Vector2f pos, sf::Vector2f dir, float radius, 
 	bulletArr.push_back(b);
 }
 
-void BulletManager::Update( EntityManager& em, float dt)
+void BulletManager::Update( EntityManager* em, float dt)
 {
+	std::cout << bulletArr.size() << std::endl;
 	for (size_t i = 0; i < bulletArr.size(); i++)
 	{
 		// liikutetaan kaikki ammukset
@@ -18,26 +20,30 @@ void BulletManager::Update( EntityManager& em, float dt)
 		if (bulletArr[i].OverMaxDist())
 		{
 			bulletArr.erase(bulletArr.begin() + i);                ////// muista poistaa kun osuuu
+			if (bulletArr.size() == 0)
+			{
+				break;
+			}
 		}
 		// check collsion
 		if (bulletArr[i].GetOwner() == "Player")
 		{
-			for (size_t j = 1; j < em.GetEntities().size(); j++)
+			for (size_t j = 1; j < em->GetEntities().size(); j++)
 			{
-				if (CircleRectCollision(bulletArr[i].GetCircle(), em.GetEntities()[j].GetRect()))
+				if (CircleRectCollision(bulletArr[i].GetCircle(), em->GetEntities()[j]->GetRect()))
 				{
 					// TODO dmg source
-					em.GetEntities()[j].GetDmg(1);
+					em->GetEntities()[j]->GetDmg(1);
 					bulletArr.erase(bulletArr.begin() + i);
 				}
 			}
 		}
 		else if (bulletArr[i].GetOwner() == "Enemy")
 		{
-			if (CircleRectCollision(bulletArr[i].GetCircle(), em.GetEntities()[0].GetRect()))
+			if (CircleRectCollision(bulletArr[i].GetCircle(), em->GetEntities()[0]->GetRect()))
 			{
 				// TODO dmg source
-				em.GetEntities()[0].GetDmg(1);
+				em->GetEntities()[0]->GetDmg(1);
 				bulletArr.erase(bulletArr.begin() + i);
 			}
 		}

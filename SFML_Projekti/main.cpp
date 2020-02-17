@@ -42,7 +42,7 @@ int main()
         sf::Vector2f mPos = sf::Vector2f(mousepos);
         // UPDATE
         em.Update(mPos, dt);
-        bm.Update(em,dt);
+        bm.Update(&em,dt);
 
         //std::cout << mPos.x << std::endl;
         // DRAW

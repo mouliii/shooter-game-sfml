@@ -14,7 +14,7 @@ public:
 	void Update(sf::Vector2f mpos, float dt);
 	void Draw(sf::RenderTarget& rt);
 	size_t GetArraySize() { return entities.size(); }
-	std::vector<Entity> GetEntities();
+	std::vector<Entity*> GetEntities();
 private:
 	std::vector<Entity*> entities;
 };

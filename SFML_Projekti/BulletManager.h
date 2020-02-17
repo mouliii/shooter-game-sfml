@@ -9,7 +9,7 @@ class BulletManager
 public:
 	BulletManager() = default;
 	void AddBullet(sf::Vector2f pos, sf::Vector2f dir, float radius, float speed, float maxDistance, sf::Color color, std::string owner);
-	void Update(class EntityManager& em,float dt);
+	void Update(class EntityManager* em,float dt);
 	void Draw(sf::RenderTarget& rt);
 	std::vector<Bullet>& GetBullets() { return bulletArr; }
 private:

@@ -54,7 +54,7 @@ void Player::Update(sf::Vector2f mousepos,float dt)
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 		{
 			canShoot = false;
-			bm->AddBullet(rect.getPosition(), mousepos, 10.f, 50.f, 400.f, sf::Color::Green,"Player");
+			bm->AddBullet(rect.getPosition(), mousepos, 10.f, 450.f, 400.f, sf::Color::Green,"Player");
 		}
 	}
 	else

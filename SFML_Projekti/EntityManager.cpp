@@ -25,12 +25,12 @@ void EntityManager::Draw(sf::RenderTarget& rt)
 	}
 }
 
-std::vector<Entity> EntityManager::GetEntities()
+std::vector<Entity*> EntityManager::GetEntities()
 {
-	std::vector<Entity> tempVec;
+	std::vector<Entity*> tempVec;
 	for (auto e : entities)
 	{
-		tempVec.push_back(*e);
+		tempVec.push_back(e);
 	}
 	return tempVec;
 }
