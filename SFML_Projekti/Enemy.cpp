@@ -1,4 +1,5 @@
 #include "Enemy.h"
+#include <iostream>
 
 Enemy::Enemy(sf::Vector2f pos, BulletManager* bm)
 	:
@@ -11,11 +12,6 @@ Enemy::Enemy(sf::Vector2f pos, BulletManager* bm)
 
 void Enemy::Update(sf::Vector2f mpos, float dt)
 {
-	
-	if (hp <= 0)
-	{
-		dead = true;
-	}
 	// ehkä laittaa liikkuminen omaan funktioon ja sit se tähä
 	sf::Vector2f dir(0.f, 0.f);
 	bool diagonalCheck[2] = { 0,0 };
@@ -32,10 +28,4 @@ void Enemy::Update(sf::Vector2f mpos, float dt)
 	pos.y += dir.y * spd;
 
 	rect.setPosition(pos);
-	
-}
-
-void Enemy::OffsetHp(int offset)
-{
-	hp += offset;
 }

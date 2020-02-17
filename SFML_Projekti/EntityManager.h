@@ -10,26 +10,11 @@ class EntityManager
 public:
 	EntityManager() = default;
 	~EntityManager() { }
-	void AddEntity(Entity& e)
-	{
-		entities.push_back(&e);
-	}
-	void Update(sf::Vector2f mpos, float dt)
-	{
-		for (size_t i = 0; i < entities.size(); i++)
-		{
-			entities[i]->Update(mpos,dt);
-		}
-	}
-	void Draw(sf::RenderTarget& rt)
-	{
-		for (size_t i = 0; i < entities.size(); i++)
-		{
-			entities[i]->Draw(rt);
-		}
-	}
+	void AddEntity(Entity& e);
+	void Update(sf::Vector2f mpos, float dt);
+	void Draw(sf::RenderTarget& rt);
 	size_t GetArraySize() { return entities.size(); }
-	//std::vector<Entity>& GetEntities() { return &entities; }
+	std::vector<Entity> GetEntities();
 private:
 	std::vector<Entity*> entities;
 };

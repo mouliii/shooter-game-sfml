@@ -1,7 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <vector>
-#include "RectCircleCollision.h"
 #include "BulletManager.h"
 #include "EntityManager.h"
 /*   vihu dmg -----> tilemap ----> camera ----> 
@@ -15,7 +14,6 @@ float curTime = float(_clock.getElapsedTime().asMilliseconds());
 EntityManager em;
 BulletManager bm;
 Player p({ 100.f,100.f }, &bm);
-
 
 int main()
 {
@@ -44,7 +42,7 @@ int main()
         sf::Vector2f mPos = sf::Vector2f(mousepos);
         // UPDATE
         em.Update(mPos, dt);
-        bm.Update(dt);
+        bm.Update(em,dt);
 
         //std::cout << mPos.x << std::endl;
         // DRAW
