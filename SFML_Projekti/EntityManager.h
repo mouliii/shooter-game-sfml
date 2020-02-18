@@ -11,7 +11,7 @@ public:
 	EntityManager() = default;
 	~EntityManager() { }
 	void AddEntity(Entity& e);
-	void Update(sf::Vector2f mpos, float dt);
+	void Update(sf::Vector2f mpos, std::vector<Entity*> em, float dt);
 	void Draw(sf::RenderTarget& rt);
 	size_t GetArraySize() { return entities.size(); }
 	std::vector<Entity*> GetEntities();

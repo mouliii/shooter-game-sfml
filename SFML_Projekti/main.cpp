@@ -41,7 +41,7 @@ int main()
         sf::Vector2i mousepos = sf::Mouse::getPosition(window);
         sf::Vector2f mPos = sf::Vector2f(mousepos);
         // UPDATE
-        em.Update(mPos, dt);
+        em.Update(mPos, em.GetEntities(), dt);
         bm.Update(&em,dt);
 
         //std::cout << mPos.x << std::endl;

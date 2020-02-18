@@ -11,7 +11,6 @@ void BulletManager::AddBullet(sf::Vector2f pos, sf::Vector2f dir, float radius, 
 
 void BulletManager::Update( EntityManager* em, float dt)
 {
-	std::cout << bulletArr.size() << std::endl;
 	for (size_t i = 0; i < bulletArr.size(); i++)
 	{
 		// liikutetaan kaikki ammukset
