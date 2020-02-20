@@ -4,9 +4,8 @@ Player::Player(sf::Vector2f pos, BulletManager* bm)
 	:
 	Entity(pos,bm)
 {
-	rect.setSize(sf::Vector2f(50, 50));
-	rect.setOutlineColor(sf::Color::Red);
-	rect.setOutlineThickness(5);
+	rect.setSize({ dims,dims });
+	rect.setFillColor(sf::Color::Blue);
 	rect.setPosition(pos);
 }
 
@@ -54,7 +53,7 @@ void Player::Update(sf::Vector2f mousepos, std::vector<Entity*> em, float dt)
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 		{
 			canShoot = false;
-			bm->AddBullet(rect.getPosition(), mousepos, 10.f, 450.f, 400.f, sf::Color::Green,"Player");
+			bm->AddBullet(GetPosCentered(), mousepos, 2.f, 450.f, 400.f, sf::Color::Green,"Player");
 		}
 	}
 	else

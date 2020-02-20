@@ -5,7 +5,7 @@ Entity::Entity(sf::Vector2f pos, BulletManager* bm)
 	pos(pos),
 	bm(bm)
 {
-	rect.setSize(sf::Vector2f(50, 50));
+	rect.setSize(sf::Vector2f(dims,dims));
 	rect.setPosition(pos);
 }
 
