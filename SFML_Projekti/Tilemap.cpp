@@ -18,20 +18,23 @@ void Tilemap::LoadLevel(std::string filepath)
             switch (c)
             {
             case '.':
-                // tile 1
+            {
+                Tile t(sf::Vector2f(x, y), { 16,16 }, sf::Color(0, 0, 0, 255), true);
+                tiles.emplace_back(t);
                 x += 16;
                 break;
+            }
             case '0':
             {
-                Tile t(sf::Vector2f(x, y), { 16,16 }, sf::Color(255, 255, 255, 255));
-                tiles.push_back(t);
+                Tile t(sf::Vector2f(x, y), { 16,16 }, sf::Color(255, 255, 255, 255), false);
+                tiles.emplace_back(t);
                 x += 16;
             }
             break;
             case '1':
             {
-                Tile t(sf::Vector2f(x, y), { 16,16 }, sf::Color(105, 150, 200, 255));
-                tiles.push_back(t);
+                Tile t(sf::Vector2f(x, y), { 16,16 }, sf::Color(105, 150, 200, 255), false);
+                tiles.emplace_back(t);
                 x += 16;
             }
             break;
@@ -42,16 +45,17 @@ void Tilemap::LoadLevel(std::string filepath)
                 break;
             default:
                 // error 'n shit
+                std::cout << "mappi sekos wtf D:" << std::endl;
                 break;
             }
         }
     }
 }
 
-void Tilemap::AddTile(sf::Vector2f pos, sf::Vector2f dimensions, sf::Color color)
+void Tilemap::AddTile(sf::Vector2f pos, sf::Vector2f dimensions, sf::Color color, bool passable)
 {
-	Tile t(pos, dimensions, color);
-	tiles.push_back(t);
+	Tile t(pos, dimensions, color, passable);
+	tiles.emplace_back(t);
 }
 
 void Tilemap::Draw(sf::RenderTarget& rt)
@@ -60,4 +64,14 @@ void Tilemap::Draw(sf::RenderTarget& rt)
 	{
 		rt.draw(t.GetRect());
 	}
+}
+
+std::vector<Tile*> Tilemap::GetTiles()
+{
+    std::vector<Tile*> tempVec;
+    for (auto& e : tiles)
+    {
+        tempVec.push_back(&e);
+    }
+    return tempVec;
 }

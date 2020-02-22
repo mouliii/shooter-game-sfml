@@ -15,6 +15,7 @@ public:
 	sf::Vector2f GetPos() { return pos; }
 	sf::Vector2f GetPosCentered() { return sf::Vector2f(GetPos().x + GetRect().getLocalBounds().width / 2, GetPos().y + GetRect().getLocalBounds().height / 2); }
 	virtual void Print() { std::cout << "entity debug print" << std::endl; }
+	void SetPos(sf::Vector2f pos) { this->pos = pos; }
 protected:
 	int hp = 3;
 	float dims = 16.f;

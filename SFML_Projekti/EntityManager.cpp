@@ -14,6 +14,7 @@ void EntityManager::Update(sf::Vector2f mpos, std::vector<Entity*> em, float dt)
 		{
 			entities.erase(entities.begin() + i);
 		}
+		
 	}
 }
 
@@ -28,7 +29,7 @@ void EntityManager::Draw(sf::RenderTarget& rt)
 std::vector<Entity*> EntityManager::GetEntities()
 {
 	std::vector<Entity*> tempVec;
-	for (auto e : entities)
+	for (auto& e : entities)
 	{
 		tempVec.push_back(e);
 	}
