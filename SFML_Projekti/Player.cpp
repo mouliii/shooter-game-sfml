@@ -53,7 +53,7 @@ void Player::Update(sf::Vector2f mousepos, std::vector<std::unique_ptr<Entity> >
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 		{
 			canShoot = false;
-			bm->AddBullet(GetPosCentered(), mousepos, 2.f, 450.f, 400.f, sf::Color::Green,"Player");
+			bm->AddBullet(GetPosCentered(), mousepos, 5.f, 400.f, 400.f, sf::Color::Green,"Player");
 		}
 	}
 	else

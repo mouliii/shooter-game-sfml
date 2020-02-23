@@ -2,6 +2,12 @@
 #include <fstream>
 #include <iostream>
 
+Tilemap::Tilemap(int tile_dimensions)
+    :
+    dims(tile_dimensions)
+{
+}
+
 void Tilemap::LoadLevel(std::string filepath)
 {
     float x = 0;
@@ -19,18 +25,18 @@ void Tilemap::LoadLevel(std::string filepath)
             {
             case '.':
                 // tile 1
-                x += 16;
+                x += dims;
                 break;
             case '0':
             {
-                Tile t(sf::Vector2f(x, y), { 16,16 }, sf::Color(255, 255, 255, 255));
+                Tile t(sf::Vector2f(x, y), { dims,dims }, sf::Color(255, 255, 255, 255));
                 tiles.push_back(t);
-                x += 16;
+                x += dims;
             }
             break;
             case '1':
             {
-                Tile t(sf::Vector2f(x, y), { 16,16 }, sf::Color(105, 150, 200, 255));
+                Tile t(sf::Vector2f(x, y), { dims,dims }, sf::Color(105, 150, 200, 255));
                 tiles.push_back(t);
                 x += 16;
             }
@@ -38,7 +44,7 @@ void Tilemap::LoadLevel(std::string filepath)
             case '\n':
                 // rset [x,y]
                 x = 0;
-                y += 16;
+                y += dims;
                 break;
             default:
                 // error 'n shit

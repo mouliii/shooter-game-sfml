@@ -16,13 +16,16 @@ ongelmat
 random vector out of range, ei tullu uudestaa
 16x16 onks hyvä?
 */
+int TILEMAPDIMENSIONS = 16;
+
 sf::Event event;
+sf::View view;
 sf::Clock _clock;
 float curTime = float(_clock.getElapsedTime().asMilliseconds());
-sf::View view;
+
 EntityManager em;
 BulletManager bm;
-Tilemap tm;
+Tilemap tm(TILEMAPDIMENSIONS);
 
 int main()
 {
