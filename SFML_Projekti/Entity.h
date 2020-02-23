@@ -7,7 +7,7 @@ class Entity
 {
 public:
 	Entity(sf::Vector2f pos, BulletManager* bm);
-	virtual void Update(sf::Vector2f mousepos, std::vector<Entity*> em, float dt);
+	virtual void Update(sf::Vector2f mousepos, std::vector<std::unique_ptr<Entity> >& em, float dt);
 	void Draw(sf::RenderTarget& target);
 	sf::RectangleShape GetRect();
 	virtual void GetDmg(int n) { hp -= n; }

@@ -1,15 +1,15 @@
 #include "EntityManager.h"
 
-void EntityManager::AddEntity(Entity& e)
+void EntityManager::AddEntity(std::unique_ptr<Entity> e)
 {
-	entities.push_back(&e);
+	entities.emplace_back(std::move(e));
 }
 
-void EntityManager::Update(sf::Vector2f mpos, std::vector<Entity*> em, float dt)
+void EntityManager::Update(sf::Vector2f mpos, float dt)
 {
 	for (size_t i = 0; i < entities.size(); i++)
 	{
-		entities[i]->Update(mpos, em, dt);
+		entities[i]->Update(mpos, entities, dt);
 		if (entities[i]->IsDead() )
 		{
 			entities.erase(entities.begin() + i);
@@ -25,13 +25,8 @@ void EntityManager::Draw(sf::RenderTarget& rt)
 	}
 }
 
-std::vector<Entity*> EntityManager::GetEntities()
+std::vector<std::unique_ptr<Entity>>& EntityManager::GetEntities()
 {
-	std::vector<Entity*> tempVec;
-	for (auto e : entities)
-	{
-		tempVec.push_back(e);
-	}
-	return tempVec;
+	return entities;
 }
 

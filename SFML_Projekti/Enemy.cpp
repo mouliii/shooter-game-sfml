@@ -10,7 +10,7 @@ Enemy::Enemy(sf::Vector2f pos, BulletManager* bm)
 	rect.setPosition(pos);
 }
 
-void Enemy::Update(sf::Vector2f mpos, std::vector<Entity*> em, float dt)
+void Enemy::Update(sf::Vector2f mpos, std::vector<std::unique_ptr<Entity> >& em, float dt)
 {
 	// dead check
 	if (hp <= 0)

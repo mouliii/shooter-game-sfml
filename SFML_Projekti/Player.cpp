@@ -9,7 +9,7 @@ Player::Player(sf::Vector2f pos, BulletManager* bm)
 	rect.setPosition(pos);
 }
 
-void Player::Update(sf::Vector2f mousepos, std::vector<Entity*> em, float dt)
+void Player::Update(sf::Vector2f mousepos, std::vector<std::unique_ptr<Entity> >& em, float dt)
 {
 	// ehkä laittaa liikkuminen omaan funktioon ja sit se tähä
 	sf::Vector2f dir(0.f,0.f);

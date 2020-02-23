@@ -4,7 +4,7 @@
 #include "BulletManager.h"
 #include "EntityManager.h"
 #include "Tilemap.h"
-/*   tilemap ----> camera ----> draw manager , layer based -------->
+/*  collision ---> bullet collision
 managerit k‰ytt‰m‰‰n smart poibntereita asd 
 tilemap map
 TILEMAP DEFAULTTAA 16x16 ATM !!!!  <----------
@@ -23,7 +23,6 @@ sf::View view;
 EntityManager em;
 BulletManager bm;
 Tilemap tm;
-Player p({ 10.f,10.f }, &bm);
 
 int main()
 {
@@ -34,7 +33,8 @@ int main()
     window.setView(view);
     // MAIN LOOP
     tm.LoadLevel("level.txt");
-    em.AddEntity(p);
+    std::unique_ptr<Player> p(new Player({ -10.f,-10.f }, &bm));
+    em.AddEntity(std::move(p) );
 
     //Enemy e({ 150.f, 200.f }, &bm);
     //em.AddEntity(e);
@@ -68,10 +68,10 @@ int main()
         sf::Vector2f worldPos = window.mapPixelToCoords(mousepos);
         sf::Vector2f mPos = sf::Vector2f(worldPos);
         // UPDATE
-        em.Update(mPos, em.GetEntities(), dt);
+        em.Update(mPos, dt);
         bm.Update(&em,dt);
 
-        view.setCenter(p.GetPosCentered()); // vika update | enne draw
+        view.setCenter(em.GetEntities()[0]->GetPosCentered()); // vika update | enne draw
         //std::cout << event.mouseWheel.delta << std::endl;
         // DRAW
         window.clear();

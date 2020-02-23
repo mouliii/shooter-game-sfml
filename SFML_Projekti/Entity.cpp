@@ -9,7 +9,7 @@ Entity::Entity(sf::Vector2f pos, BulletManager* bm)
 	rect.setPosition(pos);
 }
 
-void Entity::Update(sf::Vector2f mousepos, std::vector<Entity*> em, float dt)
+void Entity::Update(sf::Vector2f mousepos, std::vector<std::unique_ptr<Entity> >& em, float dt)
 {
 	std::cout << "entity update triggered, voi v**** " << std::endl;
 }
