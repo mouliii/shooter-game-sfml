@@ -4,8 +4,7 @@
 #include "BulletManager.h"
 #include "EntityManager.h"
 #include "Tilemap.h"
-#include "Collider.h"
-/*   swept AABB -----> texturet ------> draw manager , layer based -------->
+/*  collision ---> bullet collision
 managerit k‰ytt‰m‰‰n smart poibntereita asd 
 tilemap map
 TILEMAP DEFAULTTAA 16x16 ATM !!!!  <----------
@@ -17,15 +16,16 @@ ongelmat
 random vector out of range, ei tullu uudestaa
 16x16 onks hyv‰?
 */
+int TILEMAPDIMENSIONS = 16;
+
 sf::Event event;
+sf::View view;
 sf::Clock _clock;
 float curTime = float(_clock.getElapsedTime().asMilliseconds());
-sf::View view;
+
 EntityManager em;
 BulletManager bm;
-Tilemap tm;
-Collider collider;
-Player p({ -20.f, -20.f }, &bm);
+Tilemap tm(TILEMAPDIMENSIONS);
 
 int main()
 {
@@ -36,7 +36,10 @@ int main()
     window.setView(view);
     // MAIN LOOP
     tm.LoadLevel("level.txt");
-    em.AddEntity(p);
+    std::unique_ptr<Player> p(new Player({ -10.f,-10.f }, &bm));
+    std::unique_ptr<Enemy> e(new Enemy({ 10.f,10.f }, &bm));
+    em.AddEntity(std::move(p) );
+    em.AddEntity(std::move(e));
 
     //Enemy e({ 150.f, 200.f }, &bm);
     //em.AddEntity(e);
@@ -70,11 +73,10 @@ int main()
         sf::Vector2f worldPos = window.mapPixelToCoords(mousepos);
         sf::Vector2f mPos = sf::Vector2f(worldPos);
         // UPDATE
-        em.Update(mPos, em.GetEntities(), dt);
+        em.Update(mPos, dt);
         bm.Update(&em,dt);
-        collider.Update(em.GetEntities(), tm.GetTiles() );
 
-        view.setCenter(p.GetPosCentered()); // vika update | enne draw
+        view.setCenter(em.GetEntities()[0]->GetPosCentered()); // vika update | enne draw
         //std::cout << event.mouseWheel.delta << std::endl;
         // DRAW
         window.clear();

@@ -5,45 +5,45 @@
 
 void BulletManager::AddBullet(sf::Vector2f pos, sf::Vector2f dir, float radius, float speed, float maxDistance, sf::Color color, std::string owner)
 {
-	Bullet b(pos, dir, radius, speed, maxDistance, color, owner);
-	bulletArr.push_back(b);
+	std::unique_ptr<Bullet> b(new Bullet(pos, dir, radius, speed, maxDistance, color, owner));
+	pBullets.emplace_back(std::move(b) );
 }
 
 void BulletManager::Update( EntityManager* em, float dt)
 {
-	for (size_t i = 0; i < bulletArr.size(); i++)
+	for (size_t i = 0; i < pBullets.size(); i++)
 	{
 		// liikutetaan kaikki ammukset
-		bulletArr[i].Update(dt);
+		pBullets[i]->Update(dt);
 		// check ettei oo liian pitkälle menny
-		if (bulletArr[i].OverMaxDist())
+		if (pBullets[i]->OverMaxDist())
 		{
-			bulletArr.erase(bulletArr.begin() + i);                ////// muista poistaa kun osuuu
-			if (bulletArr.size() == 0)
+			pBullets.erase(pBullets.begin() + i);                ////// muista poistaa kun osuuu
+			if (pBullets.size() == 0)
 			{
 				break;
 			}
 		}
 		// check collsion
-		if (bulletArr[i].GetOwner() == "Player")
+		if (pBullets[i]->GetOwner() == "Player")
 		{
 			for (size_t j = 1; j < em->GetEntities().size(); j++)
 			{
-				if (CircleRectCollision(bulletArr[i].GetCircle(), em->GetEntities()[j]->GetRect()))
+				if (CircleRectCollision(pBullets[i]->GetCircle(), em->GetEntities()[j]->GetRect()))
 				{
 					// TODO dmg source
 					em->GetEntities()[j]->GetDmg(1);
-					bulletArr.erase(bulletArr.begin() + i);
+					pBullets.erase(pBullets.begin() + i);
 				}
 			}
 		}
-		else if (bulletArr[i].GetOwner() == "Enemy")
+		else if (pBullets[i]->GetOwner() == "Enemy")
 		{
-			if (CircleRectCollision(bulletArr[i].GetCircle(), em->GetEntities()[0]->GetRect()))
+			if (CircleRectCollision(pBullets[i]->GetCircle(), em->GetEntities()[0]->GetRect()))
 			{
 				// TODO dmg source
 				em->GetEntities()[0]->GetDmg(1);
-				bulletArr.erase(bulletArr.begin() + i);
+				pBullets.erase(pBullets.begin() + i);
 			}
 		}
 		else //  kaikki muut sekä "virheet"
@@ -55,8 +55,8 @@ void BulletManager::Update( EntityManager* em, float dt)
 
 void BulletManager::Draw(sf::RenderTarget& rt)
 {
-	for (size_t i = 0; i < bulletArr.size(); i++)
+	for (size_t i = 0; i < pBullets.size(); i++)
 	{
-		bulletArr[i].Draw(rt);
+		pBullets[i]->Draw(rt);
 	}
 }

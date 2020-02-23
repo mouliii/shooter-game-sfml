@@ -7,13 +7,14 @@ class Entity
 {
 public:
 	Entity(sf::Vector2f pos, BulletManager* bm);
-	virtual void Update(sf::Vector2f mousepos, std::vector<Entity*> em, float dt);
+	virtual ~Entity();
+	virtual void Update(sf::Vector2f mousepos, std::vector<std::unique_ptr<Entity> >& em, float dt);
 	void Draw(sf::RenderTarget& target);
 	sf::RectangleShape GetRect();
 	virtual void GetDmg(int n) { hp -= n; }
 	bool IsDead() { return isDead; }
 	sf::Vector2f GetPos() { return pos; }
-	sf::Vector2f GetPosCentered() { return sf::Vector2f(GetPos().x + GetRect().getLocalBounds().width / 2, GetPos().y + GetRect().getLocalBounds().height / 2); }
+	sf::Vector2f GetPosCentered();
 	virtual void Print() { std::cout << "entity debug print" << std::endl; }
 	void SetPos(sf::Vector2f pos) { this->pos = pos; }
 protected:

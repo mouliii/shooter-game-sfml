@@ -9,7 +9,7 @@ Player::Player(sf::Vector2f pos, BulletManager* bm)
 	rect.setPosition(pos);
 }
 
-void Player::Update(sf::Vector2f mousepos, std::vector<Entity*> em, float dt)
+void Player::Update(sf::Vector2f mousepos, std::vector<std::unique_ptr<Entity> >& em, float dt)
 {
 	// ehkä laittaa liikkuminen omaan funktioon ja sit se tähä
 	sf::Vector2f dir(0.f,0.f);
@@ -53,7 +53,7 @@ void Player::Update(sf::Vector2f mousepos, std::vector<Entity*> em, float dt)
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 		{
 			canShoot = false;
-			bm->AddBullet(GetPosCentered(), mousepos, 2.f, 450.f, 400.f, sf::Color::Green,"Player");
+			bm->AddBullet(GetPosCentered(), mousepos, 5.f, 400.f, 400.f, sf::Color::Green,"Player");
 		}
 	}
 	else

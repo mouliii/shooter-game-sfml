@@ -5,12 +5,12 @@ Enemy::Enemy(sf::Vector2f pos, BulletManager* bm)
 	:
 	Entity(pos,bm)
 {
-	rect.setSize(sf::Vector2f(50, 50));
+	rect.setSize(sf::Vector2f(dims, dims));
 	rect.setFillColor(sf::Color::Yellow);
 	rect.setPosition(pos);
 }
 
-void Enemy::Update(sf::Vector2f mpos, std::vector<Entity*> em, float dt)
+void Enemy::Update(sf::Vector2f mpos, std::vector<std::unique_ptr<Entity> >& em, float dt)
 {
 	// dead check
 	if (hp <= 0)
@@ -36,7 +36,7 @@ void Enemy::Update(sf::Vector2f mpos, std::vector<Entity*> em, float dt)
 	if (canShoot)
 	{
 		canShoot = false;
-		bm->AddBullet(rect.getPosition(), em[0]->GetRect().getPosition(), 10.f, 450.f, 250.f, sf::Color::Green, "Enemy");
+		bm->AddBullet(rect.getPosition(), em[0]->GetRect().getPosition(), 5.f, 300.f, 250.f, sf::Color::Green, "Enemy");
 	}
 	else
 	{

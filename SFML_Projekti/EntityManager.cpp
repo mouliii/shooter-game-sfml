@@ -1,38 +1,32 @@
 #include "EntityManager.h"
 
-void EntityManager::AddEntity(Entity& e)
+void EntityManager::AddEntity(std::unique_ptr<Entity> e)
 {
-	entities.push_back(&e);
+	pEntities.emplace_back(std::move(e));
 }
 
-void EntityManager::Update(sf::Vector2f mpos, std::vector<Entity*> em, float dt)
+void EntityManager::Update(sf::Vector2f mpos, float dt)
 {
-	for (size_t i = 0; i < entities.size(); i++)
+	for (size_t i = 0; i < pEntities.size(); i++)
 	{
-		entities[i]->Update(mpos, em, dt);
-		if (entities[i]->IsDead() )
+		pEntities[i]->Update(mpos, pEntities, dt);
+		if (pEntities[i]->IsDead() )
 		{
-			entities.erase(entities.begin() + i);
+			pEntities.erase(pEntities.begin() + i);
 		}
-		
 	}
 }
 
 void EntityManager::Draw(sf::RenderTarget& rt)
 {
-	for (size_t i = 0; i < entities.size(); i++)
+	for (size_t i = 0; i < pEntities.size(); i++)
 	{
-		entities[i]->Draw(rt);
+		pEntities[i]->Draw(rt);
 	}
 }
 
-std::vector<Entity*> EntityManager::GetEntities()
+std::vector<std::unique_ptr<Entity>>& EntityManager::GetEntities()
 {
-	std::vector<Entity*> tempVec;
-	for (auto& e : entities)
-	{
-		tempVec.push_back(e);
-	}
-	return tempVec;
+	return pEntities;
 }
 

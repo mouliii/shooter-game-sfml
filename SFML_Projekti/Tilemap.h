@@ -6,13 +6,14 @@
 class Tilemap
 {
 public:
-	Tilemap() = default;
+	Tilemap(int tile_dimensions);
 	void LoadLevel(std::string filepath);
-	void AddTile(sf::Vector2f pos, sf::Vector2f dimensions, sf::Color color, bool passable);
+	void AddTile(sf::Vector2f pos, sf::Vector2f dimensions, sf::Color color);
 	void Draw(sf::RenderTarget& rt);
-	std::vector<Tile*> GetTiles();
+	std::vector<std::unique_ptr<Tile>>& GetTiles() { return pTiles; }
 private:
-	std::vector<Tile> tiles;
+	float dims;
+	std::vector<std::unique_ptr<Tile>> pTiles;
 };
 
 // DEFAULTTAA ATM 16x16 TILE
