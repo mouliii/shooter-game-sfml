@@ -4,7 +4,7 @@
 
 Tilemap::Tilemap(int tile_dimensions)
     :
-    dims(tile_dimensions)
+    dims(float(tile_dimensions) )
 {
 }
 
@@ -24,19 +24,22 @@ void Tilemap::LoadLevel(std::string filepath)
             switch (c)
             {
             case '.':
-                // tile 1
+            {
+                std::unique_ptr<Tile> t(new Tile(sf::Vector2f(x, y), { dims,dims }, sf::Color(0, 0, 0, 255), true));
+                pTiles.emplace_back(std::move(t));
                 x += dims;
                 break;
+            }
             case '0':
             {
-                std::unique_ptr<Tile> t(new Tile(sf::Vector2f(x, y), { dims,dims }, sf::Color(255, 255, 255, 255)));
+                std::unique_ptr<Tile> t(new Tile(sf::Vector2f(x, y), { dims,dims }, sf::Color(255, 255, 255, 255), false));
                 pTiles.emplace_back(std::move(t));
                 x += dims;
             }
             break;
             case '1':
             {
-                std::unique_ptr<Tile> t(new Tile(sf::Vector2f(x, y), { dims,dims }, sf::Color(105, 150, 250, 255)));
+                std::unique_ptr<Tile> t(new Tile(sf::Vector2f(x, y), { dims,dims }, sf::Color(105, 150, 250, 255), false));
                 pTiles.emplace_back(std::move(t));
                 x += dims;
             }
@@ -54,9 +57,9 @@ void Tilemap::LoadLevel(std::string filepath)
     }
 }
 
-void Tilemap::AddTile(sf::Vector2f pos, sf::Vector2f dimensions, sf::Color color)
+void Tilemap::AddTile(sf::Vector2f pos, sf::Vector2f dimensions, sf::Color color, bool passable)
 {
-    std::unique_ptr<Tile> t(new Tile(pos, dimensions, color));
+    std::unique_ptr<Tile> t(new Tile(pos, dimensions, color, passable));
 	pTiles.emplace_back(std::move(t));
 }
 
