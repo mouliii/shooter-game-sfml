@@ -2,31 +2,31 @@
 
 void EntityManager::AddEntity(std::unique_ptr<Entity> e)
 {
-	entities.emplace_back(std::move(e));
+	pEntities.emplace_back(std::move(e));
 }
 
 void EntityManager::Update(sf::Vector2f mpos, float dt)
 {
-	for (size_t i = 0; i < entities.size(); i++)
+	for (size_t i = 0; i < pEntities.size(); i++)
 	{
-		entities[i]->Update(mpos, entities, dt);
-		if (entities[i]->IsDead() )
+		pEntities[i]->Update(mpos, pEntities, dt);
+		if (pEntities[i]->IsDead() )
 		{
-			entities.erase(entities.begin() + i);
+			pEntities.erase(pEntities.begin() + i);
 		}
 	}
 }
 
 void EntityManager::Draw(sf::RenderTarget& rt)
 {
-	for (size_t i = 0; i < entities.size(); i++)
+	for (size_t i = 0; i < pEntities.size(); i++)
 	{
-		entities[i]->Draw(rt);
+		pEntities[i]->Draw(rt);
 	}
 }
 
 std::vector<std::unique_ptr<Entity>>& EntityManager::GetEntities()
 {
-	return entities;
+	return pEntities;
 }
 

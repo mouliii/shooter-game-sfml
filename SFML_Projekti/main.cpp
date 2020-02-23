@@ -34,7 +34,9 @@ int main()
     // MAIN LOOP
     tm.LoadLevel("level.txt");
     std::unique_ptr<Player> p(new Player({ -10.f,-10.f }, &bm));
+    std::unique_ptr<Enemy> e(new Enemy({ 10.f,10.f }, &bm));
     em.AddEntity(std::move(p) );
+    em.AddEntity(std::move(e));
 
     //Enemy e({ 150.f, 200.f }, &bm);
     //em.AddEntity(e);
