@@ -4,6 +4,7 @@
 #include "BulletManager.h"
 #include "EntityManager.h"
 #include "Tilemap.h"
+#include "Collider.h"
 /*  collision ---> bullet collision
 managerit k‰ytt‰m‰‰n smart poibntereita asd 
 tilemap map
@@ -26,6 +27,7 @@ float curTime = float(_clock.getElapsedTime().asMilliseconds());
 EntityManager em;
 BulletManager bm;
 Tilemap tm(TILEMAPDIMENSIONS);
+Collider collider;
 
 int main()
 {
@@ -37,7 +39,7 @@ int main()
     // MAIN LOOP
     tm.LoadLevel("level.txt");
     std::unique_ptr<Player> p(new Player({ -10.f,-10.f }, &bm));
-    std::unique_ptr<Enemy> e(new Enemy({ 10.f,10.f }, &bm));
+    std::unique_ptr<Enemy> e(new Enemy({ 18.f,18.f }, &bm));
     em.AddEntity(std::move(p) );
     em.AddEntity(std::move(e));
 
@@ -75,7 +77,7 @@ int main()
         // UPDATE
         em.Update(mPos, dt);
         bm.Update(&em,dt);
-
+        collider.Update(em.GetEntities(), tm.GetTiles());
         view.setCenter(em.GetEntities()[0]->GetPosCentered()); // vika update | enne draw
         //std::cout << event.mouseWheel.delta << std::endl;
         // DRAW

@@ -15,5 +15,3 @@ private:
 	float dims;
 	std::vector<std::unique_ptr<Tile>> pTiles;
 };
-
-// DEFAULTTAA ATM 16x16 TILE

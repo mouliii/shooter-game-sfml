@@ -36,7 +36,7 @@ void Enemy::Update(sf::Vector2f mpos, std::vector<std::unique_ptr<Entity> >& em,
 	if (canShoot)
 	{
 		canShoot = false;
-		bm->AddBullet(rect.getPosition(), em[0]->GetRect().getPosition(), 5.f, 300.f, 250.f, sf::Color::Green, "Enemy");
+		bm->AddBullet(GetPosCentered(), em[0]->GetPosCentered(), 5.f, 300.f, 250.f, sf::Color::Green, "Enemy");
 	}
 	else
 	{

@@ -43,10 +43,10 @@ void Player::Update(sf::Vector2f mousepos, std::vector<std::unique_ptr<Entity> >
 	{
 		spd = speed * dt;
 	}
-	pos.x += dir.x * spd;
-	pos.y += dir.y * spd;
+	rect.move(dir.x * spd, dir.y * spd);
+	pos = rect.getPosition();
+	//rect.setPosition( pos );
 
-	rect.setPosition( pos );
 	// update ampuminen
 	if (canShoot)
 	{

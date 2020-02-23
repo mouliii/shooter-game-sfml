@@ -8,7 +8,7 @@ public:
 	sf::Vector2f GetPixelCoordinate() { return pos; }
 	sf::Vector2f GetTileDimensions() { return dimensions; }
 	void Draw(sf::RenderTarget& rt);
-	sf::RectangleShape GetRect() { return rect; }
+	sf::RectangleShape& GetRect() { return rect; }
 	bool isPassable() { return passable; }
 private:
 	sf::RectangleShape rect;

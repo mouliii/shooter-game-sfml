@@ -7,7 +7,7 @@ void Collider::Move(sf::RectangleShape* body, sf::Vector2f delta)
 	body->move(delta);
 }
 
-void Collider::CheckCollision(sf::RectangleShape* _this, sf::RectangleShape* other, float push)
+bool Collider::CheckCollision(sf::RectangleShape* _this, sf::RectangleShape* other, float push)
 {
 	sf::Vector2f otherPosition = other->getPosition();
 	sf::Vector2f otherHalfSize = other->getSize() / 2.f;
@@ -48,11 +48,14 @@ void Collider::CheckCollision(sf::RectangleShape* _this, sf::RectangleShape* oth
 				Move(other, { 0.0f, intersectY * push });
 			}
 		}
+		return true;
 	}
+	return false;
 }
 
-void Collider::Update(std::vector<Entity*> e, std::vector<Tile*> t)
+void Collider::Update(std::vector<std::unique_ptr<Entity>>& e, std::vector<std::unique_ptr<Tile>>& t)
 {
+	
 	for (size_t i = 0; i < e.size(); i++)
 	{
 		// entity tiles chekki kö tähän?
@@ -60,7 +63,11 @@ void Collider::Update(std::vector<Entity*> e, std::vector<Tile*> t)
 		{
 			if (!t[j]->isPassable() )
 			{
-				CheckCollision(&e[i]->GetRect(), &t[j]->GetRect(), 0.0f);
+				if (CheckCollision(&e[i]->GetRect(), &t[j]->GetRect(), 0.5f))
+				{
+					//std::cout << e[0]->GetPos().x << std::endl;
+					//std::cout << "collision" << std::endl;
+				}
 			}
 		}
 	}

@@ -23,7 +23,7 @@ void Entity::Draw(sf::RenderTarget& target)
 	target.draw(rect);
 }
 
-sf::RectangleShape Entity::GetRect()
+sf::RectangleShape& Entity::GetRect()
 {
 	return rect;
 }
