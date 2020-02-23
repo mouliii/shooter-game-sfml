@@ -10,9 +10,10 @@ public:
 	void LoadLevel(std::string filepath);
 	void AddTile(sf::Vector2f pos, sf::Vector2f dimensions, sf::Color color);
 	void Draw(sf::RenderTarget& rt);
+	std::vector<std::unique_ptr<Tile>>& GetTiles() { return pTiles; }
 private:
 	float dims;
-	std::vector<Tile> tiles;
+	std::vector<std::unique_ptr<Tile>> pTiles;
 };
 
 // DEFAULTTAA ATM 16x16 TILE

@@ -29,16 +29,16 @@ void Tilemap::LoadLevel(std::string filepath)
                 break;
             case '0':
             {
-                Tile t(sf::Vector2f(x, y), { dims,dims }, sf::Color(255, 255, 255, 255));
-                tiles.push_back(t);
+                std::unique_ptr<Tile> t(new Tile(sf::Vector2f(x, y), { dims,dims }, sf::Color(255, 255, 255, 255)));
+                pTiles.emplace_back(std::move(t));
                 x += dims;
             }
             break;
             case '1':
             {
-                Tile t(sf::Vector2f(x, y), { dims,dims }, sf::Color(105, 150, 200, 255));
-                tiles.push_back(t);
-                x += 16;
+                std::unique_ptr<Tile> t(new Tile(sf::Vector2f(x, y), { dims,dims }, sf::Color(105, 150, 250, 255)));
+                pTiles.emplace_back(std::move(t));
+                x += dims;
             }
             break;
             case '\n':
@@ -56,14 +56,14 @@ void Tilemap::LoadLevel(std::string filepath)
 
 void Tilemap::AddTile(sf::Vector2f pos, sf::Vector2f dimensions, sf::Color color)
 {
-	Tile t(pos, dimensions, color);
-	tiles.push_back(t);
+    std::unique_ptr<Tile> t(new Tile(pos, dimensions, color));
+	pTiles.emplace_back(std::move(t));
 }
 
 void Tilemap::Draw(sf::RenderTarget& rt)
 {
-	for (auto& t : tiles)
+	for (auto& t : pTiles)
 	{
-		rt.draw(t.GetRect());
+		rt.draw(t->GetRect());
 	}
 }
