@@ -9,7 +9,7 @@ class Collider
 public:
 	Collider() = default;
 	void Move(sf::RectangleShape* body, sf::Vector2f delta);
-	bool CheckCollision(sf::RectangleShape* _this, sf::RectangleShape* other,  float push);
+	void CheckCollision(sf::RectangleShape* _this, sf::RectangleShape* other,  float push);
 	void Update(std::vector<Entity*> e, std::vector<Tile*> t);
 private:
 };

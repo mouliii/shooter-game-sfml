@@ -7,7 +7,7 @@ void Collider::Move(sf::RectangleShape* body, sf::Vector2f delta)
 	body->move(delta);
 }
 
-bool Collider::CheckCollision(sf::RectangleShape* _this, sf::RectangleShape* other, float push)
+void Collider::CheckCollision(sf::RectangleShape* _this, sf::RectangleShape* other, float push)
 {
 	sf::Vector2f otherPosition = other->getPosition();
 	sf::Vector2f otherHalfSize = other->getSize() / 2.f;
@@ -48,9 +48,7 @@ bool Collider::CheckCollision(sf::RectangleShape* _this, sf::RectangleShape* oth
 				Move(other, { 0.0f, intersectY * push });
 			}
 		}
-		return true;
 	}
-	return false;
 }
 
 void Collider::Update(std::vector<Entity*> e, std::vector<Tile*> t)
@@ -62,12 +60,8 @@ void Collider::Update(std::vector<Entity*> e, std::vector<Tile*> t)
 		{
 			if (!t[j]->isPassable() )
 			{
-				if (CheckCollision(&e[i]->GetRect(), &t[j]->GetRect(), 1.0f))
-				{
-					std::cout << "hit" << std::endl;
-				}
+				CheckCollision(&e[i]->GetRect(), &t[j]->GetRect(), 0.0f);
 			}
-			
 		}
 	}
 }
