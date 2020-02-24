@@ -3,6 +3,12 @@
 #include "RectCircleCollision.h"
 #include <iostream>
 
+BulletManager::BulletManager(Tilemap& tm)
+	:
+	tm(tm)
+{
+}
+
 void BulletManager::AddBullet(sf::Vector2f pos, sf::Vector2f dir, float radius, float speed, float maxDistance, sf::Color color, std::string owner)
 {
 	std::unique_ptr<Bullet> b(new Bullet(pos, dir, radius, speed, maxDistance, color, owner));
@@ -49,6 +55,24 @@ void BulletManager::Update( EntityManager* em, float dt)
 		else //  kaikki muut sekä "virheet"
 		{
 
+		}
+		//////  bullet - wall collision /////////
+		for (size_t i = 0; i < pBullets.size(); i++)
+		{
+			for (size_t j = 0; j < tm.GetTiles().size(); j++)
+			{
+				if (!tm.GetTiles()[j]->isPassable())
+				{
+					if (CircleRectCollision(pBullets[i]->GetCircle(), tm.GetTiles()[j]->GetRect()))
+					{
+						pBullets.erase(pBullets.begin() + i);
+						if (pBullets.size() == 0)
+						{
+							break;
+						}
+					}
+				}
+			}
 		}
 	}
 }

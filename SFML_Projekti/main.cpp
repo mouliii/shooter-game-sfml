@@ -5,19 +5,14 @@
 #include "EntityManager.h"
 #include "Tilemap.h"
 #include "Collider.h"
-/*  collision ---> bullet collision
-managerit k‰ytt‰m‰‰n smart poibntereita asd 
-tilemap map
-TILEMAP DEFAULTTAA 16x16 ATM !!!!  <----------
-kamera - pelaaja kulmat
-fixed const int/float size tile 'n shit
-*/
+//   bullet collision ---->  entity - tile collision | ei kaikkia tilej‰ vaa array ---->
+
 /*
 ongelmat
 random vector out of range, ei tullu uudestaa
 16x16 onks hyv‰?
 */
-int TILEMAPDIMENSIONS = 16;
+extern const int TILEMAPDIMENSIONS = 16;
 
 sf::Event event;
 sf::View view;
@@ -25,8 +20,8 @@ sf::Clock _clock;
 float curTime = float(_clock.getElapsedTime().asMilliseconds());
 
 EntityManager em;
-BulletManager bm;
 Tilemap tm(TILEMAPDIMENSIONS);
+BulletManager bm(tm);
 Collider collider;
 
 int main()
@@ -38,7 +33,7 @@ int main()
     window.setView(view);
     // MAIN LOOP
     tm.LoadLevel("level.txt");
-    std::unique_ptr<Player> p(new Player({ -10.f,-10.f }, &bm));
+    std::unique_ptr<Player> p(new Player({ 20.f,20.f }, &bm));
     std::unique_ptr<Enemy> e(new Enemy({ 18.f,18.f }, &bm));
     em.AddEntity(std::move(p) );
     em.AddEntity(std::move(e));

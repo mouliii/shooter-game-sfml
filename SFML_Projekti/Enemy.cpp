@@ -31,7 +31,9 @@ void Enemy::Update(sf::Vector2f mpos, std::vector<std::unique_ptr<Entity> >& em,
 	}
 	pos.x += dir.x * spd;
 	pos.y += dir.y * spd;
-	rect.setPosition(pos);
+	rect.move(dir.x * spd, dir.y * spd);
+	pos = rect.getPosition();
+	//rect.setPosition(pos);
 	// ampuminen
 	if (canShoot)
 	{

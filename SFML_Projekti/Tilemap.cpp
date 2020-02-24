@@ -70,3 +70,16 @@ void Tilemap::Draw(sf::RenderTarget& rt)
 		rt.draw(t->GetRect());
 	}
 }
+
+std::unique_ptr<Tile>& Tilemap::FindTile(sf::Vector2f tile_cords)
+{
+    for (auto& t : pTiles)
+    {
+        if (t->GetMapCoordinates() == tile_cords)
+        {
+            return t;
+        }
+    }
+    std::cout << "EI LOYDY TIILIA" << std::endl;
+    return pTiles[0];
+}
