@@ -56,21 +56,19 @@ void BulletManager::Update( EntityManager* em, float dt)
 		{
 
 		}
-		//////  bullet - wall collision /////////
-		for (size_t i = 0; i < pBullets.size(); i++)
+	}
+	//////  bullet - wall collision /////////
+	for (size_t i = 0; i < pBullets.size(); i++)
+	{
+		for (size_t j = 0; j < tm.GetTiles().size(); j++)
 		{
-			for (size_t j = 0; j < tm.GetTiles().size(); j++)
+			if (!tm.GetTiles()[j]->isPassable())
 			{
-				if (!tm.GetTiles()[j]->isPassable())
+				if (CircleRectCollision(pBullets[i]->GetCircle(), tm.GetTiles()[j]->GetRect()))
 				{
-					if (CircleRectCollision(pBullets[i]->GetCircle(), tm.GetTiles()[j]->GetRect()))
-					{
-						pBullets.erase(pBullets.begin() + i);
-						if (pBullets.size() == 0)
-						{
-							break;
-						}
-					}
+					//std::cout << pBullets.size() << std::endl;
+					pBullets.erase(pBullets.begin() + i);
+					break;
 				}
 			}
 		}

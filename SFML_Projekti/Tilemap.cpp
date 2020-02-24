@@ -25,8 +25,6 @@ void Tilemap::LoadLevel(std::string filepath)
             {
             case '.':
             {
-                std::unique_ptr<Tile> t(new Tile(sf::Vector2f(x, y), { dims,dims }, sf::Color(0, 0, 0, 255), true));
-                pTiles.emplace_back(std::move(t));
                 x += dims;
                 break;
             }
