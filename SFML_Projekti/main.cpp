@@ -5,11 +5,11 @@
 #include "EntityManager.h"
 #include "Tilemap.h"
 #include "Collider.h"
-//   bullet collision ---->  entity - tile collision | ei kaikkia tilejä vaa array ---->
+//   texturet -> texture manager -> ???? sprite
 
 /*
 ongelmat
-random vector out of range, ei tullu uudestaa
+check vaa ympärillä olevat tilet
 16x16 onks hyvä?
 */
 extern const int TILEMAPDIMENSIONS = 16;
