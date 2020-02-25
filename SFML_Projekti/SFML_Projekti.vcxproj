@@ -166,6 +166,7 @@
     <ClInclude Include="EntityManager.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="RectCircleCollision.h" />
+    <ClInclude Include="TextureManager.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="Tilemap.h" />
   </ItemGroup>
