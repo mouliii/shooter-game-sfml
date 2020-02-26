@@ -1,12 +1,13 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "BulletManager.h"
 #include <iostream>
+#include "BulletManager.h"
+#include "TextureManager.h"
 
 class Entity
 {
 public:
-	Entity(sf::Vector2f pos, BulletManager* bm);
+	Entity(sf::Vector2f pos, BulletManager& bm, TextureManager& tm, std::string path);
 	virtual ~Entity();
 	virtual void Update(sf::Vector2f mousepos, std::vector<std::unique_ptr<Entity> >& em, float dt);
 	void Draw(sf::RenderTarget& target);
@@ -18,6 +19,7 @@ public:
 	virtual void Print() { std::cout << "entity debug print" << std::endl; }
 	void SetPos(sf::Vector2f pos) { this->pos = pos; }
 protected:
+	sf::Sprite sprite;
 	int hp = 3;
 	float dims = 16.f;
 	bool isDead = false;
@@ -29,5 +31,6 @@ protected:
 	sf::RectangleShape rect;
 	//sf::Sprite sprite
 	//sf::Texture texture;
-	BulletManager* bm;
+	BulletManager& bm;
+	TextureManager& tm;
 };

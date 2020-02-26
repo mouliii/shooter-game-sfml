@@ -1,12 +1,17 @@
 #include "Entity.h"
 
-Entity::Entity(sf::Vector2f pos, BulletManager* bm)
+Entity::Entity(sf::Vector2f pos, BulletManager& bm, TextureManager& tm, std::string path)
 	:
 	pos(pos),
-	bm(bm)
+	bm(bm),
+	tm(tm)
 {
 	rect.setSize(sf::Vector2f(dims,dims));
 	rect.setPosition(pos);
+
+	sprite.setTexture(*tm.AcquireTexture(path));
+	sprite.setPosition(pos);
+
 }
 
 Entity::~Entity()
@@ -20,7 +25,14 @@ void Entity::Update(sf::Vector2f mousepos, std::vector<std::unique_ptr<Entity> >
 
 void Entity::Draw(sf::RenderTarget& target)
 {
-	target.draw(rect);
+	target.draw(sprite);
+	sf::RectangleShape temp;
+	temp.setPosition(rect.getPosition());
+	temp.setSize(rect.getSize());
+	temp.setOutlineThickness(0.5f);
+	temp.setOutlineColor(sf::Color(255, 255, 255));
+	temp.setFillColor(sf::Color::Transparent);
+	target.draw(temp);
 }
 
 sf::RectangleShape& Entity::GetRect()

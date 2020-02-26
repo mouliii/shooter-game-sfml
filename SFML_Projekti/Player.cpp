@@ -1,12 +1,15 @@
 #include "Player.h"
 
-Player::Player(sf::Vector2f pos, BulletManager* bm)
+Player::Player(sf::Vector2f pos, BulletManager& bm, TextureManager& tm, std::string path)
 	:
-	Entity(pos,bm)
+	Entity(pos,bm,tm,path)
 {
 	rect.setSize({ dims,dims });
 	rect.setFillColor(sf::Color::Blue);
 	rect.setPosition(pos);
+
+	sprite.setScale({ 0.2f, 0.2f });
+	sprite.setTextureRect(sf::IntRect(0, 0, 100, 100));
 }
 
 void Player::Update(sf::Vector2f mousepos, std::vector<std::unique_ptr<Entity> >& em, float dt)
@@ -44,8 +47,8 @@ void Player::Update(sf::Vector2f mousepos, std::vector<std::unique_ptr<Entity> >
 		spd = speed * dt;
 	}
 	rect.move(dir.x * spd, dir.y * spd);
+	sprite.setPosition(rect.getPosition());
 	pos = rect.getPosition();
-	//rect.setPosition( pos );
 
 	// update ampuminen
 	if (canShoot)
@@ -53,7 +56,7 @@ void Player::Update(sf::Vector2f mousepos, std::vector<std::unique_ptr<Entity> >
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 		{
 			canShoot = false;
-			bm->AddBullet(GetPosCentered(), mousepos, 5.f, 400.f, 400.f, sf::Color::Green,"Player");
+			bm.AddBullet(GetPosCentered(), mousepos, 5.f, 400.f, 400.f, sf::Color::Green,"Player");
 		}
 	}
 	else

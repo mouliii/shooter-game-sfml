@@ -23,6 +23,7 @@ EntityManager em;
 Tilemap tm(TILEMAPDIMENSIONS);
 BulletManager bm(tm);
 Collider collider;
+TextureManager textures;
 
 int main()
 {
@@ -33,8 +34,8 @@ int main()
     window.setView(view);
     // MAIN LOOP
     tm.LoadLevel("level.txt");
-    std::unique_ptr<Player> p(new Player({ 20.f,20.f }, &bm));
-    std::unique_ptr<Enemy> e(new Enemy({ 30.f,18.f }, &bm));
+    std::unique_ptr<Player> p(new Player({ 64.f,32.f }, bm, textures,"textures/lunk.png"));
+    std::unique_ptr<Enemy> e(new Enemy({ 30.f,18.f }, bm, textures, "textures/lunk.png"));
     em.AddEntity(std::move(p) );
     em.AddEntity(std::move(e));
 

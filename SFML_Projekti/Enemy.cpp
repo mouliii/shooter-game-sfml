@@ -1,13 +1,17 @@
 #include "Enemy.h"
 #include <iostream>
 
-Enemy::Enemy(sf::Vector2f pos, BulletManager* bm)
+Enemy::Enemy(sf::Vector2f pos, BulletManager& bm, TextureManager& tm, std::string path)
 	:
-	Entity(pos,bm)
+	Entity(pos,bm,tm,path)
 {
 	rect.setSize(sf::Vector2f(dims, dims));
 	rect.setFillColor(sf::Color::Yellow);
 	rect.setPosition(pos);
+
+
+	sprite.setScale({ 0.2f, 0.2f });
+	sprite.setTextureRect(sf::IntRect(100, 100, 100, 200));
 }
 
 void Enemy::Update(sf::Vector2f mpos, std::vector<std::unique_ptr<Entity> >& em, float dt)
@@ -31,14 +35,15 @@ void Enemy::Update(sf::Vector2f mpos, std::vector<std::unique_ptr<Entity> >& em,
 	}
 	pos.x += dir.x * spd;
 	pos.y += dir.y * spd;
-	rect.move(dir.x * spd, dir.y * spd);
-	pos = rect.getPosition();
-	//rect.setPosition(pos);
+
+	sprite.move(dir.x * spd, dir.y * spd);
+	pos = sprite.getPosition();
+
 	// ampuminen
 	if (canShoot)
 	{
 		canShoot = false;
-		bm->AddBullet(GetPosCentered(), em[0]->GetPosCentered(), 5.f, 300.f, 250.f, sf::Color::Green, "Enemy");
+		bm.AddBullet(GetPosCentered(), em[0]->GetPosCentered(), 5.f, 300.f, 250.f, sf::Color::Green, "Enemy");
 	}
 	else
 	{
