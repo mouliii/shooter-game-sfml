@@ -2,14 +2,17 @@
 
 Player::Player(sf::Vector2f pos, BulletManager& bm, TextureManager& tm, std::string path)
 	:
-	Entity(pos,bm,tm,path)
+	Entity(pos, bm, tm, path)
 {
-	rect.setSize({ dims,dims });
-	rect.setFillColor(sf::Color::Blue);
+	rect.setSize({ width,height });
+	//rect.setFillColor(sf::Color::Blue);
 	rect.setPosition(pos);
-
 	sprite.setScale({ 0.2f, 0.2f });
-	sprite.setTextureRect(sf::IntRect(0, 0, 100, 100));
+
+	animations[int(AnimationIndex::RWALK)] = Animation(tm, "textures/lunk.png", 0, 104 * 7, 10, 96, 104, 0.15f);
+	animations[int(AnimationIndex::LWALK)] = Animation(tm, "textures/lunk.png", 0, 104 * 5, 10, 96, 104, 0.15f);
+	animations[int(AnimationIndex::UWALK)] = Animation(tm, "textures/lunk.png", 0, 104 * 6, 10, 96, 104, 0.15f);
+	animations[int(AnimationIndex::DWALK)] = Animation(tm, "textures/lunk.png", 0, 104 * 4, 10, 96, 104, 0.15f);
 }
 
 void Player::Update(sf::Vector2f mousepos, std::vector<std::unique_ptr<Entity> >& em, float dt)
@@ -17,25 +20,30 @@ void Player::Update(sf::Vector2f mousepos, std::vector<std::unique_ptr<Entity> >
 	// ehkä laittaa liikkuminen omaan funktioon ja sit se tähä
 	sf::Vector2f dir(0.f,0.f);
 	bool diagonalCheck[2] = { 0,0 };
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-	{
-		dir += { -1.f, 0.f };
-		diagonalCheck[0] = 1;
-	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-	{
-		dir += { 1.f, 0.f };
-		diagonalCheck[0] = 1;
-	}
+	
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 	{
 		dir += { 0.f, -1.f };
 		diagonalCheck[1] = 1;
+		curAnimation = AnimationIndex::UWALK;
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 	{
 		dir += { 0.f, 1.f };
 		diagonalCheck[1] = 1;
+		curAnimation = AnimationIndex::DWALK;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+	{
+		dir += { -1.f, 0.f };
+		diagonalCheck[0] = 1;
+		curAnimation = AnimationIndex::LWALK;
+	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+	{
+		dir += { 1.f, 0.f };
+		diagonalCheck[0] = 1;
+		curAnimation = AnimationIndex::RWALK;
 	}
 	float spd = 0.0f;
 	if (diagonalCheck[0] && diagonalCheck[1])
@@ -49,7 +57,8 @@ void Player::Update(sf::Vector2f mousepos, std::vector<std::unique_ptr<Entity> >
 	rect.move(dir.x * spd, dir.y * spd);
 	sprite.setPosition(rect.getPosition());
 	pos = rect.getPosition();
-
+	animations[curAnimation].Update(dt);
+	animations[curAnimation].ApplyToSprite(sprite);
 	// update ampuminen
 	if (canShoot)
 	{

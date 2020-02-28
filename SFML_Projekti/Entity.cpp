@@ -6,7 +6,7 @@ Entity::Entity(sf::Vector2f pos, BulletManager& bm, TextureManager& tm, std::str
 	bm(bm),
 	tm(tm)
 {
-	rect.setSize(sf::Vector2f(dims,dims));
+	rect.setSize(sf::Vector2f(width,height));
 	rect.setPosition(pos);
 
 	sprite.setTexture(*tm.AcquireTexture(path));

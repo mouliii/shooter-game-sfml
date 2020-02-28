@@ -3,6 +3,7 @@
 #include <iostream>
 #include "BulletManager.h"
 #include "TextureManager.h"
+#include "Animation.h"
 
 class Entity
 {
@@ -21,7 +22,8 @@ public:
 protected:
 	sf::Sprite sprite;
 	int hp = 3;
-	float dims = 16.f;
+	float width = 16.f;
+	float height = 16.f;
 	bool isDead = false;
 	bool canShoot = true;
 	float shootCooldown = 0.3f;

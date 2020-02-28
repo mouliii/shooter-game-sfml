@@ -5,7 +5,7 @@ Enemy::Enemy(sf::Vector2f pos, BulletManager& bm, TextureManager& tm, std::strin
 	:
 	Entity(pos,bm,tm,path)
 {
-	rect.setSize(sf::Vector2f(dims, dims));
+	rect.setSize(sf::Vector2f(width, height));
 	rect.setFillColor(sf::Color::Yellow);
 	rect.setPosition(pos);
 
