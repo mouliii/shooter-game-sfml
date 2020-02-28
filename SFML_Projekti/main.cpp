@@ -5,7 +5,7 @@
 #include "EntityManager.h"
 #include "Tilemap.h"
 #include "Collider.h"
-//   texturet -> texture manager -> ???? sprite
+//   idle animaatio ---> rework tile map
 
 /*
 ongelmat

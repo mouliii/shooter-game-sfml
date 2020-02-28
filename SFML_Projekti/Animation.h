@@ -10,6 +10,9 @@ public:
 	Animation(TextureManager& textures, std::string path, int x, int y, int nFrames, int frameWidth, int frameHeight, float frameTime );
 	void Update(float dt);
 	void ApplyToSprite(sf::Sprite& sprite);
+	void StopAnimation();
+	void ResumeAnimation();
+	void SetFrameTo(int nFrame);
 private:
 	void Advance();
 private:
@@ -18,6 +21,7 @@ private:
 	float frameTime;
 	int nFrames;
 	int curFrame = 0;
+	bool stopAnimation = false;
 	std::vector<sf::IntRect> frames;
 
 };

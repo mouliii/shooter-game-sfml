@@ -33,13 +33,31 @@ void Animation::Update(float dt)
 	while (curTime >= frameTime)
 	{
 		curTime -= frameTime;
-		Advance();
+		if (!stopAnimation)
+		{
+			Advance();
+		}
 	}
 }
 
 void Animation::ApplyToSprite(sf::Sprite& sprite)
 {
 	sprite.setTextureRect(frames[curFrame]);
+}
+
+void Animation::StopAnimation()
+{
+	stopAnimation = true;
+}
+
+void Animation::ResumeAnimation()
+{
+	stopAnimation = false;
+}
+
+void Animation::SetFrameTo(int nFrame)
+{
+	curFrame = nFrame;
 }
 
 void Animation::Advance()
