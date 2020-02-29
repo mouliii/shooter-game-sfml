@@ -63,12 +63,16 @@ void Collider::Update(std::vector<std::unique_ptr<Entity>>& e, std::vector<std::
 		{
 			if (!t[j]->isPassable() )
 			{
-				if (CheckCollision(&e[i]->GetRect(), &t[j]->GetRect(), 0.0f))
+				if (CheckCollision(&e[i]->GetRect(), &t[j]->GetRect(), t[j]->GetResistance()))
 				{
 					//std::cout << e[0]->GetPos().x << std::endl;
 					//std::cout << "collision" << std::endl;
 				}
 			}
 		}
+	}
+	for (size_t i = 0; i < t.size(); i++)
+	{
+		// tile to tile
 	}
 }

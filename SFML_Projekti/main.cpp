@@ -20,7 +20,7 @@ sf::Clock _clock;
 float curTime = float(_clock.getElapsedTime().asMilliseconds());
 
 EntityManager em;
-Tilemap tm(TILEMAPDIMENSIONS);
+Tilemap tm(TILEMAPDIMENSIONS,10,5);
 BulletManager bm(tm);
 Collider collider;
 TextureManager textures;
@@ -75,13 +75,20 @@ int main()
         bm.Update(&em,dt);
         collider.Update(em.GetEntities(), tm.GetTiles());
         view.setCenter(em.GetEntities()[0]->GetPosCentered()); // vika update | enne draw
-        //std::cout << event.mouseWheel.delta << std::endl;
+        //std::cout << mPos.y / TILEMAPDIMENSIONS << std::endl;
+        sf::RectangleShape rs;
+        rs.setPosition(tm.GetTile(mPos.x / TILEMAPDIMENSIONS, mPos.y / TILEMAPDIMENSIONS)->GetRect().getPosition());
+        rs.setSize(tm.GetTile(mPos.x / TILEMAPDIMENSIONS, mPos.y / TILEMAPDIMENSIONS)->GetRect().getSize());
+        rs.setOutlineThickness(0.5f);
+        rs.setOutlineColor(sf::Color(255, 0, 0));
+        rs.setFillColor(sf::Color::Transparent);
         // DRAW
         window.clear();
         window.setView(view);
         tm.Draw(window);
         em.Draw(window);
         bm.Draw(window);
+        window.draw(rs);
         window.display();
     }
 

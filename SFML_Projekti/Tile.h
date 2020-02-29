@@ -4,17 +4,19 @@
 class Tile
 {
 public:
-	Tile(sf::Vector2f pos, sf::Vector2f dimensions,sf::Color color, bool passable);
+	Tile(sf::Vector2f pos, sf::Vector2f dimensions,sf::Color color, bool passable, float resistance);
 	sf::Vector2f GetPixelCoordinate() { return pos; }
 	sf::Vector2f GetMapCoordinates();
 	sf::Vector2f GetTileDimensions() { return dimensions; }
 	void Draw(sf::RenderTarget& rt);
 	sf::RectangleShape& GetRect() { return rect; }
 	bool isPassable() { return passable; }
+	float& GetResistance() { return resistance; }
 private:
 	sf::RectangleShape rect;
 	sf::Vector2f pos;
 	sf::Vector2f dimensions; // [width , height]
 	sf::Color color;
 	bool passable;
+	float resistance;
 };
