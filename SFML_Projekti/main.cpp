@@ -21,7 +21,7 @@ sf::Clock _clock;
 float curTime = float(_clock.getElapsedTime().asMilliseconds());
 
 EntityManager em;
-Tilemap tm(TILEMAPDIMENSIONS,30,10);
+Tilemap tm(TILEMAPDIMENSIONS,12,10);
 BulletManager bm(tm);
 Collider collider;
 TextureManager textures;

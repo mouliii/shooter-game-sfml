@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include "Tile.h"
+#include "TextureManager.h"
 
 class Tilemap
 {
