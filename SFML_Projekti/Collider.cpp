@@ -1,6 +1,8 @@
 #include "Collider.h"
 #include <iostream>
 
+extern const int TILEMAPDIMENSIONS;
+
 
 void Collider::Move(sf::RectangleShape* body, sf::Vector2f delta)
 {
@@ -53,26 +55,34 @@ bool Collider::CheckCollision(sf::RectangleShape* _this, sf::RectangleShape* oth
 	return false;
 }
 
-void Collider::Update(std::vector<std::unique_ptr<Entity>>& e, std::vector<std::unique_ptr<Tile>>& t)
+void Collider::Update(std::vector<std::unique_ptr<Entity>>& e, Tilemap& tm)
 {
-	
 	for (size_t i = 0; i < e.size(); i++)
 	{
-		// entity tiles chekki kö tähän?
-		for (size_t j = 0; j < t.size(); j++)
+		sf::RectangleShape tempRect = e[i]->GetRect();
+		sf::Vector2f topLeft = tempRect.getPosition();							// top left
+		sf::Vector2f topRight = { topLeft.x + tempRect.getSize().x, topLeft.y - 1 };// top right
+		sf::Vector2f botLeft = { topLeft.x, topLeft.y + tempRect.getSize().y }; // bot left
+		sf::Vector2f botRight = { topLeft.x + tempRect.getSize().x, topLeft.y + tempRect.getSize().y - 1 };// bot right
+
+		for (int ix = int(topLeft.x); ix <= int(topRight.x); ix += TILEMAPDIMENSIONS)
 		{
-			if (!t[j]->isPassable() )
+			for (int iy = int(topLeft.y); iy <= int(botLeft.y); iy += TILEMAPDIMENSIONS)
 			{
-				if (CheckCollision(&e[i]->GetRect(), &t[j]->GetRect(), t[j]->GetResistance()))
+				if ( !tm.GetTile(ix / TILEMAPDIMENSIONS, iy / TILEMAPDIMENSIONS)->isPassable() )
 				{
-					//std::cout << e[0]->GetPos().x << std::endl;
-					//std::cout << "collision" << std::endl;
+					if (CheckCollision(&e[i]->GetRect(), &tm.GetTile(ix / TILEMAPDIMENSIONS, iy / TILEMAPDIMENSIONS)->GetRect(), tm.GetTile(ix / TILEMAPDIMENSIONS, iy / TILEMAPDIMENSIONS)->GetResistance()))
+					{
+						//std::cout << e[0]->GetPos().x << std::endl;
+						//std::cout << "collision" << std::endl;
+					}
 				}
 			}
+			
 		}
 	}
-	for (size_t i = 0; i < t.size(); i++)
+	for (size_t i = 0; i < 5; i++)
 	{
-		// tile to tile
+		// object to tile
 	}
 }

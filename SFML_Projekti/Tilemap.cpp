@@ -29,7 +29,7 @@ void Tilemap::LoadLevel(std::string filepath)
             {
                 for ( ; c != '\n' ; c = in.get() )
                 {
-
+                    
                 }
             }
             if (y / TILEMAPDIMENSIONS >= mapHeight)

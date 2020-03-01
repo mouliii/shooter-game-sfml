@@ -21,7 +21,7 @@ sf::Clock _clock;
 float curTime = float(_clock.getElapsedTime().asMilliseconds());
 
 EntityManager em;
-Tilemap tm(TILEMAPDIMENSIONS,10,5);
+Tilemap tm(TILEMAPDIMENSIONS,30,10);
 BulletManager bm(tm);
 Collider collider;
 TextureManager textures;
@@ -34,8 +34,8 @@ int main()
     view = sf::View(sf::Vector2f(0.f, 0.f), sf::Vector2f(300.f, 200.f));
     window.setView(view);
     // MAIN LOOP
-    tm.LoadLevel("level.txt");
-    std::unique_ptr<Player> p(new Player({ 64.f,32.f }, bm, textures,"textures/lunk.png"));
+    tm.LoadLevel("level2.txt");
+    std::unique_ptr<Player> p(new Player({ 60.f,35.f }, bm, textures,"textures/lunk.png"));
     std::unique_ptr<Enemy> e(new Enemy({ 30.f,18.f }, bm, textures, "textures/lunk.png"));
     em.AddEntity(std::move(p) );
     em.AddEntity(std::move(e));
@@ -74,7 +74,7 @@ int main()
         // UPDATE
         em.Update(mPos, dt);
         bm.Update(&em,dt);
-        collider.Update(em.GetEntities(), tm.GetTiles());
+        collider.Update(em.GetEntities(), tm);
         view.setCenter(em.GetEntities()[0]->GetPosCentered()); // vika update | enne draw
         //std::cout << mPos.y / TILEMAPDIMENSIONS << std::endl;
         sf::RectangleShape rs;

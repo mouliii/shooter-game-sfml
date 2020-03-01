@@ -10,6 +10,6 @@ public:
 	Collider() = default;
 	void Move(sf::RectangleShape* body, sf::Vector2f delta);
 	bool CheckCollision(sf::RectangleShape* _this, sf::RectangleShape* other,  float push);
-	void Update(std::vector<std::unique_ptr<Entity>>& em, std::vector<std::unique_ptr<Tile>>& tm);
+	void Update(std::vector<std::unique_ptr<Entity>>& em, Tilemap& tm);
 private:
 };
