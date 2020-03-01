@@ -25,6 +25,17 @@ void Tilemap::LoadLevel(std::string filepath)
     {
         for (char c = in.get(); in.good(); c = in.get())
         {
+            if (x / TILEMAPDIMENSIONS >= mapWidth)
+            {
+                for ( ; c != '\n' ; c = in.get() )
+                {
+
+                }
+            }
+            if (y / TILEMAPDIMENSIONS >= mapHeight)
+            {
+                break;
+            }
             switch (c)
             {
             case '.':

@@ -11,6 +11,7 @@
 ongelmat
 check vaa ympärillä olevat tilet
 16x16 onks hyvä?
+liikkuvat tilet kusee !!
 */
 extern const int TILEMAPDIMENSIONS = 16;
 
@@ -77,8 +78,8 @@ int main()
         view.setCenter(em.GetEntities()[0]->GetPosCentered()); // vika update | enne draw
         //std::cout << mPos.y / TILEMAPDIMENSIONS << std::endl;
         sf::RectangleShape rs;
-        rs.setPosition(tm.GetTile(mPos.x / TILEMAPDIMENSIONS, mPos.y / TILEMAPDIMENSIONS)->GetRect().getPosition());
-        rs.setSize(tm.GetTile(mPos.x / TILEMAPDIMENSIONS, mPos.y / TILEMAPDIMENSIONS)->GetRect().getSize());
+        rs.setPosition(tm.GetTile( int(mPos.x / TILEMAPDIMENSIONS), int(mPos.y / TILEMAPDIMENSIONS))->GetRect().getPosition());
+        rs.setSize(tm.GetTile( int(mPos.x / TILEMAPDIMENSIONS), int(mPos.y / TILEMAPDIMENSIONS))->GetRect().getSize());
         rs.setOutlineThickness(0.5f);
         rs.setOutlineColor(sf::Color(255, 0, 0));
         rs.setFillColor(sf::Color::Transparent);
