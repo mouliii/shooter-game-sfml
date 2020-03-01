@@ -4,11 +4,12 @@
 
 extern const int TILEMAPDIMENSIONS;
 
-Tilemap::Tilemap(int tile_dimensions, int mapWidthInTiles, int mapHeightInTiles)
+Tilemap::Tilemap(int tile_dimensions, int mapWidthInTiles, int mapHeightInTiles, TextureManager& tm)
     :
     dims(float(tile_dimensions) ),
     mapWidth(mapWidthInTiles),
-    mapHeight(mapHeightInTiles)
+    mapHeight(mapHeightInTiles),
+    tm(tm)
 {
 }
 
@@ -40,28 +41,28 @@ void Tilemap::LoadLevel(std::string filepath)
             {
             case '.':
             {
-                std::unique_ptr<Tile> t(new Tile(sf::Vector2f(x, y), { dims,dims }, sf::Color::Transparent, true, 1.0f));
+                std::unique_ptr<Tile> t(new Tile(sf::Vector2f(x, y), { dims,dims }, tm, sf::IntRect(0,0,16,16), sf::Color::Transparent, true, 1.0f));
                 pTiles.emplace_back(std::move(t));
                 x += dims;
                 break;
             }
             case '0':
             {
-                std::unique_ptr<Tile> t(new Tile(sf::Vector2f(x, y), { dims,dims }, sf::Color(255, 255, 255, 255), false, 0.0f));
+                std::unique_ptr<Tile> t(new Tile(sf::Vector2f(x, y), { dims,dims }, tm, sf::IntRect(16*4,16*4,16,16), sf::Color(255, 255, 255, 255), false, 0.0f));
                 pTiles.emplace_back(std::move(t));
                 x += dims;
             }
             break;
             case '1':
             {
-                std::unique_ptr<Tile> t(new Tile(sf::Vector2f(x, y), { dims,dims }, sf::Color(105, 150, 250, 255), false, 0.0f));
+                std::unique_ptr<Tile> t(new Tile(sf::Vector2f(x, y), { dims,dims }, tm, sf::IntRect(32, 32, 16, 16), sf::Color(105, 150, 250, 255), false, 0.0f));
                 pTiles.emplace_back(std::move(t));
                 x += dims;
             }
             break;
             case '3':
             {
-                std::unique_ptr<Tile> t(new Tile(sf::Vector2f(x, y), { dims,dims }, sf::Color(255, 1, 255, 255), false, 0.6f));
+                std::unique_ptr<Tile> t(new Tile(sf::Vector2f(x, y), { dims,dims }, tm, sf::IntRect(0, 0, 16, 16), sf::Color(255, 1, 255, 255), false, 0.6f));
                 pTiles.emplace_back(std::move(t));
                 x += dims;
             }
@@ -70,7 +71,7 @@ void Tilemap::LoadLevel(std::string filepath)
                 // rset [x,y]
                 while (x / TILEMAPDIMENSIONS < mapWidth)
                 {
-                    std::unique_ptr<Tile> t(new Tile(sf::Vector2f(x, y), { dims,dims }, sf::Color::Transparent, true, 1.0f));
+                    std::unique_ptr<Tile> t(new Tile(sf::Vector2f(x, y), { dims,dims }, tm, sf::IntRect(0, 0, 16, 16), sf::Color::Transparent, true, 1.0f));
                     pTiles.emplace_back(std::move(t));
                     x += dims;
                 }
@@ -86,7 +87,7 @@ void Tilemap::LoadLevel(std::string filepath)
         {
             while (x / TILEMAPDIMENSIONS < mapWidth)
             {
-                std::unique_ptr<Tile> t(new Tile(sf::Vector2f(x, y), { dims,dims }, sf::Color::Transparent, true, 1.0f));
+                std::unique_ptr<Tile> t(new Tile(sf::Vector2f(x, y), { dims,dims }, tm, sf::IntRect(0, 0, 16, 16), sf::Color::Transparent, true, 1.0f));
                 pTiles.emplace_back(std::move(t));
                 x += dims;
             }
@@ -96,9 +97,9 @@ void Tilemap::LoadLevel(std::string filepath)
     }
 }
 
-void Tilemap::AddTile(sf::Vector2f pos, sf::Vector2f dimensions, sf::Color color, bool passable, float resistance)
+void Tilemap::AddTile(sf::Vector2f pos, sf::Vector2f dimensions, TextureManager& tm, sf::IntRect textarea, sf::Color color, bool passable, float resistance)
 {
-    std::unique_ptr<Tile> t(new Tile(pos, dimensions, color, passable, resistance));
+    std::unique_ptr<Tile> t(new Tile(pos, dimensions, tm, textarea, color, passable, resistance));
 	pTiles.emplace_back(std::move(t));
 }
 
@@ -106,7 +107,7 @@ void Tilemap::Draw(sf::RenderTarget& rt)
 {
 	for (auto& t : pTiles)
 	{
-		rt.draw(t->GetRect());
+		rt.draw(t->GetSprite());
 	}
 }
 
@@ -143,7 +144,7 @@ std::unique_ptr<Tile>& Tilemap::GetTile(int x, int y)
     }
 
     int index = mapWidth * y + x;
-    if (index >= 0 && index < pTiles.size())
+    if (index >= 0 && index < int(pTiles.size()))
     {
         return pTiles[index];
     }
