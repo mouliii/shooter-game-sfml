@@ -14,7 +14,7 @@ Tile::Tile(sf::Vector2f pos, sf::Vector2f dimensions, TextureManager& tm, sf::In
 	rect.setPosition(sf::Vector2f(pos));
 	rect.setFillColor(color);
 
-	sprite.setTexture(*tm.AcquireTexture("textures/lunk.png"));
+	sprite.setTexture(*tm.AcquireTexture("textures/tilemap.png"));
 	sprite.setTextureRect(textarea);
 	sprite.setPosition(pos);
 

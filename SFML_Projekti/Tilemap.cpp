@@ -41,21 +41,21 @@ void Tilemap::LoadLevel(std::string filepath)
             {
             case '.':
             {
-                std::unique_ptr<Tile> t(new Tile(sf::Vector2f(x, y), { dims,dims }, tm, sf::IntRect(0,0,16,16), sf::Color::Transparent, true, 1.0f));
+                std::unique_ptr<Tile> t(new Tile(sf::Vector2f(x, y), { dims,dims }, tm, sf::IntRect(0,0,1,1), sf::Color::Transparent, true, 1.0f));
                 pTiles.emplace_back(std::move(t));
                 x += dims;
                 break;
             }
             case '0':
             {
-                std::unique_ptr<Tile> t(new Tile(sf::Vector2f(x, y), { dims,dims }, tm, sf::IntRect(16*4,16*4,16,16), sf::Color(255, 255, 255, 255), false, 0.0f));
+                std::unique_ptr<Tile> t(new Tile(sf::Vector2f(x, y), { dims,dims }, tm, sf::IntRect(145,34,16,16), sf::Color(255, 255, 255, 255), false, 0.0f));
                 pTiles.emplace_back(std::move(t));
                 x += dims;
             }
             break;
             case '1':
             {
-                std::unique_ptr<Tile> t(new Tile(sf::Vector2f(x, y), { dims,dims }, tm, sf::IntRect(32, 32, 16, 16), sf::Color(105, 150, 250, 255), false, 0.0f));
+                std::unique_ptr<Tile> t(new Tile(sf::Vector2f(x, y), { dims,dims }, tm, sf::IntRect(48, 79, 16, 16), sf::Color(105, 150, 250, 255), false, 0.0f));
                 pTiles.emplace_back(std::move(t));
                 x += dims;
             }
