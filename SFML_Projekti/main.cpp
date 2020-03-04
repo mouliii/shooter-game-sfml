@@ -5,10 +5,6 @@
 #include "EntityManager.h"
 #include "Tilemap.h"
 #include "Collider.h"
-#include "tmxlite/Map.hpp"
-#include "tmxlite/Layer.hpp"
-#include "tmxlite/TileLayer.hpp"
-#include "tmxlite/ObjectGroup.hpp"
 
 //   idle animaatio ---> rework tile map
 
@@ -39,17 +35,12 @@ int main()
     view = sf::View(sf::Vector2f(0.f, 0.f), sf::Vector2f(300.f, 200.f));
     window.setView(view);
     // MAIN LOOP
-
-    
-
-    //tm.LoadLevel("level2.txt");
+    tm.LoadLevel("level2.txt");
     std::unique_ptr<Player> p(new Player({ 60.f,35.f }, bm, textures,"textures/lunk.png"));
     std::unique_ptr<Enemy> e(new Enemy({ 30.f,18.f }, bm, textures, "textures/lunk.png"));
     em.AddEntity(std::move(p) );
     em.AddEntity(std::move(e));
 
-    //Enemy e({ 150.f, 200.f }, &bm);
-    //em.AddEntity(e);
     //////////
     while (window.isOpen())
     {
@@ -82,7 +73,7 @@ int main()
         // UPDATE
         em.Update(mPos, dt);
         bm.Update(&em,dt);
-        //collider.Update(em.GetEntities(), tm);
+        collider.Update(em.GetEntities(), tm);
         view.setCenter(em.GetEntities()[0]->GetPosCentered()); // vika update | enne draw
         //std::cout << mPos.y / TILEMAPDIMENSIONS << std::endl;
         sf::RectangleShape rs;
@@ -94,7 +85,7 @@ int main()
         // DRAW
         window.clear();
         window.setView(view);
-        //tm.Draw(window);
+        tm.Draw(window);
         em.Draw(window);
         bm.Draw(window);
         window.draw(rs);
