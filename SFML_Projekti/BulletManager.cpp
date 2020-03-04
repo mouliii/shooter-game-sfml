@@ -57,6 +57,7 @@ void BulletManager::Update( EntityManager* em, float dt)
 
 		}
 	}
+	/*
 	//////  bullet - wall collision /////////
 	for (size_t i = 0; i < pBullets.size(); i++)
 	{
@@ -73,6 +74,7 @@ void BulletManager::Update( EntityManager* em, float dt)
 			}
 		}
 	}
+	*/
 }
 
 void BulletManager::Draw(sf::RenderTarget& rt)

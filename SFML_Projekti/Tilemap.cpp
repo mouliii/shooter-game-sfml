@@ -4,40 +4,130 @@
 
 extern const int TILEMAPDIMENSIONS;
 
-Tilemap::Tilemap(int tile_dimensions, int mapWidthInTiles, int mapHeightInTiles, TextureManager& tm)
+Tilemap::Tilemap(TextureManager& tm)
     :
-    dims(float(tile_dimensions) ),
-    mapWidth(mapWidthInTiles),
-    mapHeight(mapHeightInTiles),
     tm(tm)
 {
 }
 
-void Tilemap::LoadLevel(std::string filepath)
+void Tilemap::LoadLevel(std::string filepath, std::string texture_path)
 {
-    float x = 0;
-    float y = 0;
+    texture = *tm.AcquireTexture(texture_path);
+    // lataa mappi ja lue
     std::ifstream in(filepath);
-    if (!in)
+    if (in.good())
     {
-        std::cout << "Failed to load file. Check filepath" << std::endl;
+        std::string str = "";
+        std::string tmp;
+        while (std::getline(in, tmp)) str += tmp;
+        jute::jValue v = jute::parser::parse(str);
+        // laitetaan mappi tiedot tilemappiin
+        dims = v["tilewidth"].as_int();
+        mapHeight = v["layers"][0]["height"].as_int();
+        mapWidth = v["layers"][0]["width"].as_int();
+        nLayers = v["nextlayerid"].as_int();
+
+        int x = 0;
+        int y = 0;
+        for (int j = 0; j < nLayers - 2; j++)
+        {
+            for (int i = 0; i < mapHeight * mapWidth; i++)
+            {
+                int rectx = i % mapWidth + 1;    // % is the "modulo operator", the remainder of i / width;
+                int recty = i / mapHeight;       // where "/" is an integer division
+                int n = (v["layers"][j]["data"][i].as_int());
+                std::unique_ptr<Tile> t(new Tile(sf::Vector2f(x,y), sf::Vector2f(dims,dims), texture, sf::IntRect(rectx,recty,dims,dims), sf::Color::Transparent, 1.0f));
+                pTiles[j].emplace_back(std::move(t));
+            }
+        }
+        x = 0;
+        y = 0;
+        for (int i = 0; i < mapHeight * mapWidth; i++)
+        {
+            // tehää rect
+            sf::IntRect r(x, y, dims, dims);
+            // jos on joku tile nii collision = true   | jos ei oo mitää mapis nii 0 default -> nolla ei ole mikää  textuuri
+            if (v["layers"][nLayers - 1]["data"][i].as_int() != 0)
+            {
+                collisionLayer.push_back({ r,true });
+            }
+            else
+            {
+                collisionLayer.push_back({ r,false });
+            }
+            // bounds check
+            x += mapWidth;
+            if (x > mapWidth * dims)
+            {
+                x = 0;
+                y += dims;
+            }
+        }
     }
     else
     {
-        for (char c = in.get(); in.good(); c = in.get())
+        std::cout << "loading map failed, senkin Uuno kato filepath" << std::endl;
+    }
+    
+}
+
+void Tilemap::AddTile(sf::Vector2f pos, sf::Vector2f dimensions, sf::Texture texture, sf::IntRect textarea, sf::Color color, float resistance)
+{
+    std::unique_ptr<Tile> t(new Tile(pos, dimensions, texture, textarea, color, resistance));
+	pTiles.emplace_back(std::move(t));
+}
+
+void Tilemap::Draw(sf::RenderTarget& rt, sf::Vector2f topleft, sf::Vector2f botright)
+{
+    int x = int(topleft.x);
+    int y = int(topleft.y);
+    int w = int(botright.x);
+    int h = int(botright.y);
+
+    for (size_t i = 0; i < nLayers; i++)
+    {
+        for (int tempx = x; tempx < w; tempx++)
         {
-            if (x / TILEMAPDIMENSIONS >= mapWidth)
+            for (int tempy = y; tempy < h; tempy++)
             {
-                for ( ; c != '\n' ; c = in.get() )
-                {
-                    
-                }
+                rt.draw(GetTile(i, tempx,tempy)->GetSprite());
             }
-            if (y / TILEMAPDIMENSIONS >= mapHeight)
-            {
-                break;
-            }
-            switch (c)
+        }
+    }
+}
+
+std::unique_ptr<Tile>& Tilemap::GetTile(int layer, int x, int y)
+{
+    if (y < 0)
+    {
+        y = 0;
+    }
+    else if ( y > mapHeight - 1)
+    {
+        y = mapHeight - 1;
+    }
+    if (x < 0)
+    {
+        x = 0;
+    }
+    else if (x > mapWidth - 1 )
+    {
+        x = mapWidth - 1;
+    }
+
+    int index = mapWidth * y + x;
+    if (index >= 0 && index < int(pTiles.size()))
+    {
+        return pTiles[layer][index];
+    }
+    else
+    {
+        return pTiles[0][0];
+    }
+}
+
+/*
+switch (c)
             {
             case '.':
             {
@@ -82,74 +172,4 @@ void Tilemap::LoadLevel(std::string filepath)
                 // error 'n shit
                 break;
             }
-        }
-        while (y / TILEMAPDIMENSIONS < mapHeight)
-        {
-            while (x / TILEMAPDIMENSIONS < mapWidth)
-            {
-                std::unique_ptr<Tile> t(new Tile(sf::Vector2f(x, y), { dims,dims }, tm, sf::IntRect(0, 0, 16, 16), sf::Color::Transparent, true, 1.0f));
-                pTiles.emplace_back(std::move(t));
-                x += dims;
-            }
-            x = 0;
-            y += dims;
-        }
-    }
-}
-
-void Tilemap::AddTile(sf::Vector2f pos, sf::Vector2f dimensions, TextureManager& tm, sf::IntRect textarea, sf::Color color, bool passable, float resistance)
-{
-    std::unique_ptr<Tile> t(new Tile(pos, dimensions, tm, textarea, color, passable, resistance));
-	pTiles.emplace_back(std::move(t));
-}
-
-void Tilemap::Draw(sf::RenderTarget& rt)
-{
-	for (auto& t : pTiles)
-	{
-		rt.draw(t->GetSprite());
-	}
-}
-
-std::unique_ptr<Tile>& Tilemap::FindTile(sf::Vector2f tile_cords)
-{
-    for (auto& t : pTiles)
-    {
-        if (t->GetMapCoordinates() == tile_cords)
-        {
-            return t;
-        }
-    }
-    std::cout << "EI LOYDY TIILIA" << std::endl;
-    return pTiles[0];
-}
-
-std::unique_ptr<Tile>& Tilemap::GetTile(int x, int y)
-{
-    if (y < 0)
-    {
-        y = 0;
-    }
-    else if ( y > mapHeight - 1)
-    {
-        y = mapHeight - 1;
-    }
-    if (x < 0)
-    {
-        x = 0;
-    }
-    else if (x > mapWidth - 1 )
-    {
-        x = mapWidth - 1;
-    }
-
-    int index = mapWidth * y + x;
-    if (index >= 0 && index < int(pTiles.size()))
-    {
-        return pTiles[index];
-    }
-    else
-    {
-        return pTiles[0];
-    }
-}
+*/

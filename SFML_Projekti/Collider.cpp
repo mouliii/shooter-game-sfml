@@ -57,6 +57,7 @@ bool Collider::CheckCollision(sf::RectangleShape* _this, sf::RectangleShape* oth
 
 void Collider::Update(std::vector<std::unique_ptr<Entity>>& e, Tilemap& tm)
 {
+	/*
 	for (size_t i = 0; i < e.size(); i++)
 	{
 		sf::RectangleShape tempRect = e[i]->GetRect();
@@ -81,6 +82,7 @@ void Collider::Update(std::vector<std::unique_ptr<Entity>>& e, Tilemap& tm)
 			
 		}
 	}
+	*/
 	for (size_t i = 0; i < 5; i++)
 	{
 		// object to tile

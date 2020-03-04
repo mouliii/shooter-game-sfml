@@ -1,20 +1,18 @@
 #include "Tile.h"
 
-Tile::Tile(sf::Vector2f pos, sf::Vector2f dimensions, TextureManager& tm, sf::IntRect textarea, sf::Color color, bool passable, float resistance)
+Tile::Tile(sf::Vector2f pos, sf::Vector2f dimensions, sf::Texture texture, sf::IntRect textarea, sf::Color color, float resistance)
 	:
 	pos(pos),
 	dimensions(dimensions),
 	color(color),
-	passable(passable),
 	resistance(resistance),
-	area(textarea),
-	tm(tm)
+	area(textarea)
 {
 	rect.setSize(sf::Vector2f(dimensions));
 	rect.setPosition(sf::Vector2f(pos));
 	rect.setFillColor(color);
 
-	sprite.setTexture(*tm.AcquireTexture("textures/tilemap.png"));
+	sprite.setTexture(texture);
 	sprite.setTextureRect(textarea);
 	sprite.setPosition(pos);
 

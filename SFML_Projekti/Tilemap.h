@@ -3,22 +3,26 @@
 #include <vector>
 #include "Tile.h"
 #include "TextureManager.h"
+#include "jute.h"
+
+
 
 class Tilemap
 {
 public:
 	Tilemap() = default;
-	Tilemap(int tile_dimensions, int mapWidthInTiles, int mapHeightInTiles, TextureManager& tm);
-	void LoadLevel(std::string filepath);
-	void AddTile(sf::Vector2f pos, sf::Vector2f dimensions, TextureManager& tm, sf::IntRect textarea, sf::Color color, bool passable, float resistance);
-	void Draw(sf::RenderTarget& rt);
-	std::unique_ptr<Tile>& FindTile(sf::Vector2f tile_cords);
-	std::vector<std::unique_ptr<Tile>>& GetTiles() { return pTiles; }
-	std::unique_ptr<Tile>& GetTile(int x, int y);
+	Tilemap(TextureManager& tm);
+	void LoadLevel(std::string filepath, std::string texture_path);
+	void AddTile(sf::Vector2f pos, sf::Vector2f dimensions, sf::Texture texture, sf::IntRect textarea, sf::Color color, float resistance);
+	void Draw(sf::RenderTarget& rt, sf::Vector2f topleft, sf::Vector2f botright);
+	std::unique_ptr<Tile>& GetTile(int layer, int x, int y);
 private:
-	float dims;
-	int mapWidth;
-	int mapHeight;
+	int nLayers = 0;
+	float dims = 0.0f;
+	int mapWidth = 0;
+	int mapHeight = 0;
 	TextureManager& tm;
-	std::vector<std::unique_ptr<Tile>> pTiles;
+	sf::Texture texture;
+	std::vector<std::vector<std::unique_ptr<Tile>>> pTiles;
+	std::vector<std::pair<sf::IntRect, bool>> collisionLayer;
 };
