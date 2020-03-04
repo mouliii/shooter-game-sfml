@@ -5,7 +5,7 @@
 class Tile
 {
 public:
-	Tile(sf::Vector2f pos, sf::Vector2f dimensions, sf::Texture texture, sf::IntRect Textarea, sf::Color color, float resistance);
+	Tile(sf::Vector2f pos, sf::Vector2f dimensions, sf::Texture* texture, sf::IntRect Textarea, sf::Color color, float resistance);
 	sf::Vector2f GetPixelCoordinate() { return pos; }
 	sf::Vector2f GetMapCoordinates();
 	sf::Vector2f GetTileDimensions() { return dimensions; }
@@ -21,5 +21,5 @@ private:
 	sf::Sprite sprite;
 	sf::Color color;
 	float resistance;
-	sf::Texture texture;
+	sf::Texture* texture;
 };

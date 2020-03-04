@@ -1,6 +1,6 @@
 #include "Tile.h"
 
-Tile::Tile(sf::Vector2f pos, sf::Vector2f dimensions, sf::Texture texture, sf::IntRect textarea, sf::Color color, float resistance)
+Tile::Tile(sf::Vector2f pos, sf::Vector2f dimensions, sf::Texture* texture, sf::IntRect textarea, sf::Color color, float resistance)
 	:
 	pos(pos),
 	dimensions(dimensions),
@@ -12,7 +12,7 @@ Tile::Tile(sf::Vector2f pos, sf::Vector2f dimensions, sf::Texture texture, sf::I
 	rect.setPosition(sf::Vector2f(pos));
 	rect.setFillColor(color);
 
-	sprite.setTexture(texture);
+	sprite.setTexture(*texture);
 	sprite.setTextureRect(textarea);
 	sprite.setPosition(pos);
 

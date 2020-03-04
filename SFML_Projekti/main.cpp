@@ -82,7 +82,7 @@ int main()
         window.setView(view);
         tm.Draw(window, em.GetEntities()[0]->GetPos(), sf::Vector2f(300.f, 200.f));
         em.Draw(window);
-        bm.Draw(window);
+        //bm.Draw(window);
         //window.draw(rs);
         window.display();
     }
