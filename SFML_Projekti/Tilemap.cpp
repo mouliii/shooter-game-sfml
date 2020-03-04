@@ -33,8 +33,8 @@ void Tilemap::LoadLevel(std::string filepath, std::string texture_path)
         for (int i = 0; i < mapHeight * mapWidth; i++)
         {           
             int n = (v["layers"][0]["data"][i].as_int());
-            int rectx = (n % mapWidth + 1) * TILEMAPDIMENSIONS;    // % is the "modulo operator", the remainder of i / width;
-            int recty = (n / mapHeight) * TILEMAPDIMENSIONS;       // where "/" is an integer division
+            int rectx = n % (mapWidth * TILEMAPDIMENSIONS) * TILEMAPDIMENSIONS;    // % is the "modulo operator", the remainder of i / width;
+            int recty = (n / (mapWidth * TILEMAPDIMENSIONS)) * TILEMAPDIMENSIONS;       // where "/" is an integer division
             std::unique_ptr<Tile> t(new Tile(sf::Vector2f(x, y), sf::Vector2f(dims, dims), &texture, sf::IntRect(rectx, recty, dims, dims), sf::Color::Transparent, 1.0f));
             pTiles.push_back(std::move(t));
             x += dims;
@@ -43,7 +43,14 @@ void Tilemap::LoadLevel(std::string filepath, std::string texture_path)
                 x = 0;
                 y += dims;
             }
+            if (i == 41)
+            {
+                int asd;
+                asd = 1;
+                std::cout << "asd";
+            }
         }
+        std::cout << pTiles.size();
         x = 0;
         y = 0;
         for (int i = 0; i < mapHeight * mapWidth; i++)
