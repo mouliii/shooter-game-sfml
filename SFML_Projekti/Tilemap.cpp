@@ -24,17 +24,17 @@ void Tilemap::LoadLevel(std::string filepath, std::string texture_path)
         jute::jValue v = jute::parser::parse(str);
         // laitetaan mappi tiedot tilemappiin
         dims = v["tilewidth"].as_int();
-        mapHeight = v["layers"][0]["height"].as_int();
-        mapWidth = v["layers"][0]["width"].as_int();
+        mapHeight = v["layers"][0]["height"].as_int() + 1;
+        mapWidth = v["layers"][0]["width"].as_int() - 1;
         nLayers = v["nextlayerid"].as_int() - 1;
 
         int x = 0;
         int y = 0;
-        for (int i = 0; i < mapHeight * mapWidth; i++)
+        for (int i = 0; i < (mapHeight * mapWidth) + 1; i++)
         {           
             int n = (v["layers"][0]["data"][i].as_int());
-            int rectx = n % (mapWidth * TILEMAPDIMENSIONS) * TILEMAPDIMENSIONS;    // % is the "modulo operator", the remainder of i / width;
-            int recty = (n / (mapWidth * TILEMAPDIMENSIONS)) * TILEMAPDIMENSIONS;       // where "/" is an integer division
+            int rectx = (n % 13 - 1) * TILEMAPDIMENSIONS;    // % is the "modulo operator", the remainder of i / width;
+            int recty = (n / 13) * TILEMAPDIMENSIONS;       // where "/" is an integer division
             std::unique_ptr<Tile> t(new Tile(sf::Vector2f(x, y), sf::Vector2f(dims, dims), &texture, sf::IntRect(rectx, recty, dims, dims), sf::Color::Transparent, 1.0f));
             pTiles.push_back(std::move(t));
             x += dims;
@@ -43,18 +43,19 @@ void Tilemap::LoadLevel(std::string filepath, std::string texture_path)
                 x = 0;
                 y += dims;
             }
-            if (i == 41)
+            if (n == 1)
             {
                 int asd;
                 asd = 1;
-                std::cout << "asd";
+                std::cout << x / TILEMAPDIMENSIONS << " " << y / TILEMAPDIMENSIONS;
             }
         }
-        std::cout << pTiles.size();
+        //std::cout << s;
         x = 0;
         y = 0;
         for (int i = 0; i < mapHeight * mapWidth; i++)
         {
+            /*
             // teh‰‰ rect
             sf::IntRect r(x, y, dims, dims);
             // jos on joku tile nii collision = true   | jos ei oo mit‰‰ mapis nii 0 default -> nolla ei ole mik‰‰  textuuri
@@ -73,10 +74,11 @@ void Tilemap::LoadLevel(std::string filepath, std::string texture_path)
                 x = 0;
                 y += dims;
             }
+            */
         }
     }
     else
-    {
+    { 
         std::cout << "loading map failed, senkin Uuno kato filepath" << std::endl;
     }
     
@@ -95,7 +97,7 @@ void Tilemap::Draw(sf::RenderTarget& rt, sf::Vector2f topleft, sf::Vector2f botr
     int w = int(botright.x);
     int h = int(botright.y);
 
-    for (size_t i = 0; i < mapHeight*mapWidth; i++)
+    for (size_t i = 0; i < (mapHeight * mapWidth) + 1; i++)
     {
         rt.draw(pTiles[i]->GetSprite());
     }

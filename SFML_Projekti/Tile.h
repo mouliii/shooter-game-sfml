@@ -13,6 +13,7 @@ public:
 	sf::RectangleShape& GetRect() { return rect; }
 	sf::Sprite& GetSprite() { return sprite; }
 	const float& GetResistance() { return resistance; }
+	sf::Texture* texture;
 private:
 	sf::RectangleShape rect;
 	sf::IntRect area;
@@ -21,5 +22,4 @@ private:
 	sf::Sprite sprite;
 	sf::Color color;
 	float resistance;
-	sf::Texture* texture;
 };
