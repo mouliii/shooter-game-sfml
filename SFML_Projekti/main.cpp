@@ -40,7 +40,7 @@ int main()
     // MAIN LOOP
     tm.LoadLevel("Levels/testimap.json", "textures/tilemap.png");
     std::unique_ptr<Player> p(new Player({ 60.f,35.f }, bm, textures,"textures/lunk.png"));
-    std::unique_ptr<Enemy> e(new Enemy({ 30.f,18.f }, bm, textures, "textures/lunk.png"));
+    std::unique_ptr<Enemy> e(new Enemy({ 60.f,18.f }, bm, textures, "textures/lunk.png"));
     em.AddEntity(std::move(p) );
     em.AddEntity(std::move(e));
 
@@ -76,7 +76,7 @@ int main()
         // UPDATE
         em.Update(mPos, dt);
         //bm.Update(&em,dt);
-        //collider.Update(em.GetEntities(), tm);
+        collider.Update(em.GetEntities(), tm);
         view.setCenter(em.GetEntities()[0]->GetPosCentered()); // vika update | enne draw
         //std::cout << mPos.y / TILEMAPDIMENSIONS << std::endl;
         

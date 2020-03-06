@@ -16,6 +16,7 @@ public:
 	void AddTile(int layer, sf::Vector2f pos, sf::Vector2f dimensions, sf::Texture texture, sf::IntRect textarea, sf::Color color, float resistance);
 	void Draw(sf::RenderTarget& rt, sf::Vector2f topleft, sf::Vector2f botright);
 	std::unique_ptr<Tile>& GetTile(int layer, int x, int y);
+	std::pair<sf::IntRect, bool>& GetCollisionRect(int x, int y);
 private:
 	int nLayers = 0;
 	float dims = 0.0f;
