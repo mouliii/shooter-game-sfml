@@ -11,8 +11,8 @@ void Collider::Move(sf::RectangleShape* body, sf::Vector2f delta)
 
 bool Collider::CheckCollision(sf::RectangleShape* _this, sf::IntRect* other)
 {
-	sf::Vector2f otherPosition = sf::Vector2f(other->left,other->top);
-	sf::Vector2f otherHalfSize = sf::Vector2f(other->width, other->height) / 2.f;
+	sf::Vector2f otherPosition = sf::Vector2f(float(other->left),float(other->top));
+	sf::Vector2f otherHalfSize = sf::Vector2f(float(other->width), float(other->height)) / 2.f;
 	sf::Vector2f thisPosition = _this->getPosition();
 	sf::Vector2f thisHalfSize = _this->getSize() / 2.f;
 

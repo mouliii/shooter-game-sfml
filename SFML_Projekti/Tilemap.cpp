@@ -1,7 +1,6 @@
 #include "Tilemap.h"
 #include <fstream>
 #include <iostream>
-
 extern const int TILEMAPDIMENSIONS;
 
 Tilemap::Tilemap(TextureManager& tm)
@@ -9,6 +8,7 @@ Tilemap::Tilemap(TextureManager& tm)
     tm(tm)
 {
 }
+
 
 void Tilemap::LoadLevel(std::string filepath, std::string texture_path)
 {
@@ -20,29 +20,33 @@ void Tilemap::LoadLevel(std::string filepath, std::string texture_path)
     {
         std::cout << "map parsing started" << std::endl;
         sf::Clock _clock;
-        float startTime = _clock.getElapsedTime().asMilliseconds();
+        float startTime = float(_clock.getElapsedTime().asMilliseconds());
         std::string str = "";
         std::string tmp;
         while (std::getline(in, tmp)) str += tmp;
         jute::jValue v = jute::parser::parse(str);
-        float curTime = _clock.getElapsedTime().asMilliseconds();
+        float curTime = float(_clock.getElapsedTime().asMilliseconds());
         std::cout << "map parsed, time: " << curTime - startTime << " ms" << std::endl;
         // laitetaan mappi tiedot tilemappiin
         dims = v["tilewidth"].as_int();
         mapHeight = v["layers"][0]["height"].as_int();
         mapWidth = v["layers"][0]["width"].as_int();
         nLayers = v["nextlayerid"].as_int() - 1;
+        // tilemap texture size
+        textureWidth = texture.getSize().x / dims;
+        textureHeight = texture.getSize().y / dims;
+        std::cout << "map dimensions: " << "[" << mapWidth << "," << mapHeight << "]" << '\n' << "texture dims: " << "[" << textureWidth << "," << textureHeight << "]" << '\n' << "Layers: " << nLayers << std::endl;
         // texture tilet ineen
         for (int i = 0; i < (mapHeight * mapWidth); i++)
         {           
             int n = (v["layers"][0]["data"][i].as_int());   // layer index data
-            int rectx = (n % 13 - 1) * TILEMAPDIMENSIONS;   // % is the "modulo operator", the remainder of i / width;
-            int recty = (n / 13) * TILEMAPDIMENSIONS;       // where "/" is an integer division
+            int rectx = (n % textureWidth - 1) * TILEMAPDIMENSIONS;   // % is the "modulo operator", the remainder of i / width;
+            int recty = (n / textureWidth) * TILEMAPDIMENSIONS;       // where "/" is an integer division
 
             int posx = i % mapWidth * TILEMAPDIMENSIONS;   // -^sama
             int posy = i / mapWidth * TILEMAPDIMENSIONS;
 
-            std::unique_ptr<Tile> t(new Tile(sf::Vector2f(posx, posy), sf::Vector2f(dims, dims), &texture, sf::IntRect(rectx, recty, dims, dims), sf::Color::Transparent, 1.0f));
+            std::unique_ptr<Tile> t(new Tile(sf::Vector2f(float(posx), float(posy)), sf::Vector2f(float(dims), float(dims)), &texture, sf::IntRect(rectx, recty, dims, dims), sf::Color::Transparent, 1.0f));
             pTiles.push_back(std::move(t));
             /*
             x += dims;
@@ -59,7 +63,7 @@ void Tilemap::LoadLevel(std::string filepath, std::string texture_path)
             // teh‰‰ rect
             int posx = i % mapWidth * TILEMAPDIMENSIONS;
             int posy = i / mapWidth * TILEMAPDIMENSIONS;
-            sf::IntRect r(posx, posy, dims, dims);
+            sf::IntRect r(posx, posy, int(dims), int(dims));
             // jos on joku tile nii collision = true   | jos ei oo mit‰‰ mapis nii 0 default -> nolla ei ole mik‰‰  textuuri
             if (v["layers"][nLayers - 1]["data"][i].as_int() != 0)
             {
@@ -70,7 +74,7 @@ void Tilemap::LoadLevel(std::string filepath, std::string texture_path)
                 collisionLayer.push_back({ r,false });
             }
         }
-        curTime = _clock.getElapsedTime().asMilliseconds();
+        curTime = float(_clock.getElapsedTime().asMilliseconds());
         std::cout << "level loaded, time: " << curTime - startTime << " ms" << std::endl;
     }
     else
@@ -78,8 +82,8 @@ void Tilemap::LoadLevel(std::string filepath, std::string texture_path)
         std::cout << "loading map failed, senkin Uuno kato filepath" << std::endl;
         std::cout << "kato myˆs et 'nextlayerid' on layerit + 1" << std::endl;
     }
-    
 }
+
 
 void Tilemap::AddTile(int layer, sf::Vector2f pos, sf::Vector2f dimensions, sf::Texture texture, sf::IntRect textarea, sf::Color color, float resistance)
 {
@@ -94,7 +98,7 @@ void Tilemap::Draw(sf::RenderTarget& rt, sf::Vector2f topleft, sf::Vector2f botr
     int w = int(botright.x);
     int h = int(botright.y);
 
-    for (size_t i = 0; i < (mapHeight * mapWidth); i++)
+    for (int i = 0; i < (mapHeight * mapWidth); i++)
     {
         rt.draw(pTiles[i]->GetSprite());
     }

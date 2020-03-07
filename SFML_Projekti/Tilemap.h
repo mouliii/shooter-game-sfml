@@ -21,9 +21,11 @@ public:
 	std::vector<std::pair<sf::IntRect, bool>>& GetCollisionLayer() { return collisionLayer; }
 private:
 	int nLayers = 0;
-	float dims = 0.0f;
+	int dims = 0;
 	int mapWidth = 0;
 	int mapHeight = 0;
+	int textureWidth = 0;
+	int textureHeight = 0;
 	TextureManager& tm;
 	sf::Texture texture;
 	std::vector<std::unique_ptr<Tile>> pTiles;

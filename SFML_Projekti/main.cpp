@@ -6,13 +6,11 @@
 #include "Tilemap.h"
 #include "Collider.h"
 
-//   idle animaatio ---> rework tile map
+//   c/c++ -> code generation -> basic error checking -> Both (/RTC1, equiv. to /RTCsu) (/RTC1) -> default
 
 /*
-ongelmat
-check vaa ympärillä olevat tilet
-16x16 onks hyvä?
-liikkuvat tilet kusee !!
+ongelmat:
+
 */
 extern const int TILEMAPDIMENSIONS = 16;
 
@@ -40,7 +38,7 @@ int main()
     // MAIN LOOP
     tm.LoadLevel("Levels/testimap.json", "textures/tilemap.png");
     std::unique_ptr<Player> p(new Player({ 60.f,105.f }, bm, textures,"textures/lunk.png"));
-    std::unique_ptr<Enemy> e(new Enemy({ 60.f,18.f }, bm, textures, "textures/lunk.png"));
+    std::unique_ptr<Enemy> e(new Enemy({ 280.f,105.f }, bm, textures, "textures/lunk.png"));
     em.AddEntity(std::move(p) );
     em.AddEntity(std::move(e));
 
