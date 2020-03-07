@@ -3,6 +3,8 @@
 #include "RectCircleCollision.h"
 #include <iostream>
 
+extern const int TILEMAPDIMENSIONS;
+
 BulletManager::BulletManager(Tilemap& tm)
 	:
 	tm(tm)
@@ -57,24 +59,34 @@ void BulletManager::Update( EntityManager* em, float dt)
 
 		}
 	}
-	/*
+	
 	//////  bullet - wall collision /////////
+	// TODO joteki smartimmaks ?
+
 	for (size_t i = 0; i < pBullets.size(); i++)
 	{
-		for (size_t j = 0; j < tm.GetTiles().size(); j++)
+		int left = pBullets[i]->GetCircle().getPosition().x - pBullets[i]->GetCircle().getRadius();
+		int top = pBullets[i]->GetCircle().getPosition().y - pBullets[i]->GetCircle().getRadius();
+		int width = pBullets[i]->GetCircle().getPosition().x + pBullets[i]->GetCircle().getRadius();
+		int height = pBullets[i]->GetCircle().getPosition().y + pBullets[i]->GetCircle().getRadius();
+
+		for (int tempx = left ; tempx < width; tempx+= TILEMAPDIMENSIONS)
 		{
-			if (!tm.GetTiles()[j]->isPassable())
+			for (int tempy = top ; tempy < height; tempy+= TILEMAPDIMENSIONS)
 			{
-				if (CircleRectCollision(pBullets[i]->GetCircle(), tm.GetTiles()[j]->GetRect()))
+				if (tm.GetCollisionRect(tempx,tempy).second)
 				{
-					//std::cout << pBullets.size() << std::endl;
-					pBullets.erase(pBullets.begin() + i);
-					break;
+					if (CircleRectCollision(pBullets[i]->GetCircle(), tm.GetCollisionRect(tempx,tempy).first))
+					{
+						//std::cout << pBullets.size() << std::endl;
+						pBullets.erase(pBullets.begin() + i);
+						break;
+					}
 				}
 			}
 		}
 	}
-	*/
+	
 }
 
 void BulletManager::Draw(sf::RenderTarget& rt)

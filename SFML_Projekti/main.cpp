@@ -39,7 +39,7 @@ int main()
     view = getLetterboxView(view, 800, 600);
     // MAIN LOOP
     tm.LoadLevel("Levels/testimap.json", "textures/tilemap.png");
-    std::unique_ptr<Player> p(new Player({ 60.f,35.f }, bm, textures,"textures/lunk.png"));
+    std::unique_ptr<Player> p(new Player({ 60.f,105.f }, bm, textures,"textures/lunk.png"));
     std::unique_ptr<Enemy> e(new Enemy({ 60.f,18.f }, bm, textures, "textures/lunk.png"));
     em.AddEntity(std::move(p) );
     em.AddEntity(std::move(e));
@@ -75,7 +75,7 @@ int main()
         sf::Vector2f mPos = sf::Vector2f(worldPos);
         // UPDATE
         em.Update(mPos, dt);
-        //bm.Update(&em,dt);
+        bm.Update(&em,dt);
         collider.Update(em.GetEntities(), tm);
         view.setCenter(em.GetEntities()[0]->GetPosCentered()); // vika update | enne draw
         //std::cout << mPos.y / TILEMAPDIMENSIONS << std::endl;
@@ -85,11 +85,10 @@ int main()
         window.setView(view);
         tm.Draw(window, em.GetEntities()[0]->GetPos(), sf::Vector2f(300.f, 200.f));
         em.Draw(window);
-        //bm.Draw(window);
+        bm.Draw(window);
         //window.draw(rs);
         window.display();
     }
-
     return 0;
 }
 

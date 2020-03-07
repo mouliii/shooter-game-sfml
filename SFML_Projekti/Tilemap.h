@@ -17,6 +17,8 @@ public:
 	void Draw(sf::RenderTarget& rt, sf::Vector2f topleft, sf::Vector2f botright);
 	std::unique_ptr<Tile>& GetTile(int layer, int x, int y);
 	std::pair<sf::IntRect, bool>& GetCollisionRect(int x, int y);
+	size_t GetCollisionLayerSize() { return collisionLayer.size(); }
+	std::vector<std::pair<sf::IntRect, bool>>& GetCollisionLayer() { return collisionLayer; }
 private:
 	int nLayers = 0;
 	float dims = 0.0f;
