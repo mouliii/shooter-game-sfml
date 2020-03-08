@@ -37,26 +37,25 @@ void Tilemap::LoadLevel(std::string filepath, std::string texture_path)
         textureHeight = texture.getSize().y / dims;
         std::cout << "map dimensions: " << "[" << mapWidth << "," << mapHeight << "]" << '\n' << "texture dims: " << "[" << textureWidth << "," << textureHeight << "]" << '\n' << "Layers: " << nLayers << std::endl;
         // texture tilet ineen
-        for (int i = 0; i < (mapHeight * mapWidth); i++)
-        {           
-            int n = (v["layers"][0]["data"][i].as_int());   // layer index data
-            int rectx = (n % textureWidth - 1) * TILEMAPDIMENSIONS;   // % is the "modulo operator", the remainder of i / width;
-            int recty = (n / textureWidth) * TILEMAPDIMENSIONS;       // where "/" is an integer division
-
-            int posx = i % mapWidth * TILEMAPDIMENSIONS;   // -^sama
-            int posy = i / mapWidth * TILEMAPDIMENSIONS;
-
-            std::unique_ptr<Tile> t(new Tile(sf::Vector2f(float(posx), float(posy)), sf::Vector2f(float(dims), float(dims)), &texture, sf::IntRect(rectx, recty, dims, dims), sf::Color::Transparent, 1.0f));
-            pTiles.push_back(std::move(t));
-            /*
-            x += dims;
-            if (x > mapWidth * TILEMAPDIMENSIONS)
+        std::vector<std::unique_ptr<Tile>> l;
+        for (int j = 0; j <= nLayers - 2; j++)
+        {
+            for (int i = 0; i < (mapHeight * mapWidth); i++)
             {
-                x = 0;
-                y += dims;
+                int n = (v["layers"][j]["data"][i].as_int());   // layer index data
+                int rectx = (n % textureWidth - 1) * TILEMAPDIMENSIONS;   // % is the "modulo operator", the remainder of i / width;
+                int recty = (n / textureWidth) * TILEMAPDIMENSIONS;       // where "/" is an integer division
+
+                int posx = i % mapWidth * TILEMAPDIMENSIONS;   // -^sama
+                int posy = i / mapWidth * TILEMAPDIMENSIONS;
+
+                std::unique_ptr<Tile> t(new Tile(sf::Vector2f(float(posx), float(posy)), sf::Vector2f(float(dims), float(dims)), &texture, sf::IntRect(rectx, recty, dims, dims), sf::Color::Transparent, 1.0f));
+                l.emplace_back(std::move(t));
             }
-            */
+            pTiles.emplace_back(std::move(l));
+            l.clear();
         }
+       
         // collision layer
         for (int i = 0; i < mapHeight * mapWidth; i++)
         {
@@ -84,24 +83,20 @@ void Tilemap::LoadLevel(std::string filepath, std::string texture_path)
     }
 }
 
-
-void Tilemap::AddTile(int layer, sf::Vector2f pos, sf::Vector2f dimensions, sf::Texture texture, sf::IntRect textarea, sf::Color color, float resistance)
-{
-    std::unique_ptr<Tile> t(new Tile(pos, dimensions, &texture, textarea, color, resistance));
-	pTiles.emplace_back(std::move(t));
-}
-
 void Tilemap::Draw(sf::RenderTarget& rt, sf::Vector2f topleft, sf::Vector2f botright)
 {
     int x = int(topleft.x);
     int y = int(topleft.y);
     int w = int(botright.x);
     int h = int(botright.y);
-
-    for (int i = 0; i < (mapHeight * mapWidth); i++)
+    for (int i = 0; i < pTiles.size(); i++)
     {
-        rt.draw(pTiles[i]->GetSprite());
+        for (int j = 0; j < (mapHeight * mapWidth); j++)
+        {
+            rt.draw(pTiles[i][j]->GetSprite());
+        }
     }
+    
     /*
     for (int tempx = x; tempx < w; tempx++)
         {
@@ -117,13 +112,13 @@ std::unique_ptr<Tile>& Tilemap::GetTile(int layer, int x, int y)
 {
 
     int index = mapWidth * (y / TILEMAPDIMENSIONS) + (x / TILEMAPDIMENSIONS);
-    if (index >= 0 && index < int(pTiles.size()))
+    if (index >= 0 && index < int(pTiles[layer].size()))
     {
-        return pTiles[index];
+        return pTiles[layer][index];
     }
     else
     {
-        return pTiles[0];
+        return pTiles[0][0];
     }
 }
 
