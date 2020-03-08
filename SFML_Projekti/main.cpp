@@ -32,7 +32,7 @@ int main()
     sf::RenderWindow window(sf::VideoMode(800, 600), "SFML works!");
     window.setFramerateLimit(60);
     //window.setVerticalSyncEnabled(1);
-    view = sf::View(sf::Vector2f(0.f, 0.f), sf::Vector2f(304.f, 208.f));
+    view = sf::View(sf::Vector2f(0.f, 0.f), sf::Vector2f(300.f, 200.f));
     window.setView(view);
     view = getLetterboxView(view, 800, 600);
     // MAIN LOOP
@@ -75,13 +75,16 @@ int main()
         em.Update(mPos, dt);
         bm.Update(&em,dt);
         collider.Update(em.GetEntities(), tm);
-        view.setCenter({ em.GetEntities()[0]->GetPosCentered() }); // vika update | enne draw
+        
+        int x = em.GetEntities()[0]->GetPosCentered().x + 0.5f;
+        int y = em.GetEntities()[0]->GetPosCentered().y + 0.5f;
+        view.setCenter(em.GetEntities()[0]->GetPosCentered()); // vika update | enne draw
         //std::cout << mPos.y / TILEMAPDIMENSIONS << std::endl;
         
         // DRAW
         window.clear();
         window.setView(view);
-        tm.Draw(window, em.GetEntities()[0]->GetPos(), sf::Vector2f(304.f, 208.f));
+        tm.Draw(window, sf::Vector2f(x,y), sf::Vector2f(300.f, 200.f));
         em.Draw(window);
         bm.Draw(window);
         //window.draw(rs);
