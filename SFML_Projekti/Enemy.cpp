@@ -2,9 +2,9 @@
 #include <iostream>
 #include "RectCircleCollision.cpp"
 
-Enemy::Enemy(sf::Vector2f pos, BulletManager& bm, TextureManager& tm, std::string path)
+Enemy::Enemy(sf::Vector2f pos, BulletManager& bm, TextureManager& tm, Tilemap& tilemap, std::string path)
 	:
-	Entity(pos,bm,tm,path)
+	Entity(pos,bm,tm,tilemap,path)
 {
 	rect.setSize(sf::Vector2f(width, height));
 	rect.setFillColor(sf::Color::Yellow);
@@ -18,7 +18,7 @@ Enemy::Enemy(sf::Vector2f pos, BulletManager& bm, TextureManager& tm, std::strin
 	sprite.setScale({ 0.17f, 0.17f });
 }
 
-void Enemy::Update(sf::Vector2f mpos, std::vector<std::unique_ptr<Entity> >& em, float dt)
+void Enemy::Update(sf::Vector2f mpos, std::vector<std::unique_ptr<Entity> >& em, Tilemap& tm, float dt)
 {
 	switch (state)
 	{

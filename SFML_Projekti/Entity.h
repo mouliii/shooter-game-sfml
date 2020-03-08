@@ -8,9 +8,9 @@
 class Entity
 {
 public:
-	Entity(sf::Vector2f pos, BulletManager& bm, TextureManager& tm, std::string path);
+	Entity(sf::Vector2f pos, BulletManager& bm, TextureManager& tm, Tilemap& tilemap, std::string path);
 	virtual ~Entity();
-	virtual void Update(sf::Vector2f mousepos, std::vector<std::unique_ptr<Entity> >& em, float dt);
+	virtual void Update(sf::Vector2f mousepos, std::vector<std::unique_ptr<Entity> >& em, Tilemap& tm, float dt);
 	void Draw(sf::RenderTarget& target);
 	sf::RectangleShape& GetRect();
 	virtual void GetDmg(int n) { hp -= n; }
@@ -35,4 +35,5 @@ protected:
 	//sf::Texture texture;
 	BulletManager& bm;
 	TextureManager& tm;
+	Tilemap& tilemap;
 };

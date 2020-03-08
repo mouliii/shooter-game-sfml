@@ -19,11 +19,11 @@ sf::View view;
 sf::Clock _clock;
 float curTime = float(_clock.getElapsedTime().asMilliseconds());
 
-EntityManager em;
 Collider collider;
 TextureManager textures;
 Tilemap tm(textures);
 BulletManager bm(tm);
+EntityManager em(tm);
 
 sf::View getLetterboxView(sf::View view, int windowWidth, int windowHeight);
 
@@ -37,8 +37,8 @@ int main()
     view = getLetterboxView(view, 800, 600);
     // MAIN LOOP
     tm.LoadLevel("Levels/testimap.json", "textures/tilemap.png");
-    std::unique_ptr<Player> p(new Player({ 60.f,105.f }, bm, textures,"textures/lunk.png"));
-    std::unique_ptr<Enemy> e(new Enemy({ 280.f,105.f }, bm, textures, "textures/lunk.png"));
+    std::unique_ptr<Player> p(new Player({ 60.f,105.f }, bm, textures, tm, "textures/lunk.png"));
+    std::unique_ptr<Enemy> e(new Enemy({ 280.f,105.f }, bm, textures, tm, "textures/lunk.png"));
     em.AddEntity(std::move(p) );
     em.AddEntity(std::move(e));
 
@@ -72,7 +72,7 @@ int main()
         sf::Vector2f worldPos = window.mapPixelToCoords(mousepos);
         sf::Vector2f mPos = sf::Vector2f(worldPos);
         // UPDATE
-        em.Update(mPos, dt);
+        em.Update(mPos, tm, dt);
         bm.Update(&em,dt);
         collider.Update(em.GetEntities(), tm);
         

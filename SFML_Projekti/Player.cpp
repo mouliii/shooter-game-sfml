@@ -1,8 +1,8 @@
 #include "Player.h"
 
-Player::Player(sf::Vector2f pos, BulletManager& bm, TextureManager& tm, std::string path)
+Player::Player(sf::Vector2f pos, BulletManager& bm, TextureManager& tm, Tilemap& tilemap, std::string path)
 	:
-	Entity(pos, bm, tm, path)
+	Entity(pos, bm, tm, tilemap, path)
 {
 	rect.setSize({ width,height });
 	//rect.setFillColor(sf::Color::Blue);
@@ -15,7 +15,7 @@ Player::Player(sf::Vector2f pos, BulletManager& bm, TextureManager& tm, std::str
 	animations[int(AnimationIndex::DWALK)] = Animation(tm, "textures/lunk.png", 0, 104 * 4, 10, 96, 104, 0.15f);
 }
 
-void Player::Update(sf::Vector2f mousepos, std::vector<std::unique_ptr<Entity> >& em, float dt)
+void Player::Update(sf::Vector2f mousepos, std::vector<std::unique_ptr<Entity> >& em, Tilemap& tm, float dt)
 {
 	// update liikkuminen ja animaatio
 	UpdateMovement(mousepos, dt);

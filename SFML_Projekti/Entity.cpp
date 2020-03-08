@@ -1,10 +1,11 @@
 #include "Entity.h"
 
-Entity::Entity(sf::Vector2f pos, BulletManager& bm, TextureManager& tm, std::string path)
+Entity::Entity(sf::Vector2f pos, BulletManager& bm, TextureManager& tm, Tilemap& tilemap, std::string path)
 	:
 	pos(pos),
 	bm(bm),
-	tm(tm)
+	tm(tm),
+	tilemap(tilemap)
 {
 	rect.setSize(sf::Vector2f(width,height));
 	rect.setPosition(pos);
@@ -18,7 +19,7 @@ Entity::~Entity()
 {
 }
 
-void Entity::Update(sf::Vector2f mousepos, std::vector<std::unique_ptr<Entity> >& em, float dt)
+void Entity::Update(sf::Vector2f mousepos, std::vector<std::unique_ptr<Entity> >& em, Tilemap& tm, float dt)
 {
 	std::cout << "entity update triggered, voi v**** " << std::endl;
 }
