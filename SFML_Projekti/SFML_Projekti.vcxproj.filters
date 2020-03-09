@@ -25,6 +25,12 @@
     <Filter Include="Source Files\Tiles">
       <UniqueIdentifier>{75d3de32-b77b-466f-9887-52f97fd1ced4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\A_Star">
+      <UniqueIdentifier>{89bd6289-ff63-423f-a4fc-35e93ec50270}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\A_Star">
+      <UniqueIdentifier>{53004512-bef9-4bcb-8610-de473871896f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -62,6 +68,9 @@
     </ClCompile>
     <ClCompile Include="jute.cpp">
       <Filter>Source Files\Tiles</Filter>
+    </ClCompile>
+    <ClCompile Include="AStar.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -103,6 +112,9 @@
     </ClInclude>
     <ClInclude Include="jute.h">
       <Filter>Header Files\Tiles</Filter>
+    </ClInclude>
+    <ClInclude Include="AStar.h">
+      <Filter>Header Files\A_Star</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

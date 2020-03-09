@@ -27,6 +27,10 @@ public:
 	const int GetHp() { return hp; }
 	void Print() override { std::cout << "vihu" << std::endl;}
 private:
+	float timer = 1.f;
+	sf::IntRect target;
+	bool moving = false;
+private:
 	Animation animations[int(AnimationIndex::COUNT)];
 	AnimationIndex curAnimation = AnimationIndex::RWALK;
 	State state = State::IDLE;

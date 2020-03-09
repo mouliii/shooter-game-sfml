@@ -18,6 +18,7 @@ public:
 	std::pair<sf::IntRect, bool>& GetCollisionRect(int x, int y);
 	size_t GetCollisionLayerSize() { return collisionLayer.size(); }
 	std::vector<std::pair<sf::IntRect, bool>>& GetCollisionLayer() { return collisionLayer; }
+	const sf::Vector2i& GetMapSize() { return sf::Vector2i(mapWidth, mapHeight); }
 private:
 	int nLayers = 0;
 	int dims = 0;

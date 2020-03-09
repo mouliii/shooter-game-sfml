@@ -20,20 +20,42 @@ Enemy::Enemy(sf::Vector2f pos, BulletManager& bm, TextureManager& tm, Tilemap& t
 
 void Enemy::Update(sf::Vector2f mpos, std::vector<std::unique_ptr<Entity> >& em, Tilemap& tm, float dt)
 {
+	sf::Vector2f dir(0.f, 0.f);
+	bool diagonalCheck[2] = { 0,0 };
+	float spd = 0.0f;
+	int xory = 0;
+
+	sf::CircleShape c(20.f);
+	c.setPosition(GetPosCentered());
+	if (CircleRect::CircleRectCollision(c, em[0]->GetRect()))
+	{
+		state = State::AGGROED;
+	}
+
 	switch (state)
 	{
 	case Enemy::IDLE:
 	{
-		sf::CircleShape c(20.f);
-		c.setPosition(GetPosCentered() );
-		if (CircleRect::CircleRectCollision(c,em[0]->GetRect()) )
+		timer -= dt;
+		if (timer <= 0.f)
 		{
-			state = State::AGGROED;
+			int x, y;
+			do
+			{
+				x = GetPosInTiles().x - GetRandomNumberInt(-5, 5);
+				y = GetPosInTiles().y - GetRandomNumberInt(-5, 5);
+			} while (tm.GetCollisionRect(x,y).second);
+			target = tm.GetCollisionRect(x, y).first;
+			//std::cout << target.left << " " << target.top << std::endl;
+			xory = GetRandomNumberInt(0, 1);
+			moving = true;
+			state = State::WANDERING;
 		}
-	}
 		animations[curAnimation].StopAnimation();
 		animations[curAnimation].SetFrameTo(4);
 		animations[curAnimation].ApplyToSprite(sprite);
+	}
+	break;
 	case Enemy::WANDERING:
 		break;
 	case Enemy::AGGROED:
@@ -62,9 +84,6 @@ void Enemy::Update(sf::Vector2f mpos, std::vector<std::unique_ptr<Entity> >& em,
 		isDead = true;
 	}
 	// liikkuminen - target
-	sf::Vector2f dir(0.f, 0.f);
-	bool diagonalCheck[2] = { 0,0 };
-	float spd = 0.0f;
 	if (diagonalCheck[0] && diagonalCheck[1])
 	{
 		spd = speed * dt * 0.707f;
@@ -76,6 +95,7 @@ void Enemy::Update(sf::Vector2f mpos, std::vector<std::unique_ptr<Entity> >& em,
 	pos.x += dir.x * spd;
 	pos.y += dir.y * spd;
 
-	sprite.move(dir.x * spd, dir.y * spd);
-	pos = sprite.getPosition();
+	rect.move(dir.x * spd, dir.y * spd);
+	sprite.setPosition(rect.getPosition());
+	pos = rect.getPosition();
 }

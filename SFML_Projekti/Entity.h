@@ -4,6 +4,9 @@
 #include "BulletManager.h"
 #include "TextureManager.h"
 #include "Animation.h"
+#include <random>
+
+extern const int TILEMAPDIMENSIONS;
 
 class Entity
 {
@@ -17,8 +20,10 @@ public:
 	bool IsDead() { return isDead; }
 	sf::Vector2f GetPos() { return pos; }
 	sf::Vector2f GetPosCentered();
+	const int GetRandomNumberInt(int min, int max);
 	virtual void Print() { std::cout << "entity debug print" << std::endl; }
 	void SetPos(sf::Vector2f pos) { this->pos = pos; }
+	const sf::Vector2f GetPosInTiles() { return sf::Vector2f(pos.x / TILEMAPDIMENSIONS, pos.y / TILEMAPDIMENSIONS); }
 protected:
 	sf::Sprite sprite;
 	int hp = 3;
@@ -28,7 +33,7 @@ protected:
 	bool canShoot = true;
 	float shootCooldown = 0.3f;
 	float shootTimer = shootCooldown;
-	float speed = 350.0f;
+	float speed = 50.f;
 	sf::Vector2f pos;
 	sf::RectangleShape rect;
 	//sf::Sprite sprite
@@ -36,4 +41,6 @@ protected:
 	BulletManager& bm;
 	TextureManager& tm;
 	Tilemap& tilemap;
+private:
+	std::mt19937 rng{ std::random_device{} () };
 };
