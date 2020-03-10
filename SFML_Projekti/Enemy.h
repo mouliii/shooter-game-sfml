@@ -3,8 +3,6 @@
 #include "Entity.h"
 #include "AStar.h"
 
-
-
 class Enemy : public Entity
 {
 private:
@@ -29,13 +27,7 @@ public:
 	const int GetHp() { return hp; }
 	void Print() override { std::cout << "vihu" << std::endl;}
 private:
-	Astar path;
-	float timer = 1.f;
-	sf::IntRect target;
-	bool moving = false;
-	std::vector<sf::Vector2i> pathVec;
-	int pathIndex = 0;
-	float speed = 26.f;
+	float speed = 70.f;
 private:
 	Animation animations[int(AnimationIndex::COUNT)];
 	AnimationIndex curAnimation = AnimationIndex::RWALK;

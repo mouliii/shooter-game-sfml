@@ -37,7 +37,7 @@ int main()
     // MAIN LOOP
     tm.LoadLevel("Levels/testimap.json", "textures/tilemap.png");
 
-    std::unique_ptr<Player> p(new Player({ 16 * 21.f, 16 * 18.f }, bm, textures, tm, "textures/lunk.png"));
+    std::unique_ptr<Player> p(new Player({ 16 * 2.f, 16 * 18.f }, bm, textures, tm, "textures/lunk.png"));
     std::unique_ptr<Enemy> e(new Enemy({ 280.f,105.f }, bm, textures, tm, "textures/lunk.png"));
     em.AddEntity(std::move(p) );
     em.AddEntity(std::move(e));

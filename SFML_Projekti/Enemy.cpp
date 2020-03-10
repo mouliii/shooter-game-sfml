@@ -3,10 +3,11 @@
 #include "RectCircleCollision.cpp"
 #include <math.h>
 
+extern const int TILEMAPDIMENSIONS;
+
 Enemy::Enemy(sf::Vector2f pos, BulletManager& bm, TextureManager& tm, Tilemap& tilemap, std::string path)
 	:
-	Entity(pos,bm,tm,tilemap,path),
-	path(tilemap)
+	Entity(pos,bm,tm,tilemap,path)
 {
 	rect.setSize(sf::Vector2f(width, height));
 	rect.setFillColor(sf::Color::Yellow);
@@ -24,95 +25,74 @@ void Enemy::Update(sf::Vector2f mpos, std::vector<std::unique_ptr<Entity> >& em,
 {
 	sf::Vector2f dir(0.f, 0.f);
 	bool diagonalCheck[2] = { 0,0 };
-	float spd = 0.0f;
 
-	//sf::CircleShape c(20.f);
-	//c.setPosition(GetPosCentered());
-	//if (CircleRect::CircleRectCollision(c, em[0]->GetRect()))
-	//{
-	//	state = State::AGGROED;
-	//}
+	
 
 	switch (state)
 	{
 	case Enemy::IDLE:
-		state = State::MOVING;
-		path.Solve_AStar(GetPosInTiles(), em[0]->GetPosInTiles(), tm.GetCollisionLayer());
-		pathVec = path.GetPathVector();
-		std::reverse(pathVec.begin(), pathVec.end());
-		targetPos.x = pathVec[pathIndex].x * TILEMAPDIMENSIONS;
-		targetPos.y = pathVec[pathIndex].y * TILEMAPDIMENSIONS;
+	{
+		sf::CircleShape c(100.f);
+		c.setPosition(GetPosCentered());
+		if (CircleRect::CircleRectCollision(c, em[0]->GetRect()))
+		{
+			state = State::MOVING;
+			aStar.Solve_AStar(GetPosInTilesCentered(), em[0]->GetPosInTilesCentered(), tm.GetCollisionLayer());
+			pathVec = aStar.GetPathVector();
+			std::reverse(pathVec.begin(), pathVec.end());
+			aStarTarget.x = pathVec[pathIndex].x * TILEMAPDIMENSIONS;
+			aStarTarget.y = pathVec[pathIndex].y * TILEMAPDIMENSIONS;
+		}
+	}
 		break;
 
 	case Enemy::MOVING:
 	{
+		UpdateAstar(GetPosInTilesCentered(), em[0]->GetPosInTilesCentered());
 		const float xd = 1.f;
 		// reitti
-		float deltaX = pos.x - targetPos.x;
-		float deltaY = pos.y - targetPos.y;
+		float deltaX = pos.x - aStarTarget.x;
+		float deltaY = pos.y - aStarTarget.y;
 		if (deltaX < -xd)
 		{
 			// liiku oikeelle
 			dir += {1.0f, 0.0f};
 			diagonalCheck[0] = 1;
+			curAnimation = AnimationIndex::RWALK;
 		}
 		else if (deltaX > xd)
 		{
 			// liiku vas
 			dir += {-1.0f, 0.0f};
 			diagonalCheck[0] = 1;
+			curAnimation = AnimationIndex::LWALK;
 		}
 		if (deltaY < -xd)
 		{
 			// liiku alas
 			dir += {0.0f, 1.0f};
 			diagonalCheck[1] = 1;
+			curAnimation = AnimationIndex::DWALK;
 		}
 		else if (deltaY > xd)
 		{
 			// liiku ylös
 			dir += {0.0f, -1.0f};
 			diagonalCheck[1] = 1;
+			curAnimation = AnimationIndex::UWALK;
 		}
 		const int maali = std::sqrt((deltaX * deltaX) + (deltaY * deltaY));
 		if (maali <= xd)
 		{
-			if (pathIndex < pathVec.size() - 1)
+			if (pathIndex < int(pathVec.size()) - 1)
 			{
+				//std::cout << (pathIndex - pathVec.size() - 1) << std::endl;
 				pathIndex++;
-				targetPos.x = pathVec[pathIndex].x * TILEMAPDIMENSIONS;
-				targetPos.y = pathVec[pathIndex].y * TILEMAPDIMENSIONS;
-				std::cout << targetPos.x << " " << targetPos.y << std::endl;
+				aStarTarget.x = pathVec[pathIndex].x * TILEMAPDIMENSIONS;
+				aStarTarget.y = pathVec[pathIndex].y * TILEMAPDIMENSIONS;
 			}
 		}
-		float spd = 0.0f;
-		if (diagonalCheck[0] && diagonalCheck[1])
-		{
-			spd = speed * dt * 0.707f;
-			animations[curAnimation].ResumeAnimation();
-		}
-		else
-		{
-			spd = speed * dt;
-			animations[curAnimation].ResumeAnimation();
-		}
-		if (!diagonalCheck[0] && !diagonalCheck[1])
-		{
-			animations[curAnimation].StopAnimation();
-			if (int(curAnimation) == 1)
-			{
-				animations[curAnimation].SetFrameTo(4);
-			}
-			else
-			{
-				animations[curAnimation].SetFrameTo(0);
-			}
-		}
-		rect.move(dir.x * spd, dir.y * spd);
-		sprite.setPosition(rect.getPosition());
-		pos = rect.getPosition();
-		animations[curAnimation].Update(dt);
-		animations[curAnimation].ApplyToSprite(sprite);
+		
 	}
 		break;
 	case Enemy::WANDERING:
@@ -143,18 +123,32 @@ void Enemy::Update(sf::Vector2f mpos, std::vector<std::unique_ptr<Entity> >& em,
 		isDead = true;
 	}
 	// liikkuminen - target
+	float spd = 0.0f;
 	if (diagonalCheck[0] && diagonalCheck[1])
 	{
 		spd = speed * dt * 0.707f;
+		animations[curAnimation].ResumeAnimation();
 	}
 	else
 	{
 		spd = speed * dt;
+		animations[curAnimation].ResumeAnimation();
 	}
-	pos.x += dir.x * spd;
-	pos.y += dir.y * spd;
-
+	if (!diagonalCheck[0] && !diagonalCheck[1])
+	{
+		animations[curAnimation].StopAnimation();
+		if (int(curAnimation) == 1)
+		{
+			animations[curAnimation].SetFrameTo(4);
+		}
+		else
+		{
+			animations[curAnimation].SetFrameTo(0);
+		}
+	}
 	rect.move(dir.x * spd, dir.y * spd);
 	sprite.setPosition(rect.getPosition());
 	pos = rect.getPosition();
+	animations[curAnimation].Update(dt);
+	animations[curAnimation].ApplyToSprite(sprite);
 }
