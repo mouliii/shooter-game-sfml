@@ -39,8 +39,23 @@ void Astar::SetEndPos(int x, int y)
 	nodeEnd = &nodes[nMapWidth * y + x];
 }
 
-void Astar::DrawPath()
+void Astar::DrawPath(sf::RenderTarget& rt)
 {
+	if (nodeEnd != nullptr)
+	{
+		sNode* p = nodeEnd;
+		while (p->parent != nullptr)
+		{
+			// oma draw
+			sf::Vertex line[] = { sf::Vertex(sf::Vector2f(p->x * nNodeSize + nNodeSize / 2, p->y * nNodeSize + nNodeSize / 2)),
+								sf::Vertex(sf::Vector2f(p->parent->x * nNodeSize + nNodeSize / 2,p->parent->y * nNodeSize + nNodeSize / 2)) };
+			rt.draw(line, 2, sf::Lines);
+			// DrawLine(p->x * nNodeSize + nNodeSize / 2, p->y * nNodeSize + nNodeSize / 2,p->parent->x * nNodeSize + nNodeSize / 2, p->parent->y * nNodeSize + nNodeSize / 2, PIXEL_SOLID, FG_YELLOW);
+
+			// Set next node to this node's parent
+			p = p->parent;
+		}
+	}
 }
 
 bool Astar::OnUserCreate()
@@ -93,12 +108,9 @@ bool Astar::OnUserCreate()
 	return true;
 }
 
-bool Astar::Solve_AStar(std::vector<std::pair<sf::IntRect, bool>> collisionLayer)
+bool Astar::Solve_AStar(sf::Vector2i startPos, sf::Vector2i endPos, std::vector<std::pair<sf::IntRect, bool>> collisionLayer)
 {
-	if (nodes == nullptr)
-	{
-		nodes = new sNode[nMapWidth * nMapHeight];
-	}
+	OnUserCreate();
 	// Reset Navigation Graph - default all node states
 	for (int x = 0; x < nMapWidth; x++)
 	{
@@ -115,6 +127,9 @@ bool Astar::Solve_AStar(std::vector<std::pair<sf::IntRect, bool>> collisionLayer
 			}
 		}
 	}
+
+	nodeStart = &nodes[nMapWidth * startPos.y + startPos.x];
+	nodeEnd = &nodes[nMapWidth * endPos.y + endPos.x];
 
 	auto distance = [](sNode* a, sNode* b) // For convenience
 	{
@@ -191,14 +206,25 @@ bool Astar::Solve_AStar(std::vector<std::pair<sf::IntRect, bool>> collisionLayer
 	return true;
 }
 
+std::vector<sf::Vector2i> Astar::GetPathVector()
+{
+	std::vector<sf::Vector2i> path;
+	if (nodeEnd != nullptr)
+	{
+		sNode* p = nodeEnd;
+		while (p->parent != nullptr)
+		{
+			path.push_back(sf::Vector2i(p->x, p->y));
+			// Set next node to this node's parent
+			p = p->parent;
+		}
+	}
+	return path;
+}
+
+
 bool Astar::OnUserUpdate(sf::RenderTarget& rt, float fElapsedTime)
 {
-
-				//sf::VertexArray line(sf::LinesStrip,2);
-				//line[0].position = sf::Vector2f(x * nNodeSize + nNodeSize / 2, y * nNodeSize + nNodeSize / 2);
-				//line[1].position = sf::Vector2f(x * nNodeSize + nNodeSize / 2, y * nNodeSize + nNodeSize / 2);
-				//rt.draw(line);
-
 	for (int x = 0; x < nMapWidth; x++)
 	{
 		for (int y = 0; y < nMapHeight; y++)

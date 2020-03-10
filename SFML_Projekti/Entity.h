@@ -23,7 +23,7 @@ public:
 	const int GetRandomNumberInt(int min, int max);
 	virtual void Print() { std::cout << "entity debug print" << std::endl; }
 	void SetPos(sf::Vector2f pos) { this->pos = pos; }
-	const sf::Vector2f GetPosInTiles() { return sf::Vector2f(pos.x / TILEMAPDIMENSIONS, pos.y / TILEMAPDIMENSIONS); }
+	const sf::Vector2i GetPosInTiles() { return sf::Vector2i( (int(pos.x) + int(width) / 2) / TILEMAPDIMENSIONS, (int(pos.y) + int(height) / 2) / TILEMAPDIMENSIONS); }
 protected:
 	sf::Sprite sprite;
 	int hp = 3;
@@ -34,6 +34,7 @@ protected:
 	float shootCooldown = 0.3f;
 	float shootTimer = shootCooldown;
 	float speed = 50.f;
+	sf::Vector2i targetPos = {0.0f,0.0f};
 	sf::Vector2f pos;
 	sf::RectangleShape rect;
 	//sf::Sprite sprite

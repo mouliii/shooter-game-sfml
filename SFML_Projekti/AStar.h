@@ -20,9 +20,10 @@ public:
 	void SetDebugTiles();
 	void SetStartPos(int x, int y);
 	void SetEndPos(int x, int y);
-	void DrawPath();
+	void DrawPath(sf::RenderTarget& rt);
 	bool OnUserCreate();
-	bool Solve_AStar(std::vector<std::pair<sf::IntRect, bool>> collisionLayer);
+	bool Solve_AStar(sf::Vector2i startPos, sf::Vector2i endPos, std::vector<std::pair<sf::IntRect, bool>> collisionLayer);
+	std::vector<sf::Vector2i> GetPathVector();
 	bool OnUserUpdate(sf::RenderTarget& rt, float fElapsedTime);
 private:
 	Tilemap& tm;

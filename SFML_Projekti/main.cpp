@@ -5,10 +5,8 @@
 #include "EntityManager.h"
 #include "Tilemap.h"
 #include "Collider.h"
-#include "AStar.h"
 
 //   c/c++ -> code generation -> basic error checking -> Both (/RTC1, equiv. to /RTCsu) (/RTC1) -> default
-// AStar_solve ( start, end, layer);
 /*
 ongelmat:
 
@@ -25,7 +23,6 @@ TextureManager textures;
 Tilemap tm(textures);
 BulletManager bm(tm);
 EntityManager em(tm);
-Astar as(tm);
 
 sf::View getLetterboxView(sf::View view, int windowWidth, int windowHeight);
 
@@ -39,15 +36,11 @@ int main()
     view = getLetterboxView(view, 800, 600);
     // MAIN LOOP
     tm.LoadLevel("Levels/testimap.json", "textures/tilemap.png");
-    // debug
-    //as.SetDebugTiles();
-    as.Solve_AStar(tm.GetCollisionLayer());
-    //
-    std::unique_ptr<Player> p(new Player({ 60.f,105.f }, bm, textures, tm, "textures/lunk.png"));
+
+    std::unique_ptr<Player> p(new Player({ 16 * 21.f, 16 * 18.f }, bm, textures, tm, "textures/lunk.png"));
     std::unique_ptr<Enemy> e(new Enemy({ 280.f,105.f }, bm, textures, tm, "textures/lunk.png"));
     em.AddEntity(std::move(p) );
     em.AddEntity(std::move(e));
-
     //////////
     while (window.isOpen())
     {
@@ -72,13 +65,6 @@ int main()
             {
                 if (event.mouseButton.button == sf::Mouse::Left)
                 {
-                    sf::Vector2i mousepos = sf::Mouse::getPosition(window);
-                    sf::Vector2f worldPos = window.mapPixelToCoords(mousepos);
-                    sf::Vector2f mPos = sf::Vector2f(worldPos);
-                    mPos.x = int(mPos.x / TILEMAPDIMENSIONS);
-                    mPos.y = int(mPos.y / TILEMAPDIMENSIONS);
-                    as.SetEndPos(mPos.x, mPos.y);
-                    as.Solve_AStar(tm.GetCollisionLayer());
                 }
             }
         }
@@ -106,8 +92,6 @@ int main()
         tm.Draw(window, sf::Vector2f(x,y), sf::Vector2f(300.f, 200.f));
         em.Draw(window);
         bm.Draw(window);
-
-        as.OnUserUpdate(window, dt);
         
         //window.draw(rs);
         window.display();
