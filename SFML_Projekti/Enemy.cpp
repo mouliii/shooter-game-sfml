@@ -53,20 +53,6 @@ void Enemy::Update(sf::Vector2f mpos, std::vector<std::unique_ptr<Entity> >& em,
 		// reitti
 		float deltaX = pos.x - aStarTarget.x;
 		float deltaY = pos.y - aStarTarget.y;
-		if (deltaX < -xd)
-		{
-			// liiku oikeelle
-			dir += {1.0f, 0.0f};
-			diagonalCheck[0] = 1;
-			curAnimation = AnimationIndex::RWALK;
-		}
-		else if (deltaX > xd)
-		{
-			// liiku vas
-			dir += {-1.0f, 0.0f};
-			diagonalCheck[0] = 1;
-			curAnimation = AnimationIndex::LWALK;
-		}
 		if (deltaY < -xd)
 		{
 			// liiku alas
@@ -81,6 +67,22 @@ void Enemy::Update(sf::Vector2f mpos, std::vector<std::unique_ptr<Entity> >& em,
 			diagonalCheck[1] = 1;
 			curAnimation = AnimationIndex::UWALK;
 		}
+
+		if (deltaX < -xd)
+		{
+			// liiku oikeelle
+			dir += {1.0f, 0.0f};
+			diagonalCheck[0] = 1;
+			curAnimation = AnimationIndex::RWALK;
+		}
+		else if (deltaX > xd)
+		{
+			// liiku vas
+			dir += {-1.0f, 0.0f};
+			diagonalCheck[0] = 1;
+			curAnimation = AnimationIndex::LWALK;
+		}
+
 		const int maali = std::sqrt((deltaX * deltaX) + (deltaY * deltaY));
 		if (maali <= xd)
 		{

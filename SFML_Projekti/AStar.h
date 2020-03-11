@@ -27,7 +27,7 @@ public:
 	bool OnUserUpdate(sf::RenderTarget& rt, float fElapsedTime);
 private:
 	Tilemap& tm;
-	bool diagonalMovement = false;
+	bool diagonalMovement = true;
 	struct sNode
 	{
 		bool bObstacle = false;			// Is the node an obstruction?
