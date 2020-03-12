@@ -1,88 +1,99 @@
 #pragma once
-#include <SFML/Graphics.hpp>
 #include <math.h>
+#include "RectCircleCollision.h"
 
-
-namespace CircleRect
+CRCollision& CRCollision::Get()
 {
-    // CIRCLE/RECTANGLE
-    static bool CircleRectCollision(sf::CircleShape c, sf::RectangleShape r) {
+	static CRCollision instance;
+	return instance;
+}
 
-        float cx = c.getPosition().x;
-        float cy = c.getPosition().y;
-        float radius = c.getRadius();
+bool CRCollision::CircleRectCollision(sf::CircleShape c, sf::RectangleShape r)
+{
+	return Get().I_CircleRectCollision(c, r);
+}
 
-        float rx = r.getPosition().x;
-        float ry = r.getPosition().y;
-        float rw = r.getGlobalBounds().width;
-        float rh = r.getGlobalBounds().height;
-        // temporary variables to set edges for testing
-        float testX = c.getPosition().x;
-        float testY = c.getPosition().y;
+bool CRCollision::CircleRectCollision(sf::CircleShape c, sf::IntRect r)
+{
+    return Get().I_CircleRectCollision(c,r);
+}
 
-        // which edge is closest?
-        if (cx < rx) {
-            testX = rx;         // test left edge
-        }
-        else if (cx > rx + rw) {
-            testX = rx + rw;   // right edge
-        }
-        if (cy < ry) {
-            testY = ry;        // top edge
-        }
-        else if (cy > ry + rh) {
-            testY = ry + rh;   // bottom edge
-        }
+bool CRCollision::I_CircleRectCollision(sf::CircleShape c, sf::RectangleShape r)
+{
+    float cx = c.getPosition().x;
+    float cy = c.getPosition().y;
+    float radius = c.getRadius();
 
-        // get distance from closest edges
-        float distX = cx - testX;
-        float distY = cy - testY;
-        float distance = sqrt((distX * distX) + (distY * distY));
+    float rx = r.getPosition().x;
+    float ry = r.getPosition().y;
+    float rw = r.getSize().x;
+    float rh = r.getSize().y;
+    // temporary variables to set edges for testing
+    float testX = c.getPosition().x;
+    float testY = c.getPosition().y;
 
-        // if the distance is less than the radius, collision!
-        if (distance <= radius) {
-            return true;
-        }
-        return false;
+    // which edge is closest?
+    if (cx < rx) {
+        testX = rx;         // test left edge
+    }
+    else if (cx > rx + rw) {
+        testX = rx + rw;   // right edge
+    }
+    if (cy < ry) {
+        testY = ry;        // top edge
+    }
+    else if (cy > ry + rh) {
+        testY = ry + rh;   // bottom edge
     }
 
-    static bool CircleRectCollision(sf::CircleShape c, sf::IntRect r) {
+    // get distance from closest edges
+    float distX = cx - testX;
+    float distY = cy - testY;
+    float distance = sqrt((distX * distX) + (distY * distY));
 
-        float cx = c.getPosition().x;
-        float cy = c.getPosition().y;
-        float radius = c.getRadius();
-
-        float rx = r.left;
-        float ry = r.top;
-        float rw = r.width;
-        float rh = r.height;
-        // temporary variables to set edges for testing
-        float testX = c.getPosition().x;
-        float testY = c.getPosition().y;
-
-        // which edge is closest?
-        if (cx < rx) {
-            testX = rx;         // test left edge
-        }
-        else if (cx > rx + rw) {
-            testX = rx + rw;   // right edge
-        }
-        if (cy < ry) {
-            testY = ry;        // top edge
-        }
-        else if (cy > ry + rh) {
-            testY = ry + rh;   // bottom edge
-        }
-
-        // get distance from closest edges
-        float distX = cx - testX;
-        float distY = cy - testY;
-        float distance = sqrt((distX * distX) + (distY * distY));
-
-        // if the distance is less than the radius, collision!
-        if (distance <= radius) {
-            return true;
-        }
-        return false;
+    // if the distance is less than the radius, collision!
+    if (distance <= radius) {
+        return true;
     }
+    return false;
+}
+
+bool CRCollision::I_CircleRectCollision(sf::CircleShape c, sf::IntRect r) {
+
+    float cx = c.getPosition().x;
+    float cy = c.getPosition().y;
+    float radius = c.getRadius();
+
+    float rx = r.left;
+    float ry = r.top;
+    float rw = r.width;
+    float rh = r.height;
+    // temporary variables to set edges for testing
+    float testX = c.getPosition().x;
+    float testY = c.getPosition().y;
+
+    // which edge is closest?
+    if (cx < rx) {
+        testX = rx;         // test left edge
+    }
+    else if (cx > rx + rw) {
+        testX = rx + rw;   // right edge
+    }
+    if (cy < ry) {
+        testY = ry;        // top edge
+    }
+    else if (cy > ry + rh) {
+        testY = ry + rh;   // bottom edge
+    }
+
+    // get distance from closest edges
+    float distX = cx - testX;
+    float distY = cy - testY;
+    float distance = sqrt((distX * distX) + (distY * distY));
+
+    // if the distance is less than the radius, collision!
+    if (distance <= radius) {
+        return true;
+    }
+    return false;
 }

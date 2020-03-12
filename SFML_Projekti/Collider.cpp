@@ -52,9 +52,11 @@ bool Collider::CheckCollision(sf::RectangleShape* _this, sf::IntRect* other)
 	return false;
 }
 
-void Collider::Update(std::vector<std::unique_ptr<Entity>>& e, Tilemap& tm)
+void Collider::Update(EntityManager* em, BulletManager* bm, Tilemap& tm)
 {
-	
+	std::vector<std::unique_ptr<Entity>>& e = em->GetEntities();
+	std::vector<std::unique_ptr<Bullet>>& b = bm->GetBullets();
+	// entity - wall
 	for (size_t i = 0; i < e.size(); i++)
 	{
 		sf::RectangleShape tempRect = e[i]->GetRect();
@@ -73,6 +75,60 @@ void Collider::Update(std::vector<std::unique_ptr<Entity>>& e, Tilemap& tm)
 					{
 						//std::cout << e[0]->GetPos().x << std::endl;
 						//std::cout << "collision" << std::endl;
+					}
+				}
+			}
+		}
+	}
+	// bullet - entity
+	for (size_t i = 0; i < b.size(); i++)
+	{
+		// check collsion
+		if (b[i]->GetOwner() == "Player")
+		{
+			for (size_t j = 1; j < em->GetEntities().size(); j++)
+			{
+				if (CRCollision::CircleRectCollision(b[i]->GetCircle(), em->GetEntities()[j]->GetRect()))
+				{
+					// TODO dmg source
+					em->GetEntities()[j]->GetDmg(1);
+					b.erase(b.begin() + i);
+				}
+			}
+		}
+		else if (b[i]->GetOwner() == "Enemy")
+		{
+			if (CRCollision::CircleRectCollision(b[i]->GetCircle(), em->GetEntities()[0]->GetRect()))
+			{
+				// TODO dmg source
+				em->GetEntities()[0]->GetDmg(1);
+				b.erase(b.begin() + i);
+			}
+		}
+		else //  kaikki muut sekä "virheet"
+		{
+
+		}
+	}
+	// bullet wall
+	for (size_t i = 0; i < b.size(); i++)
+	{
+		int left = b[i]->GetCircle().getPosition().x - b[i]->GetCircle().getRadius();
+		int top = b[i]->GetCircle().getPosition().y - b[i]->GetCircle().getRadius();
+		int width = b[i]->GetCircle().getPosition().x + b[i]->GetCircle().getRadius();
+		int height = b[i]->GetCircle().getPosition().y + b[i]->GetCircle().getRadius();
+
+		for (int tempx = left; tempx < width; tempx += TILEMAPDIMENSIONS)
+		{
+			for (int tempy = top; tempy < height; tempy += TILEMAPDIMENSIONS)
+			{
+				if (tm.GetCollisionRect(tempx, tempy).second)
+				{
+					if (CRCollision::CircleRectCollision(b[i]->GetCircle(), tm.GetCollisionRect(tempx, tempy).first))
+					{
+						//std::cout << pBullets.size() << std::endl;
+						b.erase(b.begin() + i);
+						break;
 					}
 				}
 			}

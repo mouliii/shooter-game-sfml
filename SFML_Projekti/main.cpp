@@ -77,8 +77,8 @@ int main()
         sf::Vector2f mPos = sf::Vector2f(worldPos);
         // UPDATE
         em.Update(mPos, tm, dt);
-        bm.Update(&em,dt);
-        collider.Update(em.GetEntities(), tm);
+        bm.Update(dt);
+        collider.Update(&em, &bm, tm);
         
         int x = em.GetEntities()[0]->GetPosCentered().x + 0.5f;
         int y = em.GetEntities()[0]->GetPosCentered().y + 0.5f;

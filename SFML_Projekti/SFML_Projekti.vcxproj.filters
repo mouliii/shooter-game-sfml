@@ -69,13 +69,16 @@
     <ClCompile Include="jute.cpp">
       <Filter>Source Files\Tiles</Filter>
     </ClCompile>
-    <ClCompile Include="AStar.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Random.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TextureManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AStar.cpp">
+      <Filter>Source Files\A_Star</Filter>
+    </ClCompile>
+    <ClCompile Include="RectCircleCollision.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

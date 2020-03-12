@@ -1,6 +1,7 @@
 #pragma once
 #include "SFML/Graphics.hpp"
 #include "Entity.h"
+#include "RectCircleCollision.h"
 #include "AStar.h"
 
 class Enemy : public Entity

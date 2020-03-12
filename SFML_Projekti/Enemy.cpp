@@ -1,6 +1,5 @@
 #include "Enemy.h"
 #include <iostream>
-#include "RectCircleCollision.cpp"
 #include <math.h>
 
 extern const int TILEMAPDIMENSIONS;
@@ -35,7 +34,7 @@ void Enemy::Update(sf::Vector2f mpos, std::vector<std::unique_ptr<Entity> >& em,
 	{
 		sf::CircleShape c(100.f);
 		c.setPosition(GetPosCentered());
-		if (CircleRect::CircleRectCollision(c, em[0]->GetRect()))
+		if (CRCollision::CircleRectCollision(c, em[0]->GetRect()))
 		{
 			state = State::MOVING;
 			aStar.Solve_AStar(GetPosInTilesCentered(), em[0]->GetPosInTilesCentered(), tm.GetCollisionLayer());
