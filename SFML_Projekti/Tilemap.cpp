@@ -1,6 +1,8 @@
 #include "Tilemap.h"
 #include <fstream>
 #include <iostream>
+#include "EntityManager.h"
+
 extern const int TILEMAPDIMENSIONS;
 
 Tilemap::Tilemap(TextureManager& tm)
@@ -10,8 +12,8 @@ Tilemap::Tilemap(TextureManager& tm)
 }
 
 
-void Tilemap::LoadLevel(std::string filepath, std::string texture_path)
-{
+void Tilemap::LoadLevel(std::string filepath, std::string texture_path, EntityManager* em)
+{   // 0 - texture | 1 - texture | 2 - collision | 3 - object
     texture = *tm.AcquireTexture(texture_path);
 
     // lataa mappi ja lue
@@ -32,13 +34,15 @@ void Tilemap::LoadLevel(std::string filepath, std::string texture_path)
         mapHeight = v["layers"][0]["height"].as_int();
         mapWidth = v["layers"][0]["width"].as_int();
         nLayers = v["nextlayerid"].as_int() - 1;
+        nObjects = v["nextobjectid"].as_int() - 1; 
         // tilemap texture size
         textureWidth = texture.getSize().x / dims;
         textureHeight = texture.getSize().y / dims;
         std::cout << "map dimensions: " << "[" << mapWidth << "," << mapHeight << "]" << '\n' << "texture dims: " << "[" << textureWidth << "," << textureHeight << "]" << '\n' << "Layers: " << nLayers << std::endl;
+        std::cout << "nObjects: " << nObjects << std::endl;
         // texture tilet ineen
         std::vector<std::unique_ptr<Tile>> l;
-        for (int j = 0; j <= nLayers - 2; j++)
+        for (int j = 0; j <= nLayers - 3; j++)
         {
             for (int i = 0; i < (mapHeight * mapWidth); i++)
             {
@@ -64,13 +68,28 @@ void Tilemap::LoadLevel(std::string filepath, std::string texture_path)
             int posy = i / mapWidth * TILEMAPDIMENSIONS;
             sf::IntRect r(posx, posy, int(dims), int(dims));
             // jos on joku tile nii collision = true   | jos ei oo mit‰‰ mapis nii 0 default -> nolla ei ole mik‰‰  textuuri
-            if (v["layers"][nLayers - 1]["data"][i].as_int() != 0)
+            if (v["layers"][nLayers - 2]["data"][i].as_int() != 0)
             {
                 collisionLayer.push_back({ r,true });
             }
             else
             {
                 collisionLayer.push_back({ r,false });
+            }
+        }
+        for (int i = 0; i < nObjects; i++)
+        {
+            std::string obj = v["layers"][nLayers - 1]["objects"][i]["name"].as_string();
+            if (obj == "player_spawn")
+            {
+
+                //std::unique_ptr<Player> p(new Player({ 16 * 2.f, 16 * 18.f }, bm, textures, tm, "textures/lunk.png"));
+                //&em.AddEntity(std::move(p));
+            }
+            else if (obj == "enemy_spawn")
+            {
+                //std::unique_ptr<Enemy> e(new Enemy({ 280.f,105.f }, bm, textures, tm, "textures/lunk.png"));
+                //em.AddEntity(std::move(e));
             }
         }
         curTime = float(_clock.getElapsedTime().asMilliseconds());

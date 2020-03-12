@@ -159,6 +159,7 @@
     <ClCompile Include="jute.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Random.cpp" />
     <ClCompile Include="Tile.cpp" />
     <ClCompile Include="Tilemap.cpp" />
   </ItemGroup>
@@ -173,6 +174,7 @@
     <ClInclude Include="EntityManager.h" />
     <ClInclude Include="jute.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Random.h" />
     <ClInclude Include="RectCircleCollision.h" />
     <ClInclude Include="TextureManager.h" />
     <ClInclude Include="Tile.h" />

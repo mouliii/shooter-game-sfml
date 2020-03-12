@@ -5,7 +5,6 @@
 #include "TextureManager.h"
 #include "Animation.h"
 #include "AStar.h"
-#include <random>
 
 
 class Entity
@@ -20,11 +19,9 @@ public:
 	bool IsDead() { return isDead; }
 	sf::Vector2f GetPos() { return pos; }
 	sf::Vector2f GetPosCentered();
-	const int GetRandomNumberInt(int min, int max);
 	virtual void Print() { std::cout << "entity debug print" << std::endl; }
 	void SetPos(sf::Vector2f pos) { this->pos = pos; }
 	void UpdateAstar(sf::Vector2i startPosCentered, sf::Vector2i endPosCentered);
-	void AdvanceAstar();
 	const sf::Vector2i GetPosInTilesCentered();
 protected:
 	// perus tiedot maailmasta
@@ -49,6 +46,4 @@ protected:
 	std::vector<sf::Vector2i> pathVec;
 	int pathIndex = 0;
 	sf::Vector2i aStarTarget = { 0.0f,0.0f };
-private:
-	std::mt19937 rng{ std::random_device{} () }; // ei vissii toimi
 };

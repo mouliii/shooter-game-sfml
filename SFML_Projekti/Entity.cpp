@@ -49,13 +49,6 @@ sf::Vector2f Entity::GetPosCentered()
 	return sf::Vector2f(GetPos().x + GetRect().getLocalBounds().width / 2, GetPos().y + GetRect().getLocalBounds().height / 2);
 }
 
-const int Entity::GetRandomNumberInt(int min, int max)
-{
-	std::uniform_int_distribution<int> dist(min, max);
-	int x = dist(rng);
-	return x;
-}
-
 void Entity::UpdateAstar(sf::Vector2i startPosCentered, sf::Vector2i endPosCentered)
 {
 	aStar.Solve_AStar(startPosCentered, endPosCentered, tilemap.GetCollisionLayer());

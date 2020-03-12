@@ -35,7 +35,7 @@ int main()
     window.setView(view);
     view = getLetterboxView(view, 800, 600);
     // MAIN LOOP
-    tm.LoadLevel("Levels/testimap.json", "textures/tilemap.png");
+    tm.LoadLevel("Levels/testimap.json", "textures/tilemap.png",&em);
 
     std::unique_ptr<Player> p(new Player({ 16 * 2.f, 16 * 18.f }, bm, textures, tm, "textures/lunk.png"));
     std::unique_ptr<Enemy> e(new Enemy({ 280.f,105.f }, bm, textures, tm, "textures/lunk.png"));
