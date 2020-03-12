@@ -2,18 +2,16 @@
 
 extern const int TILEMAPDIMENSIONS;
 
-Entity::Entity(sf::Vector2f pos, BulletManager& bm, TextureManager& tm, Tilemap& tilemap, std::string texture_path)
+Entity::Entity(sf::Vector2f pos, BulletManager& bm, Tilemap& tilemap, std::string texture_path)
 	:
 	pos(pos),
 	bm(bm),
-	tm(tm),
 	tilemap(tilemap),
 	aStar(tilemap)
 {
 	rect.setSize(sf::Vector2f(width,height));
 	rect.setPosition(pos);
-
-	sprite.setTexture(*tm.AcquireTexture(texture_path));
+	sprite.setTexture(*TextureManager::AcquireTexture(texture_path));
 	sprite.setPosition(pos);
 
 }

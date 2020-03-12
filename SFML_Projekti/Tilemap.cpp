@@ -5,16 +5,10 @@
 
 extern const int TILEMAPDIMENSIONS;
 
-Tilemap::Tilemap(TextureManager& tm)
-    :
-    tm(tm)
-{
-}
-
 
 void Tilemap::LoadLevel(std::string filepath, std::string texture_path, EntityManager* em)
 {   // 0 - texture | 1 - texture | 2 - collision | 3 - object
-    texture = *tm.AcquireTexture(texture_path);
+    texture = *TextureManager::AcquireTexture(texture_path);
 
     // lataa mappi ja lue
     std::ifstream in(filepath);

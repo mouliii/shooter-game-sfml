@@ -1,18 +1,18 @@
 #include "Player.h"
 
-Player::Player(sf::Vector2f pos, BulletManager& bm, TextureManager& tm, Tilemap& tilemap, std::string path)
+Player::Player(sf::Vector2f pos, BulletManager& bm, Tilemap& tilemap, std::string path)
 	:
-	Entity(pos, bm, tm, tilemap, path)
+	Entity(pos, bm, tilemap, path)
 {
 	rect.setSize({ width,height });
 	//rect.setFillColor(sf::Color::Blue);
 	rect.setPosition(pos);
 	sprite.setScale({ 0.17f, 0.17f });
 
-	animations[int(AnimationIndex::RWALK)] = Animation(tm, "textures/lunk.png", 0, 104 * 7, 10, 96, 104, 0.15f);
-	animations[int(AnimationIndex::LWALK)] = Animation(tm, "textures/lunk.png", 0, 104 * 5, 10, 96, 104, 0.15f);
-	animations[int(AnimationIndex::UWALK)] = Animation(tm, "textures/lunk.png", 0, 104 * 6, 10, 96, 104, 0.15f);
-	animations[int(AnimationIndex::DWALK)] = Animation(tm, "textures/lunk.png", 0, 104 * 4, 10, 96, 104, 0.15f);
+	animations[int(AnimationIndex::RWALK)] = Animation(TextureManager::Get(), "textures/lunk.png", 0, 104 * 7, 10, 96, 104, 0.15f);
+	animations[int(AnimationIndex::LWALK)] = Animation(TextureManager::Get(), "textures/lunk.png", 0, 104 * 5, 10, 96, 104, 0.15f);
+	animations[int(AnimationIndex::UWALK)] = Animation(TextureManager::Get(), "textures/lunk.png", 0, 104 * 6, 10, 96, 104, 0.15f);
+	animations[int(AnimationIndex::DWALK)] = Animation(TextureManager::Get(), "textures/lunk.png", 0, 104 * 4, 10, 96, 104, 0.15f);
 }
 
 void Player::Update(sf::Vector2f mousepos, std::vector<std::unique_ptr<Entity> >& em, Tilemap& tm, float dt)

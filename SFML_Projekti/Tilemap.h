@@ -11,7 +11,6 @@ class Tilemap
 {
 public:
 	Tilemap() = default;
-	Tilemap(TextureManager& tm);
 	void LoadLevel(std::string filepath, std::string texture_path, class EntityManager* em);
 	void Draw(sf::RenderTarget& rt, sf::Vector2f topleft, sf::Vector2f botright);
 	std::unique_ptr<Tile>& GetTile(int layer, int x, int y);
@@ -28,7 +27,6 @@ private:
 	int mapHeight = 0;
 	int textureWidth = 0;
 	int textureHeight = 0;
-	TextureManager& tm;
 	sf::Texture texture;
 	std::vector<std::vector<std::unique_ptr<Tile>>> pTiles;
 	std::vector<std::pair<sf::IntRect, bool>> collisionLayer;

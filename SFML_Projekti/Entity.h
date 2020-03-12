@@ -10,7 +10,7 @@
 class Entity
 {
 public:
-	Entity(sf::Vector2f pos, BulletManager& bm, TextureManager& tm, Tilemap& tilemap, std::string texture_path);
+	Entity(sf::Vector2f pos, BulletManager& bm, Tilemap& tilemap, std::string texture_path);
 	virtual ~Entity();
 	virtual void Update(sf::Vector2f mousepos, std::vector<std::unique_ptr<Entity> >& em, Tilemap& tm, float dt);
 	void Draw(sf::RenderTarget& target);
@@ -26,7 +26,6 @@ public:
 protected:
 	// perus tiedot maailmasta
 	BulletManager& bm;
-	TextureManager& tm;
 	Tilemap& tilemap;
 	// entity specific jutut
 	sf::Sprite sprite;
@@ -46,4 +45,5 @@ protected:
 	std::vector<sf::Vector2i> pathVec;
 	int pathIndex = 0;
 	sf::Vector2i aStarTarget = { 0.0f,0.0f };
+	sf::Texture t;
 };
