@@ -20,7 +20,6 @@ float curTime = float(_clock.getElapsedTime().asMilliseconds());
 
 Collider collider;
 Tilemap tm;
-BulletManager bm(tm);
 EntityManager em(tm);
 
 sf::View getLetterboxView(sf::View view, int windowWidth, int windowHeight);
@@ -36,8 +35,8 @@ int main()
     // MAIN LOOP
     tm.LoadLevel("Levels/testimap.json", "textures/tilemap.png",&em);
 
-    std::unique_ptr<Player> p(new Player({ 16 * 2.f, 16 * 18.f }, bm, tm, "textures/lunk.png"));
-    std::unique_ptr<Enemy> e(new Enemy({ 280.f,105.f }, bm, tm, "textures/lunk.png"));
+    std::unique_ptr<Player> p(new Player({ 16 * 2.f, 16 * 18.f }, tm, "textures/lunk.png"));
+    std::unique_ptr<Enemy> e(new Enemy({ 280.f,105.f }, tm, "textures/lunk.png"));
     em.AddEntity(std::move(p) );
     em.AddEntity(std::move(e));
     //////////
@@ -77,9 +76,9 @@ int main()
         sf::Vector2f mPos = sf::Vector2f(worldPos);
         // UPDATE
         em.Update(mPos, tm, dt);
-        bm.Update(dt);
-        collider.Update(&em, &bm, tm);
-        
+        BulletManager::Update(dt);
+        collider.Update(&em, tm);
+            // testi
         int x = em.GetEntities()[0]->GetPosCentered().x + 0.5f;
         int y = em.GetEntities()[0]->GetPosCentered().y + 0.5f;
         view.setCenter(em.GetEntities()[0]->GetPosCentered()); // vika update | enne draw
@@ -90,7 +89,7 @@ int main()
         window.setView(view);
         tm.Draw(window, sf::Vector2f(x,y), sf::Vector2f(300.f, 200.f));
         em.Draw(window);
-        bm.Draw(window);
+        BulletManager::Draw(window);
         
         //window.draw(rs);
         window.display();

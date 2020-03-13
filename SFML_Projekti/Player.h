@@ -16,7 +16,7 @@ private:
 		COUNT
 	};
 public:
-	Player(sf::Vector2f pos, BulletManager& bm, Tilemap& tilemap, std::string path);
+	Player(sf::Vector2f pos, Tilemap& tilemap, std::string path);
 	void Update(sf::Vector2f mousepos, std::vector<std::unique_ptr<Entity> >& em, Tilemap& tm, float dt) override;
 	void UpdateMovement(sf::Vector2f mousepos, float dt);
 	virtual void Print() { std::cout << "playerin printti" << std::endl; }

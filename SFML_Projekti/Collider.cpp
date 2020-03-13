@@ -52,10 +52,10 @@ bool Collider::CheckCollision(sf::RectangleShape* _this, sf::IntRect* other)
 	return false;
 }
 
-void Collider::Update(EntityManager* em, BulletManager* bm, Tilemap& tm)
+void Collider::Update(EntityManager* em, Tilemap& tm)
 {
 	std::vector<std::unique_ptr<Entity>>& e = em->GetEntities();
-	std::vector<std::unique_ptr<Bullet>>& b = bm->GetBullets();
+	std::vector<std::unique_ptr<Bullet>>& b = BulletManager::GetBullets();
 	// entity - wall
 	for (size_t i = 0; i < e.size(); i++)
 	{

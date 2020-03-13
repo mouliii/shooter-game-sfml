@@ -12,6 +12,6 @@ public:
 	Collider() = default;
 	void Move(sf::RectangleShape* body, sf::Vector2f delta);
 	bool CheckCollision(sf::RectangleShape* _this, sf::IntRect* other);
-	void Update(EntityManager* em, BulletManager* bm, Tilemap& tm);
+	void Update(EntityManager* em, Tilemap& tm);
 private:
 };

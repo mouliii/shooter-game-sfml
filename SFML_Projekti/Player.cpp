@@ -1,8 +1,8 @@
 #include "Player.h"
 
-Player::Player(sf::Vector2f pos, BulletManager& bm, Tilemap& tilemap, std::string path)
+Player::Player(sf::Vector2f pos, Tilemap& tilemap, std::string path)
 	:
-	Entity(pos, bm, tilemap, path)
+	Entity(pos, tilemap, path)
 {
 	rect.setSize({ width,height });
 	//rect.setFillColor(sf::Color::Blue);
@@ -25,7 +25,7 @@ void Player::Update(sf::Vector2f mousepos, std::vector<std::unique_ptr<Entity> >
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 		{
 			canShoot = false;
-			bm.AddBullet(GetPosCentered(), mousepos, 5.f, 400.f, 400.f, sf::Color::Green,"Player");
+			BulletManager::AddBullet(GetPosCentered(), mousepos, 5.f, 400.f, 400.f, sf::Color::Green,"Player");
 		}
 	}
 	else

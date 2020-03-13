@@ -23,7 +23,7 @@ private:
 		MOVING
 	};
 public:
-	Enemy(sf::Vector2f pos, BulletManager& bm, Tilemap& tilemap, std::string path);
+	Enemy(sf::Vector2f pos, Tilemap& tilemap, std::string path);
 	virtual void Update(sf::Vector2f mpos, std::vector<std::unique_ptr<Entity>>& em, Tilemap& tm, float dt) override;
 	const int GetHp() { return hp; }
 	void Print() override { std::cout << "vihu" << std::endl;}

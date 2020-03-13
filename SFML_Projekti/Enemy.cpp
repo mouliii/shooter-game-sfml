@@ -4,9 +4,9 @@
 
 extern const int TILEMAPDIMENSIONS;
 
-Enemy::Enemy(sf::Vector2f pos, BulletManager& bm, Tilemap& tilemap, std::string path)
+Enemy::Enemy(sf::Vector2f pos, Tilemap& tilemap, std::string path)
 	:
-	Entity(pos,bm,tilemap,path)
+	Entity(pos,tilemap,path)
 {
 	rect.setSize(sf::Vector2f(width, height));
 	rect.setFillColor(sf::Color::Yellow);
@@ -104,7 +104,7 @@ void Enemy::Update(sf::Vector2f mpos, std::vector<std::unique_ptr<Entity> >& em,
 		if (canShoot)
 		{
 			canShoot = false;
-			bm.AddBullet(GetPosCentered(), em[0]->GetPosCentered(), 5.f, 300.f, 250.f, sf::Color::Green, "Enemy");
+			BulletManager::AddBullet(GetPosCentered(), em[0]->GetPosCentered(), 5.f, 300.f, 250.f, sf::Color::Green, "Enemy");
 		}
 		else
 		{

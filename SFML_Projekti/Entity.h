@@ -10,7 +10,7 @@
 class Entity
 {
 public:
-	Entity(sf::Vector2f pos, BulletManager& bm, Tilemap& tilemap, std::string texture_path);
+	Entity(sf::Vector2f pos, Tilemap& tilemap, std::string texture_path);
 	virtual ~Entity();
 	virtual void Update(sf::Vector2f mousepos, std::vector<std::unique_ptr<Entity> >& em, Tilemap& tm, float dt);
 	void Draw(sf::RenderTarget& target);
@@ -25,7 +25,6 @@ public:
 	const sf::Vector2i GetPosInTilesCentered();
 protected:
 	// perus tiedot maailmasta
-	BulletManager& bm;
 	Tilemap& tilemap;
 	// entity specific jutut
 	sf::Sprite sprite;

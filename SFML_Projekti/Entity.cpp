@@ -2,10 +2,9 @@
 
 extern const int TILEMAPDIMENSIONS;
 
-Entity::Entity(sf::Vector2f pos, BulletManager& bm, Tilemap& tilemap, std::string texture_path)
+Entity::Entity(sf::Vector2f pos, Tilemap& tilemap, std::string texture_path)
 	:
 	pos(pos),
-	bm(bm),
 	tilemap(tilemap),
 	aStar(tilemap)
 {
