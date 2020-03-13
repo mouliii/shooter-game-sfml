@@ -74,16 +74,23 @@ void Tilemap::LoadLevel(std::string filepath, std::string texture_path, EntityMa
         for (int i = 0; i < nObjects; i++)
         {
             std::string obj = v["layers"][nLayers - 1]["objects"][i]["name"].as_string();
+            int x = v["layers"][nLayers - 1]["objects"][i]["x"].as_int();
+            int y = v["layers"][nLayers - 1]["objects"][i]["y"].as_int();
             if (obj == "player_spawn")
             {
-
-                //std::unique_ptr<Player> p(new Player({ 16 * 2.f, 16 * 18.f }, bm, textures, tm, "textures/lunk.png"));
-                //&em.AddEntity(std::move(p));
+                std::unique_ptr<Player> p(new Player(sf::Vector2f(x,y), *this, "textures/lunk.png"));
+                em->AddEntity(std::move(p));
+                std::vector<int> asd;
+                int id = v["layers"][nLayers - 1]["objects"][i]["id"].as_int();
+                if (id != 1)
+                {
+                    std::swap(em->GetEntities()[0], em->GetEntities()[em->GetEntities().size() - 1]);
+                }
             }
             else if (obj == "enemy_spawn")
             {
-                //std::unique_ptr<Enemy> e(new Enemy({ 280.f,105.f }, bm, textures, tm, "textures/lunk.png"));
-                //em.AddEntity(std::move(e));
+                std::unique_ptr<Enemy> e(new Enemy(sf::Vector2f(x, y), *this, "textures/lunk.png"));
+                em->AddEntity(std::move(e));
             }
         }
         curTime = float(_clock.getElapsedTime().asMilliseconds());

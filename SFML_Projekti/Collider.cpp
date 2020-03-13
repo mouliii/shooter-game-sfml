@@ -86,23 +86,29 @@ void Collider::Update(EntityManager* em, Tilemap& tm)
 		// check collsion
 		if (b[i]->GetOwner() == "Player")
 		{
+			bool hit = false;
 			for (size_t j = 1; j < em->GetEntities().size(); j++)
 			{
-				if (CRCollision::CircleRectCollision(b[i]->GetCircle(), em->GetEntities()[j]->GetRect()))
+				if (CRCollision::CircleRectCollision(b[i]->GetCircle(), e[j]->GetRect()))
 				{
+					hit = true;
 					// TODO dmg source
 					em->GetEntities()[j]->GetDmg(1);
-					b.erase(b.begin() + i);
 				}
+			}
+			if (hit)
+			{
+				b.erase(b.begin() + i);
 			}
 		}
 		else if (b[i]->GetOwner() == "Enemy")
 		{
-			if (CRCollision::CircleRectCollision(b[i]->GetCircle(), em->GetEntities()[0]->GetRect()))
+			if (CRCollision::CircleRectCollision(b[i]->GetCircle(), e[0]->GetRect()))
 			{
 				// TODO dmg source
 				em->GetEntities()[0]->GetDmg(1);
 				b.erase(b.begin() + i);
+				continue;
 			}
 		}
 		else //  kaikki muut sekä "virheet"
