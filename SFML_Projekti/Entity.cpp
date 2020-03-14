@@ -63,3 +63,33 @@ const sf::Vector2i Entity::GetPosInTilesCentered()
 {
 	return sf::Vector2i((int(pos.x) + int(width) / 2) / TILEMAPDIMENSIONS, (int(pos.y) + int(height) / 2) / TILEMAPDIMENSIONS);
 }
+
+bool Entity::LineofSight(sf::Vector2f origin, sf::Vector2f dest, int maxRange, int precision)
+{
+	// normalize delta vectori
+	sf::Vector2f delta = dest - origin;
+	float distance = std::sqrt((delta.x * delta.x) + (delta.y * delta.y));
+	delta.x /= distance;
+	delta.y /= distance;
+
+	//int precision = precision; // How many steps to check, must be smaller than pixel width/height of a tile
+
+	if (distance > maxRange) { // If target is out of range, do not check LOS
+		return false;
+	}
+	else
+	{
+		int iterations = (int)distance / precision;
+		for (int x = 1; x < iterations; x++)
+		{
+			// TileMap.IsWallTileByPixel(origin + stepDirection * (x * 25))
+			int stepX = origin.x + delta.x * (x * TILEMAPDIMENSIONS / 2);
+			int stepY = origin.y + delta.y * (x * TILEMAPDIMENSIONS / 2);
+			if (tilemap.GetCollisionRect(stepX,stepY).second)
+			{
+				return false;
+			}
+		}
+		return true; // If no wall tiles were found LOS is clear
+	}
+}

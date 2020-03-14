@@ -23,6 +23,7 @@ public:
 	void SetPos(sf::Vector2f pos) { this->pos = pos; }
 	void UpdateAstar(sf::Vector2i startPosCentered, sf::Vector2i endPosCentered);
 	const sf::Vector2i GetPosInTilesCentered();
+	bool LineofSight(sf::Vector2f origin, sf::Vector2f dest, int maxRange, int precision);
 protected:
 	// perus tiedot maailmasta
 	Tilemap& tilemap;
@@ -45,4 +46,5 @@ protected:
 	int pathIndex = 0;
 	sf::Vector2i aStarTarget = { 0.0f,0.0f };
 	sf::Texture t;
+	// TODO DEBUG
 };

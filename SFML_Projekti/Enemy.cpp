@@ -26,15 +26,10 @@ void Enemy::Update(sf::Vector2f mpos, std::vector<std::unique_ptr<Entity> >& em,
 	sf::Vector2f dir(0.f, 0.f);
 	bool diagonalCheck[2] = { 0,0 };
 
-	
-
 	switch (state)
 	{
 	case Enemy::IDLE:
-	{
-		sf::CircleShape c(100.f);
-		c.setPosition(GetPosCentered());
-		if (CRCollision::CircleRectCollision(c, em[0]->GetRect()))
+		if (LineofSight(GetPosCentered(),em[0]->GetPosCentered(),100,8))
 		{
 			state = State::MOVING;
 			aStar.Solve_AStar(GetPosInTilesCentered(), em[0]->GetPosInTilesCentered(), tm.GetCollisionLayer());
@@ -43,9 +38,7 @@ void Enemy::Update(sf::Vector2f mpos, std::vector<std::unique_ptr<Entity> >& em,
 			aStarTarget.x = pathVec[pathIndex].x * TILEMAPDIMENSIONS;
 			aStarTarget.y = pathVec[pathIndex].y * TILEMAPDIMENSIONS;
 		}
-	}
 		break;
-
 	case Enemy::MOVING:
 	{
 		UpdateAstar(GetPosInTilesCentered(), em[0]->GetPosInTilesCentered());
@@ -94,7 +87,6 @@ void Enemy::Update(sf::Vector2f mpos, std::vector<std::unique_ptr<Entity> >& em,
 				aStarTarget.y = pathVec[pathIndex].y * TILEMAPDIMENSIONS;
 			}
 		}
-		
 	}
 		break;
 	case Enemy::WANDERING:
