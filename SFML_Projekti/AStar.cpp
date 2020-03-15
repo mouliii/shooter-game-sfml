@@ -5,7 +5,9 @@ Astar::Astar(Tilemap& tm)
 	:
 	tm(tm)
 {
-	
+	nMapWidth = tm.GetMapSize().x;
+	nMapHeight = tm.GetMapSize().y;
+	nodes = new sNode[nMapWidth * nMapHeight];
 }
 
 void Astar::SetDebugTiles()
@@ -63,7 +65,6 @@ bool Astar::OnUserCreate()
 	// Create a 2D array of nodes - this is for convenience of rendering and construction
 	// and is not required for the algorithm to work - the nodes could be placed anywhere
 	// in any space, in multiple dimensions...
-	nodes = new sNode[nMapWidth * nMapHeight];
 	for (int x = 0; x < nMapWidth; x++)
 		for (int y = 0; y < nMapHeight; y++)
 		{
@@ -102,8 +103,8 @@ bool Astar::OnUserCreate()
 		}
 
 	// Manually positio the start and end markers so they are not nullptr
-	nodeStart = &nodes[(nMapHeight / 2) * nMapWidth + 1];
-	nodeEnd = &nodes[(nMapHeight / 2 - 1) * nMapWidth + nMapWidth - 2];
+	nodeStart = &nodes[0];
+	nodeEnd = &nodes[0];
 
 	return true;
 }
@@ -202,7 +203,6 @@ bool Astar::Solve_AStar(sf::Vector2i startPos, sf::Vector2i endPos, std::vector<
 			}
 		}
 	}
-
 	return true;
 }
 
@@ -278,7 +278,5 @@ bool Astar::OnUserUpdate(sf::RenderTarget& rt, float fElapsedTime)
 			p = p->parent;
 		}
 	}
-
-
 	return false;
 }

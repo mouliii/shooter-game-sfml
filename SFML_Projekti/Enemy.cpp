@@ -29,9 +29,9 @@ void Enemy::Update(sf::Vector2f mpos, std::vector<std::unique_ptr<Entity> >& em,
 	switch (state)
 	{
 	case Enemy::IDLE:
-		if (LineofSight(GetPosCentered(),em[0]->GetPosCentered(),100,8))
+		if (LineofSight(GetPosCentered(), em[0]->GetPosCentered(), 100, 8))
 		{
-			state = State::MOVING;
+			state = State::AGGROED;
 			aStar.Solve_AStar(GetPosInTilesCentered(), em[0]->GetPosInTilesCentered(), tm.GetCollisionLayer());
 			pathVec = aStar.GetPathVector();
 			std::reverse(pathVec.begin(), pathVec.end());
@@ -39,43 +39,101 @@ void Enemy::Update(sf::Vector2f mpos, std::vector<std::unique_ptr<Entity> >& em,
 			aStarTarget.y = pathVec[pathIndex].y * TILEMAPDIMENSIONS;
 		}
 		break;
-	case Enemy::MOVING:
+	case Enemy::AGGROED:
 	{
+		const float xd = 1.f; // offset, mikä lasketaan, että on tarpeeks lähellä waypointtia | jos liian iso jää jumiin ahtaisiin paikkoihin | jos liian pien ei ehkä pääse waypointtiin
+		// entity delta vector
+		const sf::Vector2f deltaPos = em[0]->GetPosCentered() - GetPosCentered();
+		const float vecLenght = std::sqrt((deltaPos.x * deltaPos.x) + (deltaPos.y * deltaPos.y));
+		// !los -> liiku -> ei ammu
+		// los -> liiku ( jos ei liian lähellä) ja ammu
+		// 
+		// update ASTAR
 		UpdateAstar(GetPosInTilesCentered(), em[0]->GetPosInTilesCentered());
-		const float xd = 1.f;
-		// reitti
-		float deltaX = pos.x - aStarTarget.x;
-		float deltaY = pos.y - aStarTarget.y;
-		if (deltaY < -xd)
+		float deltaX = pos.x - aStarTarget.x;						// TODO - just in case
+		float deltaY = pos.y - aStarTarget.y;						// aggro reset tai jotain ???
+		if (!LineofSight(GetPosCentered(), em[0]->GetPosCentered(), std::numeric_limits<int>::max(), 8))
 		{
-			// liiku alas
-			dir += {0.0f, 1.0f};
-			diagonalCheck[1] = 1;
-			curAnimation = AnimationIndex::DWALK;
+			// liiku sen mukaisesti
+			if (deltaY < -xd)
+			{
+				// liiku alas
+				dir += {0.0f, 1.0f};
+				diagonalCheck[1] = 1;
+				curAnimation = AnimationIndex::DWALK;
+			}
+			else if (deltaY > xd)
+			{
+				// liiku ylös
+				dir += {0.0f, -1.0f};
+				diagonalCheck[1] = 1;
+				curAnimation = AnimationIndex::UWALK;
+			}
+			if (deltaX < -xd)
+			{
+				// liiku oikeelle
+				dir += {1.0f, 0.0f};
+				diagonalCheck[0] = 1;
+				curAnimation = AnimationIndex::RWALK;
+			}
+			else if (deltaX > xd)
+			{
+				// liiku vas
+				dir += {-1.0f, 0.0f};
+				diagonalCheck[0] = 1;
+				curAnimation = AnimationIndex::LWALK;
+			}
 		}
-		else if (deltaY > xd)
+		else
 		{
-			// liiku ylös
-			dir += {0.0f, -1.0f};
-			diagonalCheck[1] = 1;
-			curAnimation = AnimationIndex::UWALK;
-		}
+			if (vecLenght > 80)
+			{
+				if (deltaY < -xd)
+				{
+					// liiku alas
+					dir += {0.0f, 1.0f};
+					diagonalCheck[1] = 1;
+					curAnimation = AnimationIndex::DWALK;
+				}
+				else if (deltaY > xd)
+				{
+					// liiku ylös
+					dir += {0.0f, -1.0f};
+					diagonalCheck[1] = 1;
+					curAnimation = AnimationIndex::UWALK;
+				}
 
-		if (deltaX < -xd)
-		{
-			// liiku oikeelle
-			dir += {1.0f, 0.0f};
-			diagonalCheck[0] = 1;
-			curAnimation = AnimationIndex::RWALK;
+				if (deltaX < -xd)
+				{
+					// liiku oikeelle
+					dir += {1.0f, 0.0f};
+					diagonalCheck[0] = 1;
+					curAnimation = AnimationIndex::RWALK;
+				}
+				else if (deltaX > xd)
+				{
+					// liiku vas
+					dir += {-1.0f, 0.0f};
+					diagonalCheck[0] = 1;
+					curAnimation = AnimationIndex::LWALK;
+				}
+			}
+			if (canShoot)
+			{
+				canShoot = false;
+				BulletManager::AddBullet(GetPosCentered(), em[0]->GetPosCentered(), 5.f, 300.f, 250.f, sf::Color::Green, "Enemy");
+			}
+			else
+			{
+				shootTimer -= dt;
+				if (shootTimer <= 0.0f)
+				{
+					canShoot = true;
+					shootTimer = shootCooldown;
+				}
+			}
 		}
-		else if (deltaX > xd)
-		{
-			// liiku vas
-			dir += {-1.0f, 0.0f};
-			diagonalCheck[0] = 1;
-			curAnimation = AnimationIndex::LWALK;
-		}
-
+		// update path find
 		const int maali = std::sqrt((deltaX * deltaX) + (deltaY * deltaY));
 		if (maali <= xd)
 		{
@@ -88,27 +146,8 @@ void Enemy::Update(sf::Vector2f mpos, std::vector<std::unique_ptr<Entity> >& em,
 			}
 		}
 	}
-		break;
+	break;
 	case Enemy::WANDERING:
-		break;
-	case Enemy::AGGROED:
-		// ampuminen
-		if (canShoot)
-		{
-			canShoot = false;
-			BulletManager::AddBullet(GetPosCentered(), em[0]->GetPosCentered(), 5.f, 300.f, 250.f, sf::Color::Green, "Enemy");
-		}
-		else
-		{
-			shootTimer -= dt;
-			if (shootTimer <= 0.0f)
-			{
-				canShoot = true;
-				shootTimer = shootCooldown;
-			}
-		}
-		break;
-	default:
 		break;
 	}
 	// dead check

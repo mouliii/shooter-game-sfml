@@ -116,7 +116,7 @@ void Tilemap::Draw(sf::RenderTarget& rt, sf::Vector2f topleft, sf::Vector2f botr
             rt.draw(pTiles[i][j]->GetSprite());
         }
     }
-    
+    // TODO
     /*
     for (int tempx = x; tempx < w; tempx++)
         {
@@ -154,51 +154,3 @@ std::pair<sf::IntRect, bool>& Tilemap::GetCollisionRect(int x, int y)
         return collisionLayer[0];
     }
 }
-
-/*
-switch (c)
-            {
-            case '.':
-            {
-                std::unique_ptr<Tile> t(new Tile(sf::Vector2f(x, y), { dims,dims }, tm, sf::IntRect(0,0,1,1), sf::Color::Transparent, true, 1.0f));
-                pTiles.emplace_back(std::move(t));
-                x += dims;
-                break;
-            }
-            case '0':
-            {
-                std::unique_ptr<Tile> t(new Tile(sf::Vector2f(x, y), { dims,dims }, tm, sf::IntRect(145,34,16,16), sf::Color(255, 255, 255, 255), false, 0.0f));
-                pTiles.emplace_back(std::move(t));
-                x += dims;
-            }
-            break;
-            case '1':
-            {
-                std::unique_ptr<Tile> t(new Tile(sf::Vector2f(x, y), { dims,dims }, tm, sf::IntRect(48, 79, 16, 16), sf::Color(105, 150, 250, 255), false, 0.0f));
-                pTiles.emplace_back(std::move(t));
-                x += dims;
-            }
-            break;
-            case '3':
-            {
-                std::unique_ptr<Tile> t(new Tile(sf::Vector2f(x, y), { dims,dims }, tm, sf::IntRect(0, 0, 16, 16), sf::Color(255, 1, 255, 255), false, 0.6f));
-                pTiles.emplace_back(std::move(t));
-                x += dims;
-            }
-            break;
-            case '\n':
-                // rset [x,y]
-                while (x / TILEMAPDIMENSIONS < mapWidth)
-                {
-                    std::unique_ptr<Tile> t(new Tile(sf::Vector2f(x, y), { dims,dims }, tm, sf::IntRect(0, 0, 16, 16), sf::Color::Transparent, true, 1.0f));
-                    pTiles.emplace_back(std::move(t));
-                    x += dims;
-                }
-                x = 0;
-                y += dims;
-                break;
-            default:
-                // error 'n shit
-                break;
-            }
-*/
