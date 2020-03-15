@@ -62,6 +62,10 @@ void Astar::DrawPath(sf::RenderTarget& rt)
 
 bool Astar::OnUserCreate()
 {
+	for (size_t i = 0; i < nMapWidth * nMapHeight; i++)
+	{
+		nodes[i].vecNeighbours.clear();
+	}
 	// Create a 2D array of nodes - this is for convenience of rendering and construction
 	// and is not required for the algorithm to work - the nodes could be placed anywhere
 	// in any space, in multiple dimensions...
