@@ -10,6 +10,11 @@ Astar::Astar(Tilemap& tm)
 	nodes = new sNode[nMapWidth * nMapHeight];
 }
 
+Astar::~Astar()
+{
+	delete[] nodes;
+}
+
 void Astar::SetDebugTiles()
 {
 	OnUserCreate();

@@ -17,6 +17,7 @@ private:
 	};
 public:
 	Astar(Tilemap& tm);
+	~Astar();
 	void SetDebugTiles();
 	void SetStartPos(int x, int y);
 	void SetEndPos(int x, int y);
