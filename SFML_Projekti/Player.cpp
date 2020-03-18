@@ -13,12 +13,22 @@ Player::Player(sf::Vector2f pos, Tilemap& tilemap, std::string path)
 	animations[int(AnimationIndex::LWALK)] = Animation(TextureManager::Get(), "textures/lunk.png", 0, 104 * 5, 10, 96, 104, 0.15f);
 	animations[int(AnimationIndex::UWALK)] = Animation(TextureManager::Get(), "textures/lunk.png", 0, 104 * 6, 10, 96, 104, 0.15f);
 	animations[int(AnimationIndex::DWALK)] = Animation(TextureManager::Get(), "textures/lunk.png", 0, 104 * 4, 10, 96, 104, 0.15f);
+
+	weapon = new Pistol({ GetPosCentered().x + 8.f,GetPosCentered().y }, "textures/Weapons/pistol.png");
 }
 
 void Player::Update(sf::Vector2f mousepos, std::vector<std::unique_ptr<Entity> >& em, Tilemap& tm, float dt)
 {
 	// update liikkuminen ja animaatio
 	UpdateMovement(mousepos, dt);
+	if (mousepos.x < GetPosCentered().x)
+	{
+		weapon->UpdatePos({ GetPosCentered().x - 5.f , GetPosCentered().y }, mousepos);
+	}
+	else
+	{
+		weapon->UpdatePos({ GetPosCentered().x + 5.f , GetPosCentered().y }, mousepos);
+	}
 	// update ampuminen
 	if (canShoot)
 	{

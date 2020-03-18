@@ -34,6 +34,10 @@ void Entity::Draw(sf::RenderTarget& target)
 	temp.setOutlineColor(sf::Color(255, 255, 255));
 	temp.setFillColor(sf::Color::Transparent);
 	target.draw(temp);
+	if (weapon != nullptr)
+	{
+		weapon->Draw(target);
+	}
 }
 
 sf::RectangleShape& Entity::GetRect()

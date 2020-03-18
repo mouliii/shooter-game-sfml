@@ -1,6 +1,7 @@
 #pragma once
 #include "SFML/Graphics.hpp"
 #include "Entity.h"
+#include "Weapon.h"
 
 
 
@@ -26,5 +27,4 @@ private:
 	//float height = 32.f;
 	Animation animations[int(AnimationIndex::COUNT)];
 	AnimationIndex curAnimation = AnimationIndex::RWALK;
-	
 };

@@ -140,8 +140,8 @@ void Collider::Update(EntityManager* em, Tilemap& tm)
 			}
 		}
 	}
-	// events
-	//EventHandler::HandleEvents(em->GetEntities()[0]->GetRect());
+	// pelaaja - item
+	
 }
 
 

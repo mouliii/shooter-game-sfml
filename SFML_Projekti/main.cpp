@@ -5,11 +5,12 @@
 #include "EntityManager.h"
 #include "Tilemap.h"
 #include "Collider.h"
+#include "Weapon.h"
 
 //   c/c++ -> code generation -> basic error checking -> Both (/RTC1, equiv. to /RTCsu) (/RTC1) -> default
 /*
 ongelmat:
-
+    rotate pelaaja hiiren mukaa vai mitenkä
 */
 extern const int TILEMAPDIMENSIONS = 16;
 
@@ -33,6 +34,9 @@ int main()
     window.setView(view);
     view = getLetterboxView(view, 800, 600);
     tm.LoadLevel("Levels/testimap.json", "textures/tilemap.png",&em);
+
+    Pistol pistol({ 20,105 }, "textures/Weapons/pistol.png");
+
     // MAIN LOOP
     while (window.isOpen())
     {
@@ -84,7 +88,7 @@ int main()
         tm.Draw(window, sf::Vector2f(x,y), sf::Vector2f(300.f, 200.f));
         em.Draw(window);
         BulletManager::Draw(window);
-        
+        pistol.Draw(window);
         //window.draw(rs);
         window.display();
     }

@@ -5,6 +5,7 @@
 #include "TextureManager.h"
 #include "Animation.h"
 #include "AStar.h"
+#include "Weapon.h"
 
 
 class Entity
@@ -47,4 +48,5 @@ protected:
 	sf::Vector2i aStarTarget = { 0.0f,0.0f };
 	sf::Texture t;
 	// TODO DEBUG
+	Weapon* weapon = nullptr;
 };
