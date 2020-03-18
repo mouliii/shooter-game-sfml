@@ -156,7 +156,6 @@
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="EntityManager.cpp" />
-    <ClCompile Include="EventHandler.cpp" />
     <ClCompile Include="jute.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -175,8 +174,6 @@
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EntityManager.h" />
-    <ClInclude Include="Event.h" />
-    <ClInclude Include="EventHandler.h" />
     <ClInclude Include="jute.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Random.h" />
@@ -186,7 +183,10 @@
     <ClInclude Include="Tilemap.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Levels\level2.json" />
+    <Text Include="level.txt" />
+    <Text Include="level2.txt" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="Levels\testimap.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -9,7 +9,7 @@
 //   c/c++ -> code generation -> basic error checking -> Both (/RTC1, equiv. to /RTCsu) (/RTC1) -> default
 /*
 ongelmat:
-    entity / bullet collision wall eriksee ? 1-2-3 t tjsp
+
 */
 extern const int TILEMAPDIMENSIONS = 16;
 
