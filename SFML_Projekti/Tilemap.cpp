@@ -2,7 +2,6 @@
 #include <fstream>
 #include <iostream>
 #include "EntityManager.h"
-#include "EventHandler.h"
 
 extern const int TILEMAPDIMENSIONS;
 
@@ -97,13 +96,7 @@ void Tilemap::LoadLevel(std::string filepath, std::string texture_path, EntityMa
             }
             else if (obj == "level_trigger")
             {
-                int h = v["layers"][nLayers - 1]["objects"][i]["height"].as_int();
-                int w = v["layers"][nLayers - 1]["objects"][i]["width"].as_int();
-                sf::RectangleShape temp;
-                temp.setPosition(x, y);
-                temp.setSize(sf::Vector2f(float(w), float(h)) );
-                std::unique_ptr<ChangeLevel> tele(new ChangeLevel(temp));
-                EventHandler::AddEvent(std::move(tele));
+                
             }
         }
         curTime = float(_clock.getElapsedTime().asMilliseconds());
