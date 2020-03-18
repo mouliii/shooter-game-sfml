@@ -2,6 +2,7 @@
 #include <fstream>
 #include <iostream>
 #include "EntityManager.h"
+#include "EventHandler.h"
 
 extern const int TILEMAPDIMENSIONS;
 
@@ -9,7 +10,6 @@ extern const int TILEMAPDIMENSIONS;
 void Tilemap::LoadLevel(std::string filepath, std::string texture_path, EntityManager* em)
 {   // 0 - texture | 1 - texture | 2 - collision | 3 - object
     texture = *TextureManager::AcquireTexture(texture_path);
-
     // lataa mappi ja lue
     std::ifstream in(filepath);
     if (in.good())
@@ -71,8 +71,11 @@ void Tilemap::LoadLevel(std::string filepath, std::string texture_path, EntityMa
                 collisionLayer.push_back({ r,false });
             }
         }
+
+        //  object layer
         for (int i = 0; i < nObjects; i++)
         {
+            
             std::string obj = v["layers"][nLayers - 1]["objects"][i]["name"].as_string();
             int x = v["layers"][nLayers - 1]["objects"][i]["x"].as_int();
             int y = v["layers"][nLayers - 1]["objects"][i]["y"].as_int();
@@ -91,6 +94,16 @@ void Tilemap::LoadLevel(std::string filepath, std::string texture_path, EntityMa
             {
                 std::unique_ptr<Enemy> e(new Enemy(sf::Vector2f(x, y), *this, "textures/lunk.png"));
                 em->AddEntity(std::move(e));
+            }
+            else if (obj == "level_trigger")
+            {
+                int h = v["layers"][nLayers - 1]["objects"][i]["height"].as_int();
+                int w = v["layers"][nLayers - 1]["objects"][i]["width"].as_int();
+                sf::RectangleShape temp;
+                temp.setPosition(x, y);
+                temp.setSize(sf::Vector2f(float(w), float(h)) );
+                std::unique_ptr<ChangeLevel> tele(new ChangeLevel(temp));
+                EventHandler::AddEvent(std::move(tele));
             }
         }
         curTime = float(_clock.getElapsedTime().asMilliseconds());
