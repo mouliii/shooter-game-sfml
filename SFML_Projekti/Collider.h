@@ -5,6 +5,7 @@
 #include "Tilemap.h"
 #include "BulletManager.h"
 #include "RectCircleCollision.h"
+#include "ItemList.h"
 
 class Collider
 {

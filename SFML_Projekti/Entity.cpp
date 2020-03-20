@@ -26,6 +26,10 @@ void Entity::Update(sf::Vector2f mousepos, std::vector<std::unique_ptr<Entity> >
 
 void Entity::Draw(sf::RenderTarget& target)
 {
+	if (weapon != nullptr)
+	{
+		weapon->Draw(target);
+	}
 	target.draw(sprite);
 	sf::RectangleShape temp;
 	temp.setPosition(rect.getPosition());
@@ -34,10 +38,6 @@ void Entity::Draw(sf::RenderTarget& target)
 	temp.setOutlineColor(sf::Color(255, 255, 255));
 	temp.setFillColor(sf::Color::Transparent);
 	target.draw(temp);
-	if (weapon != nullptr)
-	{
-		weapon->Draw(target);
-	}
 }
 
 sf::RectangleShape& Entity::GetRect()
@@ -98,7 +98,17 @@ bool Entity::LineofSight(sf::Vector2f origin, sf::Vector2f dest, int maxRange, i
 	}
 }
 
-void Entity::PickupWeapon(std::unique_ptr<Weapon> wep)
+void Entity::PickupWeapon(std::unique_ptr<Weapon>& wep)
 {
-	weapon = std::move(wep);
+	if (weapon == nullptr)
+	{
+		weapon = std::move(wep);
+	}
+	else
+	{
+		std::unique_ptr<Weapon> temp;
+		temp = std::move(weapon);
+		weapon = std::move(wep);
+		wep = std::move(temp);
+	}
 }

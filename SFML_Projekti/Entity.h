@@ -25,7 +25,7 @@ public:
 	void UpdateAstar(sf::Vector2i startPosCentered, sf::Vector2i endPosCentered);
 	const sf::Vector2i GetPosInTilesCentered();
 	bool LineofSight(sf::Vector2f origin, sf::Vector2f dest, int maxRange, int precision);
-	void PickupWeapon(std::unique_ptr<Weapon> wep);
+	void PickupWeapon(std::unique_ptr<Weapon>& wep);
 protected:
 	// perus tiedot maailmasta
 	Tilemap& tilemap;

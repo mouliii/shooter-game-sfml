@@ -141,7 +141,23 @@ void Collider::Update(EntityManager* em, Tilemap& tm)
 		}
 	}
 	// pelaaja - item
-	
+	for (size_t i = 0; i < ItemList::GetWeapons().size(); i++)
+	{
+		if (em->GetEntities()[0]->GetRect().getGlobalBounds().intersects(ItemList::GetWeapons()[i]->GetRect().getGlobalBounds()))
+		{
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::E))
+			{
+				em->GetEntities()[0]->PickupWeapon(ItemList::GetWeapons()[i]);
+			}
+		}
+		for (size_t i = 0; i < ItemList::GetWeapons().size(); i++)
+		{
+			if (ItemList::GetWeapons()[i] == nullptr)
+			{
+				ItemList::RemoveWeapon(i);
+			}
+		}
+	}
 }
 
 

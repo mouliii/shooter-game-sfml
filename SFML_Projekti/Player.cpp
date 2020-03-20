@@ -25,11 +25,11 @@ void Player::Update(sf::Vector2f mousepos, std::vector<std::unique_ptr<Entity> >
 	{
 		if (mousepos.x < GetPosCentered().x)
 		{
-			weapon->UpdatePos({ GetPosCentered().x - 5.f , GetPosCentered().y }, mousepos);
+			weapon->UpdatePos({ GetPosCentered().x, GetPosCentered().y }, mousepos); // <---- -ase updateen offset
 		}
 		else
 		{
-			weapon->UpdatePos({ GetPosCentered().x + 5.f , GetPosCentered().y }, mousepos);
+			weapon->UpdatePos({ GetPosCentered().x, GetPosCentered().y }, mousepos);
 		}
 	}
 	
@@ -39,7 +39,7 @@ void Player::Update(sf::Vector2f mousepos, std::vector<std::unique_ptr<Entity> >
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 		{
 			canShoot = false;
-			BulletManager::AddBullet(GetPosCentered(), mousepos, 5.f, 400.f, 400.f, sf::Color::Green,"Player");
+			BulletManager::AddBullet(GetPosCentered(), mousepos, 5.f, 200.f, 400.f, sf::Color::Green,"Player");
 		}
 	}
 	else
@@ -63,25 +63,21 @@ void Player::UpdateMovement(sf::Vector2f mousepos, float dt)
 	{
 		dir += { 0.f, -1.f };
 		diagonalCheck[1] = 1;
-		curAnimation = AnimationIndex::UWALK;
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 	{
 		dir += { 0.f, 1.f };
 		diagonalCheck[1] = 1;
-		curAnimation = AnimationIndex::DWALK;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 	{
 		dir += { -1.f, 0.f };
 		diagonalCheck[0] = 1;
-		curAnimation = AnimationIndex::LWALK;
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 	{
 		dir += { 1.f, 0.f };
 		diagonalCheck[0] = 1;
-		curAnimation = AnimationIndex::RWALK;
 	}
 	float spd = 0.0f;
 	if (diagonalCheck[0] && diagonalCheck[1])
@@ -94,6 +90,34 @@ void Player::UpdateMovement(sf::Vector2f mousepos, float dt)
 		spd = speed * dt;
 		animations[curAnimation].ResumeAnimation();
 	}
+	rect.move(dir.x * spd, dir.y * spd);
+	sprite.setPosition(rect.getPosition());
+	pos = rect.getPosition();
+
+	// animaatio
+	sf::Vector2f delta = GetPosCentered() - mousepos;
+	float rotation = atan2(delta.y, delta.x) * 180 / 3.14159265f;
+	if (rotation > -45 && rotation < 45)
+	{
+		// vasen
+		curAnimation = AnimationIndex::LWALK;
+	}
+	else if (rotation > 45 && rotation < 135)
+	{
+		// ylä
+		curAnimation = AnimationIndex::UWALK;
+	}
+	else if (rotation < -45 && rotation > -135 )
+	{
+		// ala
+		curAnimation = AnimationIndex::DWALK;
+	}
+	else if (rotation > 135 || rotation < -135)
+	{
+		// oikea
+		curAnimation = AnimationIndex::RWALK;
+	}
+	// animaation pysäytys
 	if (!diagonalCheck[0] && !diagonalCheck[1])
 	{
 		animations[curAnimation].StopAnimation();
@@ -106,9 +130,6 @@ void Player::UpdateMovement(sf::Vector2f mousepos, float dt)
 			animations[curAnimation].SetFrameTo(0);
 		}
 	}
-	rect.move(dir.x * spd, dir.y * spd);
-	sprite.setPosition(rect.getPosition());
-	pos = rect.getPosition();
 	animations[curAnimation].Update(dt);
 	animations[curAnimation].ApplyToSprite(sprite);
 }

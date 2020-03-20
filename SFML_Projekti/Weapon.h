@@ -17,7 +17,7 @@ public:
 	{
 		rt.draw(sprite);
 	}
-	void UpdatePos(sf::Vector2f newPos, sf::Vector2f mouse)
+	virtual void UpdatePos(sf::Vector2f newPos, sf::Vector2f mouse)
 	{
 		sf::Vector2f delta = newPos - mouse;
 		float rotation = atan2(delta.y, delta.x) * 180 / 3.14f;
@@ -55,7 +55,35 @@ public:
 		:
 		Weapon(pos, texture_path)
 	{ }
+	void UpdatePos(sf::Vector2f newPos, sf::Vector2f mouse)
+	{
+		Weapon::UpdatePos(newPos, mouse);
+		if (mouse.x < pos.x)
+		{
+			pos.x -= 5.f;
+		}
+		else
+		{
+			pos.x += 5.f;
+		}
+	}
+private:
 
+};
+
+class Ak47 : public Weapon
+{
+public:
+	Ak47(sf::Vector2f pos, std::string texture_path)
+		:
+		Weapon(pos, texture_path)
+	{
+		sprite.setOrigin(sprite.getTexture()->getSize().x / 2, sprite.getTexture()->getSize().y / 2);
+	}
+	void UpdatePos(sf::Vector2f newPos, sf::Vector2f mouse)
+	{
+		Weapon::UpdatePos(newPos, mouse);
+	}
 private:
 
 };

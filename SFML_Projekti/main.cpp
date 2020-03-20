@@ -5,12 +5,12 @@
 #include "EntityManager.h"
 #include "Tilemap.h"
 #include "Collider.h"
-#include "ItemList.h"
 
 //   c/c++ -> code generation -> basic error checking -> Both (/RTC1, equiv. to /RTCsu) (/RTC1) -> default
 /*
 ongelmat:
     rotate pelaaja hiiren mukaa vai mitenkä
+    rotate kulman mukaan
 */
 extern const int TILEMAPDIMENSIONS = 16;
 
@@ -36,6 +36,9 @@ int main()
     tm.LoadLevel("Levels/testimap.json", "textures/tilemap.png",&em);
     std::unique_ptr<Pistol> pistol(new Pistol({ 64.f,105.f}, "textures/Weapons/pistol.png"));
     ItemList::AddWeapon(std::move(pistol));
+    std::unique_ptr<Ak47> ak(new Ak47({ 100.f,105.f }, "textures/Weapons/ak47.png"));
+    ItemList::AddWeapon(std::move(ak));
+
 
     // MAIN LOOP
     while (window.isOpen())
@@ -76,17 +79,7 @@ int main()
         em.Update(mPos, tm, dt);
         BulletManager::Update(dt);
         collider.Update(&em, tm);
-        for (size_t i = 0; i < ItemList::GetWeapons().size(); i++)
-        {
-            if (em.GetEntities()[0]->GetRect().getGlobalBounds().intersects(ItemList::GetWeapons()[i]->GetRect().getGlobalBounds()))
-            {
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::E))
-                {
-                    em.GetEntities()[0]->PickupWeapon(std::move(ItemList::GetWeapons()[i]));
-                    ItemList::RemoveWeapon(i);
-                }
-            }
-        }
+        
             // testi
         int x = em.GetEntities()[0]->GetPosCentered().x + 0.5f;
         int y = em.GetEntities()[0]->GetPosCentered().y + 0.5f;
