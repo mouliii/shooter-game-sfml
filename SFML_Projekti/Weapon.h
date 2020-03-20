@@ -11,6 +11,7 @@ public:
 	{
 		sprite.setTexture(*TextureManager::AcquireTexture(texture_path));
 		sprite.setPosition(pos);
+		sprite.setOrigin(0.f, sprite.getTexture()->getSize().y / 2);
 	}
 	void Draw(sf::RenderTarget& rt)
 	{
@@ -32,6 +33,13 @@ public:
 		}
 		pos = newPos;
 		sprite.setPosition(pos);
+	}
+	sf::RectangleShape GetRect()
+	{
+		sf::RectangleShape rect;
+		rect.setPosition(pos);
+		rect.setSize(sf::Vector2f(sprite.getTexture()->getSize()) );
+		return rect;
 	}
 protected:
 	int magSize = 7;

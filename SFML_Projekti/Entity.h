@@ -25,6 +25,7 @@ public:
 	void UpdateAstar(sf::Vector2i startPosCentered, sf::Vector2i endPosCentered);
 	const sf::Vector2i GetPosInTilesCentered();
 	bool LineofSight(sf::Vector2f origin, sf::Vector2f dest, int maxRange, int precision);
+	void PickupWeapon(std::unique_ptr<Weapon> wep);
 protected:
 	// perus tiedot maailmasta
 	Tilemap& tilemap;
@@ -48,5 +49,5 @@ protected:
 	sf::Vector2i aStarTarget = { 0.0f,0.0f };
 	sf::Texture t;
 	// TODO DEBUG
-	Weapon* weapon = nullptr;
+	std::unique_ptr<Weapon> weapon = nullptr;
 };

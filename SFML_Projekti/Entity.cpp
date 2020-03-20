@@ -97,3 +97,8 @@ bool Entity::LineofSight(sf::Vector2f origin, sf::Vector2f dest, int maxRange, i
 		return true; // If no wall tiles were found LOS is clear
 	}
 }
+
+void Entity::PickupWeapon(std::unique_ptr<Weapon> wep)
+{
+	weapon = std::move(wep);
+}

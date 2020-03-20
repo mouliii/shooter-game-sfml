@@ -5,7 +5,7 @@
 #include "EntityManager.h"
 #include "Tilemap.h"
 #include "Collider.h"
-#include "Weapon.h"
+#include "ItemList.h"
 
 //   c/c++ -> code generation -> basic error checking -> Both (/RTC1, equiv. to /RTCsu) (/RTC1) -> default
 /*
@@ -34,8 +34,8 @@ int main()
     window.setView(view);
     view = getLetterboxView(view, 800, 600);
     tm.LoadLevel("Levels/testimap.json", "textures/tilemap.png",&em);
-
-    Pistol pistol({ 20,105 }, "textures/Weapons/pistol.png");
+    std::unique_ptr<Pistol> pistol(new Pistol({ 64.f,105.f}, "textures/Weapons/pistol.png"));
+    ItemList::AddWeapon(std::move(pistol));
 
     // MAIN LOOP
     while (window.isOpen())
@@ -76,6 +76,17 @@ int main()
         em.Update(mPos, tm, dt);
         BulletManager::Update(dt);
         collider.Update(&em, tm);
+        for (size_t i = 0; i < ItemList::GetWeapons().size(); i++)
+        {
+            if (em.GetEntities()[0]->GetRect().getGlobalBounds().intersects(ItemList::GetWeapons()[i]->GetRect().getGlobalBounds()))
+            {
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::E))
+                {
+                    em.GetEntities()[0]->PickupWeapon(std::move(ItemList::GetWeapons()[i]));
+                    ItemList::RemoveWeapon(i);
+                }
+            }
+        }
             // testi
         int x = em.GetEntities()[0]->GetPosCentered().x + 0.5f;
         int y = em.GetEntities()[0]->GetPosCentered().y + 0.5f;
@@ -88,8 +99,10 @@ int main()
         tm.Draw(window, sf::Vector2f(x,y), sf::Vector2f(300.f, 200.f));
         em.Draw(window);
         BulletManager::Draw(window);
-        pistol.Draw(window);
-        //window.draw(rs);
+        for (size_t i = 0; i < ItemList::GetWeapons().size(); i++)
+        {
+            ItemList::GetWeapons()[i]->Draw(window);
+        }
         window.display();
     }
     return 0;

@@ -93,6 +93,9 @@
     <ClCompile Include="TextureManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ItemList.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h">
@@ -142,6 +145,9 @@
     </ClInclude>
     <ClInclude Include="Weapon.h">
       <Filter>Header Files\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemList.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
