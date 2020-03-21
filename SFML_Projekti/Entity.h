@@ -48,6 +48,6 @@ protected:
 	int pathIndex = 0;
 	sf::Vector2i aStarTarget = { 0.0f,0.0f };
 	sf::Texture t;
-	// TODO DEBUG
+	// weeapon
 	std::unique_ptr<Weapon> weapon = nullptr;
 };

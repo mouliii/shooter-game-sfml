@@ -2,12 +2,18 @@
 #include <SFML/Graphics.hpp>
 #include "TextureManager.h"
 
+
+// TODO max range tänne  - json file
+//		bullet size myös?
 class Weapon
 {
 public:
-	Weapon(sf::Vector2f pos, std::string texture_path)
+	Weapon(sf::Vector2f pos, std::string texture_path, float fd, int magSize)
 		:
-		pos(pos)
+		pos(pos),
+		firingDelay(fd),
+		magSize(magSize),
+		curBullets(magSize)
 	{
 		sprite.setTexture(*TextureManager::AcquireTexture(texture_path));
 		sprite.setPosition(pos);
@@ -41,11 +47,15 @@ public:
 		rect.setSize(sf::Vector2f(sprite.getTexture()->getSize()) );
 		return rect;
 	}
+	const int GetMagSize() { return magSize; }
+	const int GetCurBullets() { return curBullets; }
+	const float GetFiringDelay() { return firingDelay; }
 protected:
-	int magSize = 7;
-	int curBullets = magSize;
 	sf::Sprite sprite;
 	sf::Vector2f pos;
+	float firingDelay;
+	int magSize;
+	int curBullets;
 };
 
 class Pistol : public Weapon
@@ -53,22 +63,24 @@ class Pistol : public Weapon
 public:
 	Pistol(sf::Vector2f pos, std::string texture_path)
 		:
-		Weapon(pos, texture_path)
-	{ }
+		Weapon(pos, texture_path, 0.3f, 7)
+	{
+	}
 	void UpdatePos(sf::Vector2f newPos, sf::Vector2f mouse)
 	{
 		Weapon::UpdatePos(newPos, mouse);
 		if (mouse.x < pos.x)
 		{
 			pos.x -= 5.f;
+			sprite.move({ -5.f,0.f });
 		}
 		else
 		{
 			pos.x += 5.f;
+			sprite.move({ 5.f,0.f });
 		}
 	}
 private:
-
 };
 
 class Ak47 : public Weapon
@@ -76,7 +88,7 @@ class Ak47 : public Weapon
 public:
 	Ak47(sf::Vector2f pos, std::string texture_path)
 		:
-		Weapon(pos, texture_path)
+		Weapon(pos, texture_path, 0.1f, 30)
 	{
 		sprite.setOrigin(sprite.getTexture()->getSize().x / 2, sprite.getTexture()->getSize().y / 2);
 	}
@@ -85,5 +97,4 @@ public:
 		Weapon::UpdatePos(newPos, mouse);
 	}
 private:
-
 };

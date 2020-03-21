@@ -26,6 +26,7 @@ void Entity::Update(sf::Vector2f mousepos, std::vector<std::unique_ptr<Entity> >
 
 void Entity::Draw(sf::RenderTarget& target)
 {
+	// TODO  järjestys, missä, kuka?
 	if (weapon != nullptr)
 	{
 		weapon->Draw(target);
@@ -103,6 +104,10 @@ void Entity::PickupWeapon(std::unique_ptr<Weapon>& wep)
 	if (weapon == nullptr)
 	{
 		weapon = std::move(wep);
+		// ampuminen
+		canShoot = false;
+		shootCooldown = weapon->GetFiringDelay();
+		shootTimer = 0.5f;
 	}
 	else
 	{
@@ -110,5 +115,9 @@ void Entity::PickupWeapon(std::unique_ptr<Weapon>& wep)
 		temp = std::move(weapon);
 		weapon = std::move(wep);
 		wep = std::move(temp);
+
+		canShoot = false;
+		shootCooldown = weapon->GetFiringDelay();
+		shootTimer = 0.5f;
 	}
 }

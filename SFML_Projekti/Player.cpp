@@ -25,7 +25,7 @@ void Player::Update(sf::Vector2f mousepos, std::vector<std::unique_ptr<Entity> >
 	{
 		if (mousepos.x < GetPosCentered().x)
 		{
-			weapon->UpdatePos({ GetPosCentered().x, GetPosCentered().y }, mousepos); // <---- -ase updateen offset
+			weapon->UpdatePos({ GetPosCentered().x, GetPosCentered().y }, mousepos);
 		}
 		else
 		{
@@ -49,6 +49,7 @@ void Player::Update(sf::Vector2f mousepos, std::vector<std::unique_ptr<Entity> >
 		{
 			canShoot = true;
 			shootTimer = shootCooldown;
+			std::cout << shootCooldown << std::endl;
 		}
 	}
 }
