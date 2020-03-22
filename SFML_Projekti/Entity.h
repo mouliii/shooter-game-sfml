@@ -42,12 +42,14 @@ protected:
 	bool canShoot = true;
 	float shootCooldown = 0.3f;
 	float shootTimer = shootCooldown;
+	bool reload = false;
+	float reloadTimer;
 	// a star path finding
 	Astar aStar;
 	std::vector<sf::Vector2i> pathVec;
 	int pathIndex = 0;
 	sf::Vector2i aStarTarget = { 0.0f,0.0f };
 	sf::Texture t;
-	// weeapon
+	// weapon
 	std::unique_ptr<Weapon> weapon = nullptr;
 };

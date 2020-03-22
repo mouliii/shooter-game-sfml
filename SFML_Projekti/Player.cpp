@@ -31,27 +31,47 @@ void Player::Update(sf::Vector2f mousepos, std::vector<std::unique_ptr<Entity> >
 		{
 			weapon->UpdatePos({ GetPosCentered().x, GetPosCentered().y }, mousepos);
 		}
+
+		// update ampuminen
+		if (!reload)
+		{
+			if (canShoot)
+			{
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+				{
+					canShoot = false;
+					BulletManager::AddBullet(GetPosCentered(), mousepos, 5.f, 200.f, 400.f, sf::Color::Green, "Player");
+					weapon->ReduceCurAmmo(1);
+					if (weapon->GetCurBullets() <= 0)
+					{
+						reload = true;
+					}
+				}
+			}
+			else
+			{
+				shootTimer -= dt;
+				if (shootTimer <= 0.0f)
+				{
+					canShoot = true;
+					shootTimer = shootCooldown;
+				}
+			}
+		}
+		else
+		{
+			reloadTimer -= dt;
+			if (reloadTimer <= 0.0f)
+			{
+				reloadTimer = weapon->GetReloadTime();
+				weapon->Reload();
+				reload = false;
+			}
+		}
+		
 	}
 	
-	// update ampuminen
-	if (canShoot)
-	{
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-		{
-			canShoot = false;
-			BulletManager::AddBullet(GetPosCentered(), mousepos, 5.f, 200.f, 400.f, sf::Color::Green,"Player");
-		}
-	}
-	else
-	{
-		shootTimer -= dt;
-		if (shootTimer <= 0.0f)
-		{
-			canShoot = true;
-			shootTimer = shootCooldown;
-			std::cout << shootCooldown << std::endl;
-		}
-	}
+	
 }
 
 void Player::UpdateMovement(sf::Vector2f mousepos, float dt)

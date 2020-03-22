@@ -8,12 +8,13 @@
 class Weapon
 {
 public:
-	Weapon(sf::Vector2f pos, std::string texture_path, float fd, int magSize)
+	Weapon(sf::Vector2f pos, std::string texture_path, float fd, int magSize, float reloadTime)
 		:
 		pos(pos),
 		firingDelay(fd),
 		magSize(magSize),
-		curBullets(magSize)
+		curBullets(magSize),
+		reloadTime(reloadTime)
 	{
 		sprite.setTexture(*TextureManager::AcquireTexture(texture_path));
 		sprite.setPosition(pos);
@@ -50,12 +51,16 @@ public:
 	const int GetMagSize() { return magSize; }
 	const int GetCurBullets() { return curBullets; }
 	const float GetFiringDelay() { return firingDelay; }
+	const float GetReloadTime() { return reloadTime; }
+	void ReduceCurAmmo(int i) { curBullets -= i; }
+	void Reload() { curBullets = magSize; }
 protected:
 	sf::Sprite sprite;
 	sf::Vector2f pos;
 	float firingDelay;
 	int magSize;
 	int curBullets;
+	float reloadTime;
 };
 
 class Pistol : public Weapon
@@ -63,7 +68,7 @@ class Pistol : public Weapon
 public:
 	Pistol(sf::Vector2f pos, std::string texture_path)
 		:
-		Weapon(pos, texture_path, 0.3f, 7)
+		Weapon(pos, texture_path, 0.3f, 7, 0.7f)
 	{
 	}
 	void UpdatePos(sf::Vector2f newPos, sf::Vector2f mouse)
@@ -88,7 +93,7 @@ class Ak47 : public Weapon
 public:
 	Ak47(sf::Vector2f pos, std::string texture_path)
 		:
-		Weapon(pos, texture_path, 0.1f, 30)
+		Weapon(pos, texture_path, 0.1f, 30, 1.0f)
 	{
 		sprite.setOrigin(sprite.getTexture()->getSize().x / 2, sprite.getTexture()->getSize().y / 2);
 	}
