@@ -11,7 +11,7 @@ Enemy::Enemy(sf::Vector2f pos, Tilemap& tilemap, std::string path)
 	rect.setSize(sf::Vector2f(width, height));
 	rect.setFillColor(sf::Color::Yellow);
 	rect.setPosition(pos);
-
+	weapon = std::make_unique<Pistol>(GetPosCentered(), "textures/Weapons/pistol.png");
 	
 	animations[int(AnimationIndex::RWALK)] = Animation(TextureManager::Get(), "textures/lunk.png", 0, 104 * 7, 10, 96, 104, 0.15f);
 	animations[int(AnimationIndex::LWALK)] = Animation(TextureManager::Get(), "textures/lunk.png", 0, 104 * 5, 10, 96, 104, 0.15f);
@@ -118,18 +118,40 @@ void Enemy::Update(sf::Vector2f mpos, std::vector<std::unique_ptr<Entity> >& em,
 					curAnimation = AnimationIndex::LWALK;
 				}
 			}
-			if (canShoot)
+			if (weapon != nullptr)
 			{
-				canShoot = false;
-				BulletManager::AddBullet(GetPosCentered(), em[0]->GetPosCentered(), 5.f, 150.f, 250.f, sf::Color::Green, "Enemy");
-			}
-			else
-			{
-				shootTimer -= dt;
-				if (shootTimer <= 0.0f)
+				// update ampuminen
+				if (!reload)
 				{
-					canShoot = true;
-					shootTimer = shootCooldown;
+					if (canShoot)
+					{
+						canShoot = false;
+						BulletManager::AddBullet(GetPosCentered(), em[0]->GetPosCentered(), 5.f, 200.f, 400.f, sf::Color::Green, "Enemy");
+						weapon->ReduceCurAmmo(1);
+						if (weapon->GetCurBullets() <= 0)
+						{
+							reload = true;
+						}
+					}
+					else
+					{
+						shootTimer -= dt;
+						if (shootTimer <= 0.0f)
+						{
+							canShoot = true;
+							shootTimer = shootCooldown;
+						}
+					}
+				}
+				else
+				{
+					reloadTimer -= dt;
+					if (reloadTimer <= 0.0f)
+					{
+						reloadTimer = weapon->GetReloadTime();
+						weapon->Reload();
+						reload = false;
+					}
 				}
 			}
 		}
@@ -177,6 +199,17 @@ void Enemy::Update(sf::Vector2f mpos, std::vector<std::unique_ptr<Entity> >& em,
 		else
 		{
 			animations[curAnimation].SetFrameTo(0);
+		}
+	}
+	if (weapon != nullptr)
+	{
+		if (em[0]->GetPosCentered().x < GetPosCentered().x)
+		{
+			weapon->UpdatePos({ GetPosCentered().x, GetPosCentered().y }, em[0]->GetPosCentered());
+		}
+		else
+		{
+			weapon->UpdatePos({ GetPosCentered().x, GetPosCentered().y }, em[0]->GetPosCentered());
 		}
 	}
 	rect.move(dir.x * spd, dir.y * spd);
