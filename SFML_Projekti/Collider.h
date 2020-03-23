@@ -15,4 +15,5 @@ public:
 	bool CheckCollision(sf::RectangleShape* _this, sf::IntRect* other);
 	void Update(EntityManager* em, Tilemap& tm);
 private:
+	bool keyPressed = false;
 };

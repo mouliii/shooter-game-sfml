@@ -41,7 +41,7 @@ public:
 		pos = newPos;
 		sprite.setPosition(pos);
 	}
-	sf::RectangleShape GetRect()
+	virtual sf::RectangleShape GetRect()
 	{
 		sf::RectangleShape rect;
 		rect.setPosition(pos);
@@ -100,6 +100,16 @@ public:
 	void UpdatePos(sf::Vector2f newPos, sf::Vector2f mouse)
 	{
 		Weapon::UpdatePos(newPos, mouse);
+	}
+	sf::RectangleShape GetRect() override
+	{
+		sf::Vector2f tpos;
+		tpos.x = pos.x - sprite.getTexture()->getSize().x / 2;
+		tpos.y = pos.y - sprite.getTexture()->getSize().y / 2;
+		sf::RectangleShape rect;
+		rect.setPosition(tpos);
+		rect.setSize(sf::Vector2f(sprite.getTexture()->getSize()));
+		return rect;
 	}
 private:
 };

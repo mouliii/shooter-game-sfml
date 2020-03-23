@@ -147,7 +147,15 @@ void Collider::Update(EntityManager* em, Tilemap& tm)
 		{
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::E))
 			{
-				em->GetEntities()[0]->PickupWeapon(ItemList::GetWeapons()[i]);
+				if (!keyPressed)
+				{
+					keyPressed = true;
+					em->GetEntities()[0]->PickupWeapon(ItemList::GetWeapons()[i]);
+				}
+			}
+			else
+			{
+				keyPressed = false;
 			}
 		}
 		for (size_t i = 0; i < ItemList::GetWeapons().size(); i++)
