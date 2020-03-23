@@ -14,7 +14,7 @@ Player::Player(sf::Vector2f pos, Tilemap& tilemap, std::string path)
 	animations[int(AnimationIndex::UWALK)] = Animation(TextureManager::Get(), "textures/lunk.png", 0, 104 * 6, 10, 96, 104, 0.15f);
 	animations[int(AnimationIndex::DWALK)] = Animation(TextureManager::Get(), "textures/lunk.png", 0, 104 * 4, 10, 96, 104, 0.15f);
 
-	//weapon = new Pistol({ GetPosCentered().x + 8.f,GetPosCentered().y }, "textures/Weapons/pistol.png");
+	weapon = std::make_unique<Ak47>(GetPosCentered(), "textures/Weapons/ak47.png");
 }
 
 void Player::Update(sf::Vector2f mousepos, std::vector<std::unique_ptr<Entity> >& em, Tilemap& tm, float dt)
@@ -40,7 +40,7 @@ void Player::Update(sf::Vector2f mousepos, std::vector<std::unique_ptr<Entity> >
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 				{
 					canShoot = false;
-					BulletManager::AddBullet(GetPosCentered(), mousepos, 5.f, 200.f, 400.f, sf::Color::Green, "Player");
+					BulletManager::AddBullet(weapon->GetType(), GetPosCentered(), mousepos, 3.5f, 200.f, 400.f, sf::Color::Green, "Player");
 					weapon->ReduceCurAmmo(1);
 					if (weapon->GetCurBullets() <= 0)
 					{

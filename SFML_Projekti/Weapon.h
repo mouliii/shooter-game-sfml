@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "TextureManager.h"
+#include "BulletManager.h"
 
 
 // TODO max range tänne  - json file
@@ -54,6 +55,7 @@ public:
 	const float GetReloadTime() { return reloadTime; }
 	void ReduceCurAmmo(int i) { curBullets -= i; }
 	void Reload() { curBullets = magSize; }
+	BulletManager::Type GetType() { return type; }
 protected:
 	sf::Sprite sprite;
 	sf::Vector2f pos;
@@ -61,6 +63,7 @@ protected:
 	int magSize;
 	int curBullets;
 	float reloadTime;
+	BulletManager::Type type = BulletManager::Type::NORMAL;
 };
 
 class Pistol : public Weapon
@@ -70,6 +73,7 @@ public:
 		:
 		Weapon(pos, texture_path, 0.3f, 7, 0.7f)
 	{
+		type = BulletManager::Type::SHELL;
 	}
 	void UpdatePos(sf::Vector2f newPos, sf::Vector2f mouse)
 	{
@@ -96,6 +100,7 @@ public:
 		Weapon(pos, texture_path, 0.1f, 30, 1.0f)
 	{
 		sprite.setOrigin(sprite.getTexture()->getSize().x / 2, sprite.getTexture()->getSize().y / 2);
+		type = BulletManager::Type::NORMAL;
 	}
 	void UpdatePos(sf::Vector2f newPos, sf::Vector2f mouse)
 	{

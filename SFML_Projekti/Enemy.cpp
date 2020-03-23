@@ -126,7 +126,7 @@ void Enemy::Update(sf::Vector2f mpos, std::vector<std::unique_ptr<Entity> >& em,
 					if (canShoot)
 					{
 						canShoot = false;
-						BulletManager::AddBullet(GetPosCentered(), em[0]->GetPosCentered(), 5.f, 200.f, 400.f, sf::Color::Green, "Enemy");
+						BulletManager::AddBullet(weapon->GetType(), GetPosCentered(), em[0]->GetPosCentered(), 3.5f, 200.f, 400.f, sf::Color::Green, "Enemy");
 						weapon->ReduceCurAmmo(1);
 						if (weapon->GetCurBullets() <= 0)
 						{
@@ -167,6 +167,17 @@ void Enemy::Update(sf::Vector2f mpos, std::vector<std::unique_ptr<Entity> >& em,
 				aStarTarget.y = pathVec[pathIndex].y * TILEMAPDIMENSIONS;
 			}
 		}
+		if (weapon != nullptr)
+		{
+			if (em[0]->GetPosCentered().x < GetPosCentered().x)
+			{
+				weapon->UpdatePos({ GetPosCentered().x, GetPosCentered().y }, em[0]->GetPosCentered());
+			}
+			else
+			{
+				weapon->UpdatePos({ GetPosCentered().x, GetPosCentered().y }, em[0]->GetPosCentered());
+			}
+		}
 	}
 	break;
 	case Enemy::WANDERING:
@@ -199,17 +210,6 @@ void Enemy::Update(sf::Vector2f mpos, std::vector<std::unique_ptr<Entity> >& em,
 		else
 		{
 			animations[curAnimation].SetFrameTo(0);
-		}
-	}
-	if (weapon != nullptr)
-	{
-		if (em[0]->GetPosCentered().x < GetPosCentered().x)
-		{
-			weapon->UpdatePos({ GetPosCentered().x, GetPosCentered().y }, em[0]->GetPosCentered());
-		}
-		else
-		{
-			weapon->UpdatePos({ GetPosCentered().x, GetPosCentered().y }, em[0]->GetPosCentered());
 		}
 	}
 	rect.move(dir.x * spd, dir.y * spd);

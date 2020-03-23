@@ -190,6 +190,8 @@
     <Text Include="level2.txt" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Levels\level2.json" />
+    <None Include="Levels\level21.json" />
     <None Include="Levels\testimap.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
