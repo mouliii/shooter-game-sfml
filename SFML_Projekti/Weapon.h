@@ -73,7 +73,7 @@ public:
 		:
 		Weapon(pos, texture_path, 0.3f, 7, 0.7f)
 	{
-		type = BulletManager::Type::SHELL;
+		type = BulletManager::Type::NORMAL;
 	}
 	void UpdatePos(sf::Vector2f newPos, sf::Vector2f mouse)
 	{
@@ -101,6 +101,33 @@ public:
 	{
 		sprite.setOrigin(sprite.getTexture()->getSize().x / 2, sprite.getTexture()->getSize().y / 2);
 		type = BulletManager::Type::NORMAL;
+	}
+	void UpdatePos(sf::Vector2f newPos, sf::Vector2f mouse)
+	{
+		Weapon::UpdatePos(newPos, mouse);
+	}
+	sf::RectangleShape GetRect() override
+	{
+		sf::Vector2f tpos;
+		tpos.x = pos.x - sprite.getTexture()->getSize().x / 2;
+		tpos.y = pos.y - sprite.getTexture()->getSize().y / 2;
+		sf::RectangleShape rect;
+		rect.setPosition(tpos);
+		rect.setSize(sf::Vector2f(sprite.getTexture()->getSize()));
+		return rect;
+	}
+private:
+};
+
+class Shotgun : public Weapon
+{
+public:
+	Shotgun(sf::Vector2f pos, std::string texture_path)
+		:
+		Weapon(pos, texture_path, 0.5f, 4, 1.5f)
+	{
+		sprite.setOrigin(sprite.getTexture()->getSize().x / 2, sprite.getTexture()->getSize().y / 2);
+		type = BulletManager::Type::SHELL;
 	}
 	void UpdatePos(sf::Vector2f newPos, sf::Vector2f mouse)
 	{

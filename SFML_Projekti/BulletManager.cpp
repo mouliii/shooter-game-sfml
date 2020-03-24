@@ -8,9 +8,9 @@ BulletManager& BulletManager::Get()
 	return instance;
 }
 
-void BulletManager::AddBullet(sf::Vector2f pos, sf::Vector2f dir, float radius, float speed, float maxDistance, sf::Color color, std::string owner)
+void BulletManager::AddBullet(Type type, sf::Vector2f pos, sf::Vector2f dir, float radius, float speed, float maxDistance, sf::Color color, std::string owner)
 {
-	Get().I_AddBullet(pos, dir, radius, speed, maxDistance, color, owner);
+	Get().I_AddBullet(type, pos, dir, radius, speed, maxDistance, color, owner);
 }
 
 void BulletManager::Update(float dt)
@@ -28,10 +28,31 @@ std::vector<std::unique_ptr<Bullet>>& BulletManager::GetBullets()
 	return Get().I_GetBullets();
 }
 
-void BulletManager::I_AddBullet(sf::Vector2f pos, sf::Vector2f dir, float radius, float speed, float maxDistance, sf::Color color, std::string owner)
+void BulletManager::I_AddBullet(Type type, sf::Vector2f pos, sf::Vector2f dir, float radius, float speed, float maxDistance, sf::Color color, std::string owner)
 {
-	std::unique_ptr<Bullet> b(new Bullet(pos, dir, radius, speed, maxDistance, color, owner));
-	pBullets.emplace_back(std::move(b));
+	if (type == Type::NORMAL)
+	{
+		auto b = std::make_unique<Bullet>(pos, dir, radius, speed, maxDistance, color, owner);
+		pBullets.emplace_back(std::move(b));
+	}
+	else if (type == Type::SHELL)
+	{
+		for (size_t i = 0; i < 4; i++)
+		{
+			// TODO
+			
+			sf::Vector2f delta = dir - pos;
+			const float length = std::sqrt((delta.x * delta.x) + (delta.y * delta.y));
+			delta.x /= length;
+			delta.y /= length;
+			sf::Vector2f temp;
+			temp.x = 30.f * delta.x + Random::GetRandomInt(-7, 7);
+			temp.y = 30.f * delta.y + Random::GetRandomInt(-7, 7);
+			temp += pos;
+			pBullets.emplace_back(std::make_unique<Bullet>(pos, temp, radius, speed, maxDistance, color, owner));
+			
+		}
+	}
 }
 
 void BulletManager::I_Update(float dt)
