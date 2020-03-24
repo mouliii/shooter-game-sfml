@@ -15,6 +15,7 @@ Player::Player(sf::Vector2f pos, Tilemap& tilemap, std::string path)
 	animations[int(AnimationIndex::DWALK)] = Animation(TextureManager::Get(), "textures/lunk.png", 0, 104 * 4, 10, 96, 104, 0.15f);
 
 	weapon = std::make_unique<Shotgun>(GetPosCentered(), "textures/Weapons/shotgun.png");
+	reloadTimer = weapon->GetReloadTime();
 }
 
 void Player::Update(sf::Vector2f mousepos, std::vector<std::unique_ptr<Entity> >& em, Tilemap& tm, float dt)

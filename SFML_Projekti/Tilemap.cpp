@@ -45,9 +45,7 @@ void Tilemap::LoadLevel(std::string filepath, std::string texture_path, EntityMa
 
                 int posx = i % mapWidth * TILEMAPDIMENSIONS;   // -^sama
                 int posy = i / mapWidth * TILEMAPDIMENSIONS;
-
-                std::unique_ptr<Tile> t(new Tile(sf::Vector2f(float(posx), float(posy)), sf::Vector2f(float(dims), float(dims)), &texture, sf::IntRect(rectx, recty, dims, dims), sf::Color::Transparent, 1.0f));
-                l.emplace_back(std::move(t));
+                l.emplace_back(std::make_unique<Tile>(sf::Vector2f(float(posx), float(posy)), sf::Vector2f(float(dims), float(dims)), &texture, sf::IntRect(rectx, recty, dims, dims), sf::Color::Transparent, 1.0f));
             }
             pTiles.emplace_back(std::move(l));
             l.clear();
@@ -80,8 +78,7 @@ void Tilemap::LoadLevel(std::string filepath, std::string texture_path, EntityMa
             int y = v["layers"][nLayers - 1]["objects"][i]["y"].as_int();
             if (obj == "player_spawn")
             {
-                std::unique_ptr<Player> p(new Player(sf::Vector2f(x,y), *this, "textures/lunk.png"));
-                em->AddEntity(std::move(p));
+                em->AddEntity(std::make_unique<Player>(sf::Vector2f(x, y), *this, "textures/lunk.png"));
                 std::vector<int> asd;
                 int id = v["layers"][nLayers - 1]["objects"][i]["id"].as_int();
                 if (id != 1)
@@ -91,8 +88,7 @@ void Tilemap::LoadLevel(std::string filepath, std::string texture_path, EntityMa
             }
             else if (obj == "enemy_spawn")
             {
-                std::unique_ptr<Enemy> e(new Enemy(sf::Vector2f(x, y), *this, "textures/lunk.png"));
-                em->AddEntity(std::move(e));
+                em->AddEntity(std::make_unique<Enemy>(sf::Vector2f(x, y), *this, "textures/lunk.png"));
             }
             else if (obj == "level_trigger")
             {

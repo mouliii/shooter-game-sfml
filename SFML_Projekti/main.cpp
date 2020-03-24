@@ -34,10 +34,8 @@ int main()
     window.setView(view);
     view = getLetterboxView(view, 800, 600);
     tm.LoadLevel("Levels/testimap.json", "textures/tilemap.png",&em);
-    std::unique_ptr<Pistol> pistol(new Pistol({ 64.f,105.f}, "textures/Weapons/pistol.png"));
-    ItemList::AddWeapon(std::move(pistol));
-    std::unique_ptr<Ak47> ak(new Ak47({ 100.f,105.f }, "textures/Weapons/ak47.png"));
-    ItemList::AddWeapon(std::move(ak));
+    ItemList::AddWeapon(std::make_unique<Pistol>(sf::Vector2f(64.f,105.f), "textures/Weapons/pistol.png"));
+    ItemList::AddWeapon(std::make_unique<Ak47>(sf::Vector2f(100.f, 105.f), "textures/Weapons/ak47.png"));
 
 
     // MAIN LOOP
