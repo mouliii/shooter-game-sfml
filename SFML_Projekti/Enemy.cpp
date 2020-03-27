@@ -126,7 +126,7 @@ void Enemy::Update(sf::Vector2f mpos, std::vector<std::unique_ptr<Entity> >& em,
 					if (canShoot)
 					{
 						canShoot = false;
-						BulletManager::AddBullet(weapon->GetType(), GetPosCentered(), em[0]->GetPosCentered(), 3.5f, 200.f, 400.f, sf::Color::Green, "Enemy");
+						BulletManager::AddBullet(weapon->GetType(), GetPosCentered(), em[0]->GetPosCentered(), 3.5f, 120.f, 400.f, sf::Color::Green, "Enemy");
 						weapon->ReduceCurAmmo(1);
 						if (weapon->GetCurBullets() <= 0)
 						{
@@ -212,6 +212,7 @@ void Enemy::Update(sf::Vector2f mpos, std::vector<std::unique_ptr<Entity> >& em,
 			animations[curAnimation].SetFrameTo(0);
 		}
 	}
+	canTakeDmg = true;
 	rect.move(dir.x * spd, dir.y * spd);
 	sprite.setPosition(rect.getPosition());
 	pos = rect.getPosition();

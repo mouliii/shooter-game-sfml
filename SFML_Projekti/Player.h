@@ -27,4 +27,5 @@ private:
 	//float height = 32.f;
 	Animation animations[int(AnimationIndex::COUNT)];
 	AnimationIndex curAnimation = AnimationIndex::RWALK;
+	float invisTimer = 0.5f;
 };

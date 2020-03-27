@@ -16,7 +16,7 @@ public:
 	virtual void Update(sf::Vector2f mousepos, std::vector<std::unique_ptr<Entity> >& em, Tilemap& tm, float dt);
 	void Draw(sf::RenderTarget& target);
 	sf::RectangleShape& GetRect();
-	virtual void GetDmg(int n) { hp -= n; }
+	virtual void GetDmg(int n);
 	bool IsDead() { return isDead; }
 	sf::Vector2f GetPos() { return pos; }
 	sf::Vector2f GetPosCentered();
@@ -38,6 +38,7 @@ protected:
 	float height = 16.f;
 	bool isDead = false;
 	float speed = 50.f;
+	bool canTakeDmg = true;
 	// ampuminen
 	bool canShoot = true;
 	float shootCooldown = 0.3f;

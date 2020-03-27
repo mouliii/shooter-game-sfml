@@ -46,6 +46,15 @@ sf::RectangleShape& Entity::GetRect()
 	return rect;
 }
 
+void Entity::GetDmg(int n)
+{
+	if (canTakeDmg)
+	{
+		hp -= n;
+		canTakeDmg = false;
+	}
+}
+
 sf::Vector2f Entity::GetPosCentered()
 {
 	return sf::Vector2f(GetPos().x + GetRect().getLocalBounds().width / 2, GetPos().y + GetRect().getLocalBounds().height / 2);

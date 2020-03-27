@@ -71,7 +71,7 @@ class Pistol : public Weapon
 public:
 	Pistol(sf::Vector2f pos, std::string texture_path)
 		:
-		Weapon(pos, texture_path, 0.3f, 7, 0.7f)
+		Weapon(pos, texture_path, 0.5f, 7, 0.7f)
 	{
 		type = BulletManager::Type::NORMAL;
 	}
@@ -97,7 +97,7 @@ class Ak47 : public Weapon
 public:
 	Ak47(sf::Vector2f pos, std::string texture_path)
 		:
-		Weapon(pos, texture_path, 0.1f, 30, 1.0f)
+		Weapon(pos, texture_path, 0.25f, 30, 1.0f)
 	{
 		sprite.setOrigin(sprite.getTexture()->getSize().x / 2, sprite.getTexture()->getSize().y / 2);
 		type = BulletManager::Type::NORMAL;

@@ -72,7 +72,20 @@ void Player::Update(sf::Vector2f mousepos, std::vector<std::unique_ptr<Entity> >
 		
 	}
 	
-	
+	if (!canTakeDmg)
+	{
+		invisTimer -= dt;
+		if (invisTimer <= 0.0f)
+		{
+			std::cout << hp << std::endl;
+			canTakeDmg = true;
+			invisTimer = 0.5f;
+		}
+	}
+	if (hp <= 0)
+	{
+		std::cout << "DETH" << std::endl;
+	}
 }
 
 void Player::UpdateMovement(sf::Vector2f mousepos, float dt)

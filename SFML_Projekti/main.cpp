@@ -33,7 +33,7 @@ int main()
     view = sf::View(sf::Vector2f(0.f, 0.f), sf::Vector2f(300.f, 200.f));
     window.setView(view);
     view = getLetterboxView(view, 800, 600);
-    tm.LoadLevel("Levels/testimap.json", "textures/tilemap.png",&em);
+    tm.LoadLevel("Levels/level21.json", "textures/dungeon_tileset.png",&em);
     ItemList::AddWeapon(std::make_unique<Pistol>(sf::Vector2f(64.f,105.f), "textures/Weapons/pistol.png"));
     ItemList::AddWeapon(std::make_unique<Ak47>(sf::Vector2f(100.f, 105.f), "textures/Weapons/ak47.png"));
 
