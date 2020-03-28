@@ -1,4 +1,5 @@
 #include "TextureManager.h"
+#include "iostream"
 
 TextureManager& TextureManager::Get()
 {
@@ -51,6 +52,7 @@ std::shared_ptr<sf::Texture> TextureManager::I_AcquireTexture(std::string path)
 		auto pTex = std::make_shared<sf::Texture>();
 		if (!pTex->loadFromFile(path))
 		{
+			std::cout << "ei oo tollast textuuria, tyhmä" << std::endl;
 		}
 		pTextures.insert({ path, pTex });
 		return pTex;

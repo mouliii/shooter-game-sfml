@@ -26,17 +26,18 @@ EntityManager em(tm);
 sf::View getLetterboxView(sf::View view, int windowWidth, int windowHeight);
 
 int main()
-{
-    sf::RenderWindow window(sf::VideoMode(800, 600), "SFML works!");
+{   // 1280x720 720p         1980 x 1080p fhd
+    sf::RenderWindow window(sf::VideoMode(1280, 720), "SFML works!");
     window.setFramerateLimit(60);
     //window.setVerticalSyncEnabled(1);
-    view = sf::View(sf::Vector2f(0.f, 0.f), sf::Vector2f(300.f, 200.f));
+    //                                                    300 x 250
+    view = sf::View(sf::Vector2f(0.f, 0.f), sf::Vector2f(1280, 720));
     window.setView(view);
-    view = getLetterboxView(view, 800, 600);
-    tm.LoadLevel("Levels/level21.json", "textures/dungeon_tileset.png",&em);
+    view.zoom(0.3f);
+    //view = getLetterboxView(view, 800, 600);
+    tm.LoadLevel("Levels/testimap.json", "textures/tilemap.png",&em);
     ItemList::AddWeapon(std::make_unique<Pistol>(sf::Vector2f(64.f,105.f), "textures/Weapons/pistol.png"));
     ItemList::AddWeapon(std::make_unique<Ak47>(sf::Vector2f(100.f, 105.f), "textures/Weapons/ak47.png"));
-
 
     // MAIN LOOP
     while (window.isOpen())
