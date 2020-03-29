@@ -16,6 +16,8 @@ Player::Player(sf::Vector2f pos, Tilemap& tilemap, std::string path)
 
 	weapon = std::make_unique<Shotgun>(GetPosCentered(), "textures/Weapons/shotgun.png");
 	reloadTimer = weapon->GetReloadTime();
+
+	hp = 8;
 }
 
 void Player::Update(sf::Vector2f mousepos, std::vector<std::unique_ptr<Entity> >& em, Tilemap& tm, float dt)
