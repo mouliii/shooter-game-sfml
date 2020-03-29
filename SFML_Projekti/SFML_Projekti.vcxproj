@@ -192,7 +192,7 @@
   <ItemGroup>
     <None Include="Levels\level2.json" />
     <None Include="Levels\level21.json" />
-    <None Include="Levels\testimap.json" />
+    <None Include="Levels\level1.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

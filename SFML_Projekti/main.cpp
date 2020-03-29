@@ -35,8 +35,8 @@ int main()
     view = sf::View(sf::Vector2f(0.f, 0.f), sf::Vector2f(1280, 720));
     window.setView(view);
     view.zoom(0.3f);
-    //view = getLetterboxView(view, 800, 600);
-    tm.LoadLevel("Levels/level2.json", "textures/dungeon_tileset.png",&em);
+    //view = getLetterboxView(view, 800, 600);    // dungeon_tileset  |    tilemap
+    tm.LoadLevel("Levels/level1.json", "textures/tilemap.png",&em);
     ItemList::AddWeapon(std::make_unique<Pistol>(sf::Vector2f(64.f,105.f), "textures/Weapons/pistol.png"));
     ItemList::AddWeapon(std::make_unique<Ak47>(sf::Vector2f(100.f, 105.f), "textures/Weapons/ak47.png"));
 
@@ -81,17 +81,18 @@ int main()
         collider.Update(&em, tm);
         
             // testi
-        const int asddsa = 50;
+        const int maxOffset = 50;
         int x = em.GetEntities()[0]->GetPosCentered().x + 0.5f;
         int y = em.GetEntities()[0]->GetPosCentered().y + 0.5f;
         sf::Vector2f offest = mPos - em.GetEntities()[0]->GetPosCentered();
         offest.x /= 4.f;
         offest.y /= 4.f;
+        const float actualOffset = maxOffset + em.GetEntities()[0]->GetPosCentered().x;
         sf::Vector2f cam = em.GetEntities()[0]->GetPosCentered() + offest;
-        cam.x = std::min(std::max(cam.x, -asddsa + em.GetEntities()[0]->GetPosCentered().x), asddsa + em.GetEntities()[0]->GetPosCentered().x);
-        cam.y = std::min(std::max(cam.y, -asddsa + em.GetEntities()[0]->GetPosCentered().y), asddsa + em.GetEntities()[0]->GetPosCentered().y);
+        cam.x = std::min(std::max(cam.x, view.getSize().x / 2.f), float(tm.GetMapSize().x * TILEMAPDIMENSIONS) - view.getSize().x / 2.f);
+        cam.y = std::min(std::max(cam.y, view.getSize().y / 2.f), float(tm.GetMapSize().y * TILEMAPDIMENSIONS) - view.getSize().y / 2.f);
         view.setCenter(cam); // vika update | enne draw
-        //std::cout << mPos.y / TILEMAPDIMENSIONS << std::endl;
+        std::cout << view.getCenter().x << " " <<  view.getCenter().y << std::endl;
         
         // DRAW
         window.clear();

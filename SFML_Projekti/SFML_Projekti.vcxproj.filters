@@ -159,13 +159,13 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Levels\testimap.json">
-      <Filter>Resource Files</Filter>
-    </None>
     <None Include="Levels\level2.json">
       <Filter>Resource Files</Filter>
     </None>
     <None Include="Levels\level21.json">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Levels\level1.json">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
