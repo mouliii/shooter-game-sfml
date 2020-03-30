@@ -34,7 +34,10 @@ void Player::Update(sf::Vector2f mousepos, std::vector<std::unique_ptr<Entity> >
 		{
 			weapon->UpdatePos({ GetPosCentered().x, GetPosCentered().y }, mousepos);
 		}
-
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
+		{
+			reload = true;
+		}
 		// update ampuminen
 		if (!reload)
 		{
