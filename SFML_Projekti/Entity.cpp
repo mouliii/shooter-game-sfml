@@ -83,8 +83,7 @@ bool Entity::LineofSight(sf::Vector2f origin, sf::Vector2f dest, int maxRange, i
 	// normalize delta vectori
 	sf::Vector2f delta = dest - origin;
 	float distance = std::sqrt((delta.x * delta.x) + (delta.y * delta.y));
-	delta.x /= distance;
-	delta.y /= distance;
+	delta /= distance;
 
 	//int precision = precision; // How many steps to check, must be smaller than pixel width/height of a tile
 

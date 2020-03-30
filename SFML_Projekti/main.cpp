@@ -24,19 +24,15 @@ Collider collider;
 Tilemap tm;
 EntityManager em(tm);
 
-sf::View getLetterboxView(sf::View view, int windowWidth, int windowHeight);
-
 int main()
 {   // 1280x720 720p         1980 x 1080p fhd
     sf::RenderWindow window(sf::VideoMode(1280, 720), "SFML works!");
     window.setFramerateLimit(144);
     //window.setVerticalSyncEnabled(1);
-    //                                                    300 x 250
     view = sf::View(sf::Vector2f(0.f, 0.f), sf::Vector2f(1280, 720));
     window.setView(view);
-    view.zoom(0.3f);
-    //view = getLetterboxView(view, 800, 600);    // dungeon_tileset  |    tilemap
-    tm.LoadLevel("Levels/level1.json", "textures/tilemap.png",&em);
+    view.zoom(0.3f); // dungeon_tileset  |    tilemap
+    tm.LoadLevel("Levels/level2.json", "textures/dungeon_tileset.png",&em);
     ItemList::AddWeapon(std::make_unique<Pistol>(sf::Vector2f(64.f,105.f), "textures/Weapons/pistol.png"));
     ItemList::AddWeapon(std::make_unique<Ak47>(sf::Vector2f(100.f, 105.f), "textures/Weapons/ak47.png"));
 
@@ -80,24 +76,24 @@ int main()
         BulletManager::Update(dt);
         collider.Update(&em, tm);
         
-            // testi
+        // view
         const int maxOffset = 50;
         int x = em.GetEntities()[0]->GetPosCentered().x + 0.5f;
         int y = em.GetEntities()[0]->GetPosCentered().y + 0.5f;
-        sf::Vector2f offest = mPos - em.GetEntities()[0]->GetPosCentered();
-        offest.x /= 4.f;
-        offest.y /= 4.f;
+        sf::Vector2f offset = mPos - em.GetEntities()[0]->GetPosCentered();
+        offset.x /= 4.f;
+        offset.y /= 3.5f;
         const float actualOffset = maxOffset + em.GetEntities()[0]->GetPosCentered().x;
-        sf::Vector2f cam = em.GetEntities()[0]->GetPosCentered() + offest;
+        sf::Vector2f cam = em.GetEntities()[0]->GetPosCentered() + offset;
         cam.x = std::min(std::max(cam.x, view.getSize().x / 2.f), float(tm.GetMapSize().x * TILEMAPDIMENSIONS) - view.getSize().x / 2.f);
         cam.y = std::min(std::max(cam.y, view.getSize().y / 2.f), float(tm.GetMapSize().y * TILEMAPDIMENSIONS) - view.getSize().y / 2.f);
         view.setCenter(cam); // vika update | enne draw
-        std::cout << view.getCenter().x << " " <<  view.getCenter().y << std::endl;
+        //std::cout << view.getCenter().x << " " <<  view.getCenter().y << std::endl;
         
         // DRAW
         window.clear();
         window.setView(view);
-        tm.Draw(window, sf::Vector2f(x,y), sf::Vector2f(300.f, 200.f));
+        tm.Draw(window, view.getCenter() - (view.getSize() / 2.f), view.getSize());
         em.Draw(window);
         BulletManager::Draw(window);
         for (size_t i = 0; i < ItemList::GetWeapons().size(); i++)
@@ -107,40 +103,4 @@ int main()
         window.display();
     }
     return 0;
-}
-
-
-sf::View getLetterboxView(sf::View view, int windowWidth, int windowHeight) {
-
-    // Compares the aspect ratio of the window to the aspect ratio of the view,
-    // and sets the view's viewport accordingly in order to archieve a letterbox effect.
-    // A new view (with a new viewport set) is returned.
-
-    float windowRatio = windowWidth / (float)windowHeight;
-    float viewRatio = view.getSize().x / (float)view.getSize().y;
-    float sizeX = 1;
-    float sizeY = 1;
-    float posX = 0;
-    float posY = 0;
-
-    bool horizontalSpacing = true;
-    if (windowRatio < viewRatio)
-        horizontalSpacing = false;
-
-    // If horizontalSpacing is true, the black bars will appear on the left and right side.
-    // Otherwise, the black bars will appear on the top and bottom.
-
-    if (horizontalSpacing) {
-        sizeX = viewRatio / windowRatio;
-        posX = (1 - sizeX) / 2.f;
-    }
-
-    else {
-        sizeY = windowRatio / viewRatio;
-        posY = (1 - sizeY) / 2.f;
-    }
-
-    view.setViewport(sf::FloatRect(posX, posY, sizeX, sizeY));
-
-    return view;
 }

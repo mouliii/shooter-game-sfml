@@ -107,26 +107,32 @@ void Tilemap::LoadLevel(std::string filepath, std::string texture_path, EntityMa
 
 void Tilemap::Draw(sf::RenderTarget& rt, sf::Vector2f topleft, sf::Vector2f botright)
 {
-    int x = int(topleft.x);
-    int y = int(topleft.y);
-    int w = int(botright.x);
-    int h = int(botright.y);
-    for (int i = 0; i < pTiles.size(); i++)
+    int x = int(topleft.x)  / TILEMAPDIMENSIONS;
+    int y = int(topleft.y)  / TILEMAPDIMENSIONS;
+    int w = int(botright.x) / TILEMAPDIMENSIONS;
+    int h = int(botright.y) / TILEMAPDIMENSIONS;
+    
+    for (size_t i = 0; i < pTiles.size(); i++)
     {
         for (int j = 0; j < (mapHeight * mapWidth); j++)
         {
             rt.draw(pTiles[i][j]->GetSprite());
         }
     }
-    // TODO
     /*
-    for (int tempx = x; tempx < w; tempx++)
+    // TODO
+    //std::cout << w << std::endl;
+    for (size_t i = 0; i < pTiles.size(); i++)
+    {
+        for (int tempx = x; tempx < w; tempx++)
         {
             for (int tempy = y; tempy < h; tempy++)
             {
-                rt.draw(GetTile(i, tempx,tempy)->GetSprite());
+                // index 0 sadkosakdoask <...-
+                rt.draw(GetTile(i, tempx, tempy)->GetSprite());
             }
         }
+    }
     */
 }
 

@@ -17,9 +17,9 @@ private:
 	void Advance();
 private:
 	sf::Texture texture;
-	float curTime = 0.0f;;
-	float frameTime;
-	int nFrames;
+	float curTime = 0.0f;
+	float frameTime = 0.0f;
+	int nFrames = 0;
 	int curFrame = 0;
 	bool stopAnimation = false;
 	std::vector<sf::IntRect> frames;

@@ -64,10 +64,10 @@ bool CRCollision::I_CircleRectCollision(sf::CircleShape c, sf::IntRect r) {
     float cy = c.getPosition().y;
     float radius = c.getRadius();
 
-    float rx = r.left;
-    float ry = r.top;
-    float rw = r.width;
-    float rh = r.height;
+    float rx = float(r.left);
+    float ry = float(r.top);
+    float rw = float(r.width);
+    float rh = float(r.height);
     // temporary variables to set edges for testing
     float testX = c.getPosition().x;
     float testY = c.getPosition().y;

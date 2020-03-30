@@ -12,6 +12,7 @@ Enemy::Enemy(sf::Vector2f pos, Tilemap& tilemap, std::string path)
 	rect.setFillColor(sf::Color::Yellow);
 	rect.setPosition(pos);
 	weapon = std::make_unique<Pistol>(GetPosCentered(), "textures/Weapons/pistol.png");
+	shootTimer += 0.2f;
 	
 	animations[int(AnimationIndex::RWALK)] = Animation(TextureManager::Get(), "textures/lunk.png", 0, 104 * 7, 10, 96, 104, 0.15f);
 	animations[int(AnimationIndex::LWALK)] = Animation(TextureManager::Get(), "textures/lunk.png", 0, 104 * 5, 10, 96, 104, 0.15f);
@@ -126,7 +127,7 @@ void Enemy::Update(sf::Vector2f mpos, std::vector<std::unique_ptr<Entity> >& em,
 					if (canShoot)
 					{
 						canShoot = false;
-						BulletManager::AddBullet(weapon->GetType(), GetPosCentered(), em[0]->GetPosCentered(), 3.5f, 120.f, 400.f, sf::Color::Green, "Enemy");
+						BulletManager::AddBullet(weapon->GetType(), GetPosCentered(), em[0]->GetPosCentered(), 3.5f, 80.f, 400.f, sf::Color::Green, "Enemy");
 						weapon->ReduceCurAmmo(1);
 						if (weapon->GetCurBullets() <= 0)
 						{
