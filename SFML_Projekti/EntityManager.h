@@ -16,6 +16,6 @@ public:
 	size_t GetArraySize() { return pEntities.size(); }
 	std::vector<std::unique_ptr<Entity>>& GetEntities();
 private:
-	std::vector<std::unique_ptr<Entity> > pEntities;
+	std::vector<std::unique_ptr<Entity> > pEntities;  // hyvis ja pahis vectorit
 	Tilemap& tm;
 };

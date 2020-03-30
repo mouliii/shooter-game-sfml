@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <iostream>
 #include <vector>
 #include "BulletManager.h"
@@ -32,9 +33,14 @@ int main()
     view = sf::View(sf::Vector2f(0.f, 0.f), sf::Vector2f(1280, 720));
     window.setView(view);
     view.zoom(0.3f); // dungeon_tileset  |    tilemap
-    tm.LoadLevel("Levels/level2.json", "textures/dungeon_tileset.png",&em);
+    tm.LoadLevel("Levels/level1.json", "textures/tilemap.png",&em);
     ItemList::AddWeapon(std::make_unique<Pistol>(sf::Vector2f(64.f,105.f), "textures/Weapons/pistol.png"));
     ItemList::AddWeapon(std::make_unique<Ak47>(sf::Vector2f(100.f, 105.f), "textures/Weapons/ak47.png"));
+
+    sf::Music bgm;
+    bgm.openFromFile("Sounds/bgm/bgm.flac");
+    bgm.setVolume(10.f);
+    bgm.play();
 
     // MAIN LOOP
     while (window.isOpen())

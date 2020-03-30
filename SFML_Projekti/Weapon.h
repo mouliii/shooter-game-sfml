@@ -4,7 +4,7 @@
 #include "BulletManager.h"
 
 
-// TODO max range tänne  - json file
+// TODO max range tänne  - json file ?
 //		bullet size myös?
 class Weapon
 {

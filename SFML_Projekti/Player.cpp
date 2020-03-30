@@ -18,6 +18,16 @@ Player::Player(sf::Vector2f pos, Tilemap& tilemap, std::string path)
 	reloadTimer = weapon->GetReloadTime();
 
 	hp = 8;
+	sf::SoundBuffer sb;
+	sb.loadFromFile("Sounds/Gun/Pistol/Shot.wav");
+	pum.second = std::move(sb);
+	pum.first.setBuffer(pum.second);
+	pum.first.setVolume(15.f);
+	//reload sound
+	sb.loadFromFile("Sounds/Gun/Pistol/Reload.wav");
+	s_reload.second = std::move(sb);
+	s_reload.first.setBuffer(s_reload.second);
+	s_reload.first.setVolume(40.f);
 }
 
 void Player::Update(sf::Vector2f mousepos, std::vector<std::unique_ptr<Entity> >& em, Tilemap& tm, float dt)
@@ -45,6 +55,7 @@ void Player::Update(sf::Vector2f mousepos, std::vector<std::unique_ptr<Entity> >
 			{
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 				{
+					pum.first.play();
 					canShoot = false;
 					BulletManager::AddBullet(weapon->GetType(), GetPosCentered(), mousepos, 3.5f, 200.f, 400.f, sf::Color::Green, "Player");
 					weapon->ReduceCurAmmo(1);
@@ -69,6 +80,7 @@ void Player::Update(sf::Vector2f mousepos, std::vector<std::unique_ptr<Entity> >
 			reloadTimer -= dt;
 			if (reloadTimer <= 0.0f)
 			{
+				s_reload.first.play();
 				reloadTimer = weapon->GetReloadTime();
 				weapon->Reload();
 				reload = false;

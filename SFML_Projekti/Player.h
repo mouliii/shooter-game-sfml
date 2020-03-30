@@ -1,5 +1,6 @@
 #pragma once
-#include "SFML/Graphics.hpp"
+#include <SFML/Audio.hpp>
+#include <SFML/Graphics.hpp>
 #include "Entity.h"
 #include "Weapon.h"
 
@@ -28,4 +29,7 @@ private:
 	Animation animations[int(AnimationIndex::COUNT)];
 	AnimationIndex curAnimation = AnimationIndex::RWALK;
 	float invisTimer = 0.5f;
+	//sounds
+	std::pair<sf::Sound,sf::SoundBuffer> pum;
+	std::pair<sf::Sound, sf::SoundBuffer> s_reload;
 };
