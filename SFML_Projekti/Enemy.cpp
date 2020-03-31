@@ -6,7 +6,8 @@ extern const int TILEMAPDIMENSIONS;
 
 Enemy::Enemy(sf::Vector2f pos, Tilemap& tilemap, std::string path)
 	:
-	Entity(pos,tilemap,path)
+	Entity(pos,tilemap,path),
+	aStar(tilemap)
 {
 	rect.setSize(sf::Vector2f(width, height));
 	rect.setFillColor(sf::Color::Yellow);
@@ -26,23 +27,19 @@ void Enemy::Update(sf::Vector2f mpos, std::vector<std::unique_ptr<Entity> >& em,
 {
 	sf::Vector2f dir(0.f, 0.f);
 	bool diagonalCheck[2] = { 0,0 };
-
+	// TODO - jos tekee UpdateMovement() nii koko switch ei toimi ????????????????
 	switch (state)
 	{
 	case Enemy::IDLE:
 		if (LineofSight(GetPosCentered(), em[0]->GetPosCentered(), 100, 8))
 		{
 			state = State::AGGROED;
-			aStar.Solve_AStar(GetPosInTilesCentered(), em[0]->GetPosInTilesCentered(), tm.GetCollisionLayer());
-			pathVec = aStar.GetPathVector();
-			std::reverse(pathVec.begin(), pathVec.end());
-			aStarTarget.x = pathVec[pathIndex].x * TILEMAPDIMENSIONS;
-			aStarTarget.y = pathVec[pathIndex].y * TILEMAPDIMENSIONS;
+			UpdateAstar(GetPosInTilesCentered(), em[0]->GetPosInTilesCentered());
 		}
 		break;
 	case Enemy::AGGROED:
 	{
-		const float xd = 1.f; // offset, mikä lasketaan, että on tarpeeks lähellä waypointtia | jos liian iso jää jumiin ahtaisiin paikkoihin | jos liian pien ei ehkä pääse waypointtiin
+		const float xd = 0.5f; // offset, mikä lasketaan, että on tarpeeks lähellä waypointtia | jos liian iso jää jumiin ahtaisiin paikkoihin | jos liian pien ei ehkä pääse waypointtiin
 		// entity delta vector
 		const sf::Vector2f deltaPos = em[0]->GetPosCentered() - GetPosCentered();
 		const float vecLenght = std::sqrt((deltaPos.x * deltaPos.x) + (deltaPos.y * deltaPos.y));
@@ -219,4 +216,18 @@ void Enemy::Update(sf::Vector2f mpos, std::vector<std::unique_ptr<Entity> >& em,
 	pos = rect.getPosition();
 	animations[curAnimation].Update(dt);
 	animations[curAnimation].ApplyToSprite(sprite);
+}
+
+void Enemy::UpdateAstar(sf::Vector2i startPosCentered, sf::Vector2i endPosCentered)
+{
+	// jos pathVec.end() != endposcentered
+	aStar.Solve_AStar(startPosCentered, endPosCentered, tilemap.GetCollisionLayer());
+	pathVec.clear();
+	pathVec = aStar.GetPathVector();
+	std::reverse(pathVec.begin(), pathVec.end());
+	if (!pathVec.empty())
+	{
+		aStarTarget.x = pathVec[pathIndex].x * TILEMAPDIMENSIONS;
+		aStarTarget.y = pathVec[pathIndex].y * TILEMAPDIMENSIONS;
+	}
 }
