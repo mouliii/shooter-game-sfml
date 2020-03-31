@@ -42,9 +42,9 @@ private:
 	};
 	sNode* nodes = nullptr;
 	std::vector<Type> debugDraw;
-	int nMapWidth = 25;
-	int nMapHeight = 20;
-	int nNodeSize = 16;
+	int nMapWidth;
+	int nMapHeight;
+	int nNodeSize;
 
 	sNode* nodeStart = nullptr;
 	sNode* nodeEnd = nullptr;

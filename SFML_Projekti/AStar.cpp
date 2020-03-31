@@ -7,6 +7,7 @@ Astar::Astar(Tilemap& tm)
 {
 	nMapWidth = tm.GetMapSize().x;
 	nMapHeight = tm.GetMapSize().y;
+	nNodeSize = tm.tileSize();
 	nodes = new sNode[nMapWidth * nMapHeight];
 }
 
