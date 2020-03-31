@@ -82,38 +82,28 @@ void Collider::Update(EntityManager* em, Tilemap& tm)
 	}
 	// bullet - entity
 	for (size_t i = 0; i < b.size(); i++)
-	{
+	{	// loppaa kaikki entityt ja jos collision -> ja jos ei sama tag -> dmg
 		// check collsion
-		if (b[i]->GetOwner() == "Player")
+		for (size_t k = 0; k < em->GetEntities().size(); k++)
 		{
-			bool hit = false;
-			for (size_t j = 1; j < em->GetEntities().size(); j++)
+			// TODO WTF
+
+			if (CRCollision::CircleRectCollision(b[i]->GetCircle(), em->GetEntities()[k]->GetRect()))
 			{
-				if (CRCollision::CircleRectCollision(b[i]->GetCircle(), e[j]->GetRect()))
+				if (b[i]->GetOwner() != e[k]->GetID() )
 				{
-					hit = true;
+					//std::cout << i << " " << b.size() << std::endl;
 					// TODO dmg source
-					em->GetEntities()[j]->GetDmg(1);
+					em->GetEntities()[k]->GetDmg(1);
+					b[i].swap( b.back());
+					b.pop_back();
+					if (i != 0)
+					{
+						i--;
+					}
+					break;
 				}
 			}
-			if (hit)
-			{
-				b.erase(b.begin() + i);
-			}
-		}
-		else if (b[i]->GetOwner() == "Enemy")
-		{
-			if (CRCollision::CircleRectCollision(b[i]->GetCircle(), e[0]->GetRect()))
-			{
-				// TODO dmg source
-				em->GetEntities()[0]->GetDmg(1);
-				b.erase(b.begin() + i);
-				continue;
-			}
-		}
-		else //  kaikki muut sekä "virheet"
-		{
-
 		}
 	}
 	// bullet wall

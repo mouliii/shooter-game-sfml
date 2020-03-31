@@ -26,6 +26,7 @@ public:
 	const sf::Vector2i GetPosInTilesCentered();
 	bool LineofSight(sf::Vector2f origin, sf::Vector2f dest, int maxRange, int precision);
 	void PickupWeapon(std::unique_ptr<Weapon>& wep);
+	const std::string GetID() { return id; }
 protected:
 	// perus tiedot maailmasta
 	Tilemap& tilemap;
@@ -39,6 +40,7 @@ protected:
 	bool isDead = false;
 	float speed = 50.f;
 	bool canTakeDmg = true;
+	std::string id = "";
 	// ampuminen
 	bool canShoot = true;
 	float shootCooldown = 0.3f;

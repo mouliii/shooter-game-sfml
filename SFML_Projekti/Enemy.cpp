@@ -21,6 +21,7 @@ Enemy::Enemy(sf::Vector2f pos, Tilemap& tilemap, std::string path)
 	animations[int(AnimationIndex::DWALK)] = Animation(TextureManager::Get(), "textures/lunk.png", 0, 104 * 4, 10, 96, 104, 0.15f);
 
 	sprite.setScale({ 0.17f, 0.17f });
+	id = "Enemy";
 }
 
 void Enemy::Update(sf::Vector2f mpos, std::vector<std::unique_ptr<Entity> >& em, Tilemap& tm, float dt)
@@ -124,7 +125,7 @@ void Enemy::Update(sf::Vector2f mpos, std::vector<std::unique_ptr<Entity> >& em,
 					if (canShoot)
 					{
 						canShoot = false;
-						BulletManager::AddBullet(weapon->GetType(), GetPosCentered(), em[0]->GetPosCentered(), 3.5f, 80.f, 400.f, sf::Color::Green, "Enemy");
+						BulletManager::AddBullet(weapon->GetType(), GetPosCentered(), em[0]->GetPosCentered(), 3.5f, 80.f, 400.f, sf::Color::Green, id);
 						weapon->ReduceCurAmmo(1);
 						if (weapon->GetCurBullets() <= 0)
 						{

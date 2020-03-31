@@ -17,6 +17,7 @@ Player::Player(sf::Vector2f pos, Tilemap& tilemap, std::string path)
 	weapon = std::make_unique<Shotgun>(GetPosCentered(), "textures/Weapons/shotgun.png");
 	reloadTimer = weapon->GetReloadTime();
 
+	id = "Player";
 	hp = 8;
 	sf::SoundBuffer sb;
 	sb.loadFromFile("Sounds/Gun/Pistol/Shot.wav");
@@ -57,7 +58,7 @@ void Player::Update(sf::Vector2f mousepos, std::vector<std::unique_ptr<Entity> >
 				{
 					pum.first.play();
 					canShoot = false;
-					BulletManager::AddBullet(weapon->GetType(), GetPosCentered(), mousepos, 3.5f, 200.f, 400.f, sf::Color::Green, "Player");
+					BulletManager::AddBullet(weapon->GetType(), GetPosCentered(), mousepos, 3.5f, 200.f, 400.f, sf::Color::Green, id);
 					weapon->ReduceCurAmmo(1);
 					if (weapon->GetCurBullets() <= 0)
 					{
