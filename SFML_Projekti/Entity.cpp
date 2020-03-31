@@ -5,8 +5,7 @@ extern const int TILEMAPDIMENSIONS;
 Entity::Entity(sf::Vector2f pos, Tilemap& tilemap, std::string texture_path)
 	:
 	pos(pos),
-	tilemap(tilemap),
-	aStar(tilemap)
+	tilemap(tilemap)
 {
 	rect.setSize(sf::Vector2f(width,height));
 	rect.setPosition(pos);
@@ -60,18 +59,7 @@ sf::Vector2f Entity::GetPosCentered()
 	return sf::Vector2f(GetPos().x + GetRect().getLocalBounds().width / 2, GetPos().y + GetRect().getLocalBounds().height / 2);
 }
 
-void Entity::UpdateAstar(sf::Vector2i startPosCentered, sf::Vector2i endPosCentered)
-{
-	aStar.Solve_AStar(startPosCentered, endPosCentered, tilemap.GetCollisionLayer());
-	pathVec.clear();
-	pathVec = aStar.GetPathVector();
-	std::reverse(pathVec.begin(), pathVec.end());
-	if (!pathVec.empty())
-	{
-		aStarTarget.x = pathVec[pathIndex].x * TILEMAPDIMENSIONS;
-		aStarTarget.y = pathVec[pathIndex].y * TILEMAPDIMENSIONS;
-	}
-}
+
 
 const sf::Vector2i Entity::GetPosInTilesCentered()
 {

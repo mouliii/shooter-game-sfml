@@ -45,12 +45,6 @@ protected:
 	float shootTimer = shootCooldown;
 	bool reload = false;
 	float reloadTimer = 0.0f;
-	// a star path finding
-	Astar aStar;
-	std::vector<sf::Vector2i> pathVec;
-	int pathIndex = 0;
-	sf::Vector2i aStarTarget = { 0,0 };
-	sf::Texture t;
 	// weapon
 	std::unique_ptr<Weapon> weapon = nullptr;
 };
