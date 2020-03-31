@@ -33,66 +33,91 @@ void Tilemap::LoadLevel(std::string filepath, std::string texture_path, EntityMa
         textureHeight = texture.getSize().y / dims;
         std::cout << "map dimensions: " << "[" << mapWidth << "," << mapHeight << "]" << '\n' << "texture dims: " << "[" << textureWidth << "," << textureHeight << "]" << '\n' << "Layers: " << nLayers << std::endl;
         std::cout << "nObjects: " << nObjects << std::endl;
-        // texture tilet ineen
-        std::vector<std::unique_ptr<Tile>> l;
-        for (int j = 0; j <= nLayers - 3; j++)
+        ////// TESTI TODO
+        for (size_t i = 0; i < nLayers; i++)
         {
-            for (int i = 0; i < (mapHeight * mapWidth); i++)
+            std::string n = "";
+            try
             {
-                int n = (v["layers"][j]["data"][i].as_int());   // layer index data
-                int rectx = (n % textureWidth - 1) * TILEMAPDIMENSIONS;   // % is the "modulo operator", the remainder of i / width;
-                int recty = (n / textureWidth) * TILEMAPDIMENSIONS;       // where "/" is an integer division
-
-                int posx = i % mapWidth * TILEMAPDIMENSIONS;   // -^sama
-                int posy = i / mapWidth * TILEMAPDIMENSIONS;
-                l.emplace_back(std::make_unique<Tile>(sf::Vector2f(float(posx), float(posy)), sf::Vector2f(float(dims), float(dims)), &texture, sf::IntRect(rectx, recty, dims, dims), sf::Color::Transparent, 1.0f));
-            }
-            pTiles.emplace_back(std::move(l));
-            l.clear();
-        }
-       
-        // collision layer
-        for (int i = 0; i < mapHeight * mapWidth; i++)
-        {
-            // teh‰‰ rect
-            int posx = i % mapWidth * TILEMAPDIMENSIONS;
-            int posy = i / mapWidth * TILEMAPDIMENSIONS;
-            sf::IntRect r(posx, posy, int(dims), int(dims));
-            // jos on joku tile nii collision = true   | jos ei oo mit‰‰ mapis nii 0 default -> nolla ei ole mik‰‰  textuuri
-            if (v["layers"][nLayers - 2]["data"][i].as_int() != 0)
-            {
-                collisionLayer.push_back({ r,true });
-            }
-            else
-            {
-                collisionLayer.push_back({ r,false });
-            }
-        }
-
-        //  object layer
-        for (int i = 0; i < nObjects; i++)
-        {
-            
-            std::string obj = v["layers"][nLayers - 1]["objects"][i]["name"].as_string();
-            int x = v["layers"][nLayers - 1]["objects"][i]["x"].as_int();
-            int y = v["layers"][nLayers - 1]["objects"][i]["y"].as_int();
-            if (obj == "player_spawn")
-            {
-                em->AddEntity(std::make_unique<Player>(sf::Vector2f(x, y), *this, "textures/lunk.png"));
-                std::vector<int> asd;
-                int id = v["layers"][nLayers - 1]["objects"][i]["id"].as_int();
-                if (id != 1)
+                n = (v["layers"][i]["name"].as_string());
+                if (n == "")
                 {
-                    std::swap(em->GetEntities()[0], em->GetEntities()[em->GetEntities().size() - 1]);
+                    throw std::exception("mapin lataamisessa virhe, ei ole esim. pelaaja ");
                 }
             }
-            else if (obj == "enemy_spawn")
+            catch (const std::exception& e)
             {
-                em->AddEntity(std::make_unique<Enemy>(sf::Vector2f(x, y), *this, "textures/lunk.png"));
+                std::cout << e.what() << std::endl;
+                break;
             }
-            else if (obj == "level_trigger")
+            if (n.find("Tile") != std::string::npos)
             {
-                
+                std::vector<std::unique_ptr<Tile>> l;
+                for (int t = 0; t < (mapHeight * mapWidth); t++)
+                {
+                    int n = (v["layers"][i]["data"][t].as_int());   // layer index data
+                    int rectx = (n % textureWidth - 1) * TILEMAPDIMENSIONS;   // % is the "modulo operator", the remainder of i / width;
+                    int recty = (n / textureWidth) * TILEMAPDIMENSIONS;       // where "/" is an integer division
+
+                    int posx = t % mapWidth * TILEMAPDIMENSIONS;   // -^sama
+                    int posy = t / mapWidth * TILEMAPDIMENSIONS;
+                    l.emplace_back(std::make_unique<Tile>(sf::Vector2f(float(posx), float(posy)), sf::Vector2f(float(dims), float(dims)), &texture, sf::IntRect(rectx, recty, dims, dims), sf::Color::Transparent, 1.0f));
+                }
+                pTiles.emplace_back(std::move(l));
+            }
+            else if (n.find("collision") != std::string::npos)
+            {
+                for (int c = 0; c < mapHeight * mapWidth; c++)
+                {
+                    // teh‰‰ rect
+                    int posx = c % mapWidth * TILEMAPDIMENSIONS;
+                    int posy = c / mapWidth * TILEMAPDIMENSIONS;
+                    sf::IntRect r(posx, posy, int(dims), int(dims));
+                    // jos on joku tile nii collision = true   | jos ei oo mit‰‰ mapis nii 0 default -> nolla ei ole mik‰‰  textuuri
+                    if (v["layers"][i]["data"][c].as_int() != 0)
+                    {
+                        collisionLayer.push_back({ r,true });
+                    }
+                    else
+                    {
+                        collisionLayer.push_back({ r,false });
+                    }
+                }
+            }
+            else if (n.find("Object") != std::string::npos)
+            {
+                for (int o = 0; o < nObjects; o++)
+                {
+                    try
+                    {
+                        v["layers"][i]["objects"][o]["id"].as_int();
+                    }
+                    catch (const std::exception&)
+                    {
+                        break;
+                    }
+                    std::string obj = v["layers"][i]["objects"][o]["name"].as_string();
+                    int x = v["layers"][i]["objects"][o]["x"].as_int();
+                    int y = v["layers"][i]["objects"][o]["y"].as_int();
+                    if (obj == "player_spawn")
+                    {
+                        em->AddEntity(std::make_unique<Player>(sf::Vector2f(x, y), *this, "textures/lunk.png"));
+                        std::vector<int> asd;
+                        int id = v["layers"][i]["objects"][o]["id"].as_int();
+                        if (id != 1)
+                        {
+                            std::swap(em->GetEntities()[0], em->GetEntities()[em->GetEntities().size() - 1]);
+                        }
+                    }
+                    else if (obj == "enemy_spawn")
+                    {
+                        em->AddEntity(std::make_unique<Enemy>(sf::Vector2f(x, y), *this, "textures/lunk.png"));
+                    }
+                    else if (obj == "level_trigger")
+                    {
+
+                    }
+                }
             }
         }
         curTime = float(_clock.getElapsedTime().asMilliseconds());
