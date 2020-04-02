@@ -6,13 +6,10 @@
 #include "EntityManager.h"
 #include "Tilemap.h"
 #include "Collider.h"
-#include <math.h>
 
 //   c/c++ -> code generation -> basic error checking -> Both (/RTC1, equiv. to /RTCsu) (/RTC1) -> default
 /*
 ongelmat:
-    rotate pelaaja hiiren mukaa vai mitenkä
-    rotate kulman mukaan
 */
 extern const int TILEMAPDIMENSIONS = 16;
 
@@ -26,7 +23,7 @@ Tilemap tm;
 EntityManager em(tm);
 
 int main()
-{   // 1280x720 720p         1980 x 1080p fhd
+{
     sf::RenderWindow window(sf::VideoMode(1280, 720), "SFML works!");
     window.setFramerateLimit(144);
     //window.setVerticalSyncEnabled(1);
@@ -106,6 +103,7 @@ int main()
         {
             ItemList::GetWeapons()[i]->Draw(window);
         }
+
         window.display();
     }
     return 0;
