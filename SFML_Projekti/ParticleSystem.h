@@ -18,7 +18,7 @@ struct ParticleProperties
 
 
 class ParticleSystem
-{
+{ // TODO ehk se eka push_back ja erase juttu kans ?
 public:
 	ParticleSystem();
 	void Draw(sf::RenderTarget& rt);
