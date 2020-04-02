@@ -87,7 +87,7 @@ int main()
         collider.Update(&em, tm);
         if (active)
         {
-            for (size_t i = 0; i < 5; i++)
+            for (size_t i = 0; i < 1; i++)
             {
                 ps.SpawnParticle(mPos, partprop);
             }

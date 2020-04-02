@@ -8,11 +8,11 @@ struct ParticleProperties
 {
 	sf::Vector2f vel = { 30.f, 30.f };
 	float velVariation = 0.5f;
-	float sizeStart = 5.f;
+	float sizeStart = 10.f;
 	float sizeEnd = 1.f;
 	float sizeVariation = 1.f;
-	sf::Color startColor = sf::Color::Red;
-	sf::Color endColor = sf::Color::Yellow;
+	sf::Color startColor = sf::Color::Blue;
+	sf::Color endColor = sf::Color::White;
 	float lifeTime = 1.0f;
 };
 
@@ -37,7 +37,6 @@ private:
 		float fullLife;
 		bool active;
 	};
-	bool backToFront = true;
 	std::vector<Particle> particles;
 	size_t index = 1499;
 };
