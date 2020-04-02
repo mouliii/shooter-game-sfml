@@ -6,6 +6,7 @@
 #include "EntityManager.h"
 #include "Tilemap.h"
 #include "Collider.h"
+#include "ParticleSystem.h"
 
 //   c/c++ -> code generation -> basic error checking -> Both (/RTC1, equiv. to /RTCsu) (/RTC1) -> default
 /*
@@ -22,6 +23,10 @@ Collider collider;
 Tilemap tm;
 EntityManager em(tm);
 
+ParticleSystem ps;
+ParticleProperties partprop;
+bool active = false;
+
 int main()
 {
     sf::RenderWindow window(sf::VideoMode(1280, 720), "SFML works!");
@@ -30,7 +35,7 @@ int main()
     view = sf::View(sf::Vector2f(0.f, 0.f), sf::Vector2f(1280, 720));
     window.setView(view);
     view.zoom(0.3f); // dungeon_tileset  |    tilemap
-    tm.LoadLevel("Levels/level1.json", "textures/tilemap.png",&em);
+    tm.LoadLevel("Levels/level21.json", "textures/dungeon_tileset.png",&em);
     ItemList::AddWeapon(std::make_unique<Pistol>(sf::Vector2f(64.f,105.f), "textures/Weapons/pistol.png"));
     ItemList::AddWeapon(std::make_unique<Ak47>(sf::Vector2f(100.f, 105.f), "textures/Weapons/ak47.png"));
 
@@ -61,8 +66,12 @@ int main()
             }
             if (event.type == sf::Event::MouseButtonPressed)
             {
+                sf::Vector2i mousepos = sf::Mouse::getPosition(window);
+                sf::Vector2f worldPos = window.mapPixelToCoords(mousepos);
+                sf::Vector2f mPos = sf::Vector2f(worldPos);
                 if (event.mouseButton.button == sf::Mouse::Left)
                 {
+                    active = !active;
                 }
             }
         }
@@ -75,10 +84,15 @@ int main()
         sf::Vector2f worldPos = window.mapPixelToCoords(mousepos);
         sf::Vector2f mPos = sf::Vector2f(worldPos);
         // UPDATE
-        em.Update(mPos, tm, dt);
+            //em.Update(mPos, tm, dt);
         BulletManager::Update(dt);
         collider.Update(&em, tm);
-        
+        if (active)
+        {
+            ps.SpawnParticle(mPos, partprop);
+        }
+        ps.Update(dt);
+
         // view
         const int maxOffset = 50;
         int x = em.GetEntities()[0]->GetPosCentered().x + 0.5f;
@@ -103,6 +117,9 @@ int main()
         {
             ItemList::GetWeapons()[i]->Draw(window);
         }
+
+        ps.Draw(window);
+
 
         window.display();
     }

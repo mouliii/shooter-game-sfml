@@ -159,6 +159,7 @@
     <ClCompile Include="ItemList.cpp" />
     <ClCompile Include="jute.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Random.cpp" />
     <ClCompile Include="RectCircleCollision.cpp" />
@@ -177,6 +178,7 @@
     <ClInclude Include="EntityManager.h" />
     <ClInclude Include="ItemList.h" />
     <ClInclude Include="jute.h" />
+    <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="RectCircleCollision.h" />
