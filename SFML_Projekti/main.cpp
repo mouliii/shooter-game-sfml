@@ -76,6 +76,7 @@ int main()
         float dt = _clock.getElapsedTime().asMilliseconds() - curTime;
         dt /= 1000;
         curTime = float(_clock.getElapsedTime().asMilliseconds());
+        std::cout << dt << std::endl;
         // INPUT
         sf::Vector2i mousepos = sf::Mouse::getPosition(window);
         sf::Vector2f worldPos = window.mapPixelToCoords(mousepos);
