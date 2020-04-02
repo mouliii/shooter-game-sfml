@@ -25,6 +25,7 @@ void ParticleSystem::Draw(sf::RenderTarget& rt)
 					rect.setOrigin(sf::Vector2f(size / 2.f, size / 2.f));
 					rect.setPosition(particles[i].pos);
 					rect.setSize(sf::Vector2f(size, size));
+					rect.setRotation(particles[i].rotation);
 					rect.setFillColor(color);
 
 					rt.draw(rect);
@@ -52,6 +53,7 @@ void ParticleSystem::Draw(sf::RenderTarget& rt)
 				rect.setOrigin(sf::Vector2f(size / 2.f, size / 2.f));
 				rect.setPosition(particles[i].pos);
 				rect.setSize(sf::Vector2f(size, size));
+				rect.setRotation(particles[i].rotation);
 				rect.setFillColor(color);
 
 				rt.draw(rect);
@@ -73,6 +75,7 @@ void ParticleSystem::SpawnParticle(sf::Vector2f pos, const ParticleProperties& p
 	p.sizeEnd = pp.sizeEnd;
 	p.startColor = pp.startColor;
 	p.endColor = pp.endColor;
+	p.rotation = Random::GetRandomInt(0, 360);
 	p.lifeTime = pp.lifeTime;
 	p.fullLife = p.lifeTime;
 
@@ -85,6 +88,7 @@ void ParticleSystem::Update(float dt)
 	{
 
 		p.pos += p.vel * dt;
+		p.rotation += 20.0f * dt;
 		p.lifeTime -= dt;
 	}
 }

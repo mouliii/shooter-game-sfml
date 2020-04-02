@@ -66,9 +66,6 @@ int main()
             }
             if (event.type == sf::Event::MouseButtonPressed)
             {
-                sf::Vector2i mousepos = sf::Mouse::getPosition(window);
-                sf::Vector2f worldPos = window.mapPixelToCoords(mousepos);
-                sf::Vector2f mPos = sf::Vector2f(worldPos);
                 if (event.mouseButton.button == sf::Mouse::Left)
                 {
                     active = !active;
@@ -89,7 +86,10 @@ int main()
         collider.Update(&em, tm);
         if (active)
         {
-            ps.SpawnParticle(mPos, partprop);
+            for (size_t i = 0; i < 5; i++)
+            {
+                ps.SpawnParticle(mPos, partprop);
+            }
         }
         ps.Update(dt);
 
