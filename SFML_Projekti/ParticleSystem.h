@@ -37,6 +37,9 @@ private:
 		float fullLife;
 		bool active;
 	};
+	bool spawn = true;
+	float time = 0.001f;
+	float curTime = time;
 	std::vector<Particle> particles;
 	size_t index = 1499;
 };

@@ -41,20 +41,25 @@ void ParticleSystem::Draw(sf::RenderTarget& rt)
 
 void ParticleSystem::SpawnParticle(sf::Vector2f pos, const ParticleProperties& pp)
 {
-	Particle& p = particles[index];
-	p.active = true;
-	p.pos = pos;
-	p.vel.x = pp.vel.x * Random::GetRandomFloat(-1.0f, 1.0f);
-	p.vel.y = pp.vel.y * Random::GetRandomFloat(-1.0f, 1.0f);
-	p.sizeStart = pp.sizeStart + pp.sizeVariation * Random::GetRandomFloat(-1.0, 1.0f);
-	p.sizeEnd = pp.sizeEnd;
-	p.startColor = pp.startColor;
-	p.endColor = pp.endColor;
-	p.rotation = Random::GetRandomInt(0, 360);
-	p.lifeTime = pp.lifeTime + Random::GetRandomFloat(-0.5f, 0.5f);
-	p.fullLife = p.lifeTime;
-	//++ drawaa vanhat p‰‰llimm‰isiksi ja -- drawaa vanhat p‰‰llimm‰isiksi
-	index = ++index % particles.size();
+	if (spawn)
+	{
+		spawn = false;
+		Particle& p = particles[index];
+		p.active = true;
+		p.pos = pos;
+		p.vel.x = pp.vel.x * Random::GetRandomFloat(-1.0f, 1.0f);
+		p.vel.y = pp.vel.y * Random::GetRandomFloat(-1.0f, 1.0f);
+		p.sizeStart = pp.sizeStart + pp.sizeVariation * Random::GetRandomFloat(-1.0, 1.0f);
+		p.sizeEnd = pp.sizeEnd;
+		p.startColor = pp.startColor;
+		p.endColor = pp.endColor;
+		p.rotation = Random::GetRandomInt(0, 360);
+		p.lifeTime = pp.lifeTime + Random::GetRandomFloat(-0.5f, 0.5f);
+		p.fullLife = p.lifeTime;
+		//++ drawaa vanhat p‰‰llimm‰isiksi ja -- drawaa vanhat p‰‰llimm‰isiksi
+		index = ++index % particles.size();
+	}
+	
 }
 
 void ParticleSystem::Update(float dt)
@@ -73,5 +78,11 @@ void ParticleSystem::Update(float dt)
 		p.pos += p.vel * dt;
 		p.rotation += 50.0f * dt;
 		p.lifeTime -= dt;
+	}
+	curTime -= dt;
+	if (curTime <= 0.0f)
+	{
+		spawn = true;
+		curTime = time;
 	}
 }
